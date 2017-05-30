@@ -1,0 +1,44 @@
+{
+  "name": "uniqorm",
+  "description": "Easy to use, multi-dialect ORM framework for JavaScript",
+  "version": "0.0.1",
+  "author": "Panates Ltd.",
+  "contributors": [
+    "Eray Hanoglu <e.hanoglu@panates.com>"
+  ],
+  "license": "MIT",
+  "repository": "panates/uniqorm",
+  "main": "src/index.js",
+  "keywords": [
+    "javascript",
+    "orm",
+    "sql",
+    "data-mapping",
+    "database",
+    "oracle",
+    "framework"
+  ],
+  "dependencies": {
+    "sqb": "^0.2.7"
+  },
+  "devDependencies": {
+    "babel-eslint": "^6.1.2",
+    "eslint": "^3.19.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0"
+  },
+  "engines": {
+    "node": ">= 6.0"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "index.js",
+    "lib/"
+  ],
+  "scripts": {
+    "test": "mocha --require test/support/env --reporter spec --bail --check-leaks test/",
+    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --require test/support/env --reporter dot --check-leaks test/",
+    "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --require test/support/env --reporter spec --check-leaks test/"
+  }
+}
