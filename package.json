@@ -18,9 +18,7 @@
     "oracle",
     "framework"
   ],
-  "dependencies": {
-    "sqb": "^0.2.14"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "eslint": "^3.19.0",

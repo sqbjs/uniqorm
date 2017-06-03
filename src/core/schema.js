@@ -77,6 +77,8 @@ class Schema {
    * If argument is a configuration object it extends new Model class
    *
    * @param {Model|Object} obj
+   * @param {string} [obj.name]
+   * @param {string} [obj.tableName]
    * @return {Function}
    * @public
    */
