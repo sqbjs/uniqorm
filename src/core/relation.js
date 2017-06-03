@@ -13,16 +13,16 @@
 
 class Relation {
 
-    constructor(model, field, foreignModel, foreignKey) {
-        this.model = model;
-        this.field = field;
-        this.foreignModel = foreignModel;
-        this.foreignKey = foreignKey;
-    }
+  constructor(model, field, foreignModel, foreignKey) {
+    this.model = model;
+    this.field = field;
+    this.foreignModel = foreignModel;
+    this.foreignKey = foreignKey;
+  }
 
-    get foreignSchema() {
-        return this.foreignModel.schema.name;
-    }
+  get foreignSchema() {
+    return this.foreignModel.schema.name;
+  }
 
 }
 

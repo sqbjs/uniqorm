@@ -11,13 +11,12 @@ const Schema = require('./core/schema');
 const Model = require('./core/model');
 const ft = require('./core/field');
 
-
 module.exports = {
-    Schema,
-    Model,
-    schema: function (name, db) {
-        return new Schema(name, db);
-    }
+  Schema,
+  Model,
+  schema: function(name, db) {
+    return new Schema(name, db);
+  }
 };
 
 Object.assign(module.exports, ft);
