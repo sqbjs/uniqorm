@@ -49,9 +49,7 @@ class Model {
       };
     }
     //noinspection JSUnresolvedVariable
-    for (let i = 0; i < this._relations.length; i++) {
-      //noinspection JSUnresolvedVariable
-      const relation = this._relations[i];
+    for (const relation of this._relations) {
       if (relation.fields) {
         const f = relation.fields[name];
         if (f) {
@@ -85,7 +83,7 @@ Model.extend = function(config) {
           this.tableName = meta.tableName;
           this.tableAlias = meta.tableName.substring(0, 1).toLowerCase();
           aliases.push(this.tableAlias);
-          this._relations.forEach(relation => {
+          for (const relation of this._relations) {
             const t = relation.foreignModel.meta.tableName;
             const aa = t.substring(t, 1).toLowerCase();
             let a = aa;
@@ -97,7 +95,7 @@ Model.extend = function(config) {
             relation.tableName = t;
             //noinspection JSUndefinedPropertyAssignment
             relation.tableAlias = a;
-          });
+          }
         }
       };
   const meta = new ModelMeta(config);
@@ -216,18 +214,18 @@ class ModelMeta {
     const self = this;
     const args = [];
     // build a flat array of arguments
-    fields.forEach(field => {
+    for (const field of fields) {
       if (Array.isArray(field)) {
         field.forEach(function(item) {
           args.push(item);
         });
-      } else args.push(field);
-    });
-    args.forEach(function(item) {
+      } else if (field) args.push(field);
+    }
+    for (const item of args) {
       const f = self.fields[item];
       if (!f)
         throw new Error(`Default fields definition error. Field "${item}" not found`);
-    });
+    }
     this._defaultFields = args;
     return this;
   }
@@ -236,8 +234,7 @@ class ModelMeta {
   getPrimaryKeys() {
     const self = this;
     const out = [];
-    Object.getOwnPropertyNames(self.fields).forEach(
-        function(key) {
+    Object.getOwnPropertyNames(self.fields).forEach(key => {
           const f = self.fields[key];
           if (f.primaryKey)
             out.push(f);

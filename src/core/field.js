@@ -178,11 +178,16 @@ Field.get = function(type) {
 class NUMBER extends Field {
 
   constructor(precision, scale) {
-    super(precision, scale);
+    super(precision);
     if (typeof precision === 'object') {
       this.setPrecision(precision.precision);
       this.setScale(precision.scale);
       this.setUnsigned(precision.unsigned);
+    } else {
+      if (!precision)
+        this.setPrecision(precision);
+      if (!scale)
+        this.setPrecision(scale);
     }
   }
 
@@ -354,8 +359,8 @@ Field.register(INTEGER);
 
 class BIGINT extends INTEGER {
 
-  constructor() {
-    super();
+  constructor(cfg) {
+    super(cfg);
   }
 
   //noinspection JSUnusedGlobalSymbols
@@ -379,7 +384,7 @@ Field.register(BIGINT);
 class VARCHAR extends Field {
 
   constructor(length) {
-    super();
+    super(length);
     if (typeof length === 'object') {
       this.setLength(length.length);
     }

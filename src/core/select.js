@@ -31,8 +31,12 @@ class Select {
   setFields(...fields) {
     if (!fields.length) return;
     this._fields = [];
-    for (const item of fields) {
-      this.addField(item);
+    for (const f of fields) {
+      if (Array.isArray(f))
+        for (const k of f)
+          this.addField(k);
+      else
+        this.addField(f);
     }
   }
 
@@ -74,7 +78,7 @@ class Select {
   _prepare() {
     const self = this;
     const model = self.model;
-    const database = model.schema.database;
+    const database = model.schema.dbPool;
     const defaultSchema = database.schema;
     const schema = model.schema.name &&
     model.schema.name !== defaultSchema ? model.schema.name : '';
@@ -93,12 +97,12 @@ class Select {
       selFields = model.meta.getFieldNames();
 
     /* - Iterate array and convert names to to real field names */
-    selFields.forEach(function(item) {
+    for (const item of selFields) {
       const f = model.getFieldInfo(item);
       assert(f, `Field (${item}) is not defined in model (${model.name})`);
       if (f.owner === model || f.owner.type === '1:1') {
         columns.push(f.tableAlias + '.' + f.fieldName +
-            (f.fieldName !== f.name ? ' ' + f.name : ''));
+            (f.name && f.fieldName !== f.name ? ' ' + f.name : ''));
         if (f.owner.type) {
           if (!joins[f.tableAlias]) {
             joins[f.tableAlias] = {
@@ -112,7 +116,7 @@ class Select {
         }
       } else
         assert(f, `Can not link field (${item}) directly. 1:1 relation is required for this operation`);
-    });
+    }
     statement.columns(...columns);
 
     /* Prepare join clause */
@@ -162,7 +166,7 @@ class Select {
     }
 
     /*console.log('--------');
-     console.log(database.serializer.build(statement).sql);
+     console.log(dbPool.serializer.build(statement).sql);
      console.log('--------');*/
     return statement;
   }

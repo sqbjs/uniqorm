@@ -20,10 +20,10 @@ const assert = require('assert');
  */
 class Schema {
 
-  constructor(name, db) {
+  constructor(name, dbPool) {
     const self = this;
     self.name = name;
-    self.database = db;
+    self.dbPool = dbPool;
     // Create a read only proxy
     //noinspection JSUnusedGlobalSymbols
     const models = new Proxy({}, {
@@ -103,6 +103,32 @@ class Schema {
     });
     this.models[ctor.name] = ctor;
     return ctor;
+  }
+
+  //noinspection JSUnusedGlobalSymbols
+  importMetadata(cfg, callback) {
+    if (typeof cfg === 'function') {
+      callback = cfg;
+      cfg = undefined;
+    }
+
+    const promise = new Promise((resolve, reject) => {
+
+      this.dbPool.connect(conn => {
+        conn.meta().select().schemas()
+            .where(['schema_name'], this.name)
+            .then(result => {
+              console.log(result);
+            });
+      }).catch(err => {
+        reject(err);
+      });
+
+    });
+
+    return !callback ? promise : promise.then(() => callback)
+        .catch(err => callback(err));
+
   }
 
   /**

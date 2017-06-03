@@ -26,6 +26,9 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0"
   },
+  "peerDependencies": {
+    "sqb": "^0.2.15"
+  },
   "engines": {
     "node": ">= 6.0"
   },
