@@ -8,7 +8,8 @@
   ],
   "license": "MIT",
   "repository": "panates/uniqorm",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "bin": "./bin/cli.js",
   "keywords": [
     "javascript",
     "orm",
@@ -18,16 +19,21 @@
     "oracle",
     "framework"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "commander": "^2.9.0",
+    "putil-promisify": "^1.0.3",
+    "putil-waterfall": "^1.0.8"
+  },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.8.0",
     "istanbul": "^0.4.5",
-    "mocha": "^3.2.0"
+    "mocha": "^3.4.2"
   },
   "peerDependencies": {
-    "sqb": "^0.2.15"
+    "sqb": "^0.4.11"
   },
   "engines": {
     "node": ">= 6.0"
@@ -35,7 +41,6 @@
   "files": [
     "LICENSE",
     "README.md",
-    "index.js",
     "lib/"
   ],
   "scripts": {
