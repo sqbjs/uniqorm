@@ -33,7 +33,7 @@
     "mocha": "^3.4.2"
   },
   "peerDependencies": {
-    "sqb": "^0.4.11"
+    "sqb": "^0.4.14"
   },
   "engines": {
     "node": ">= 6.0"
@@ -41,7 +41,8 @@
   "files": [
     "LICENSE",
     "README.md",
-    "lib/"
+    "lib/",
+    "bin/"
   ],
   "scripts": {
     "test": "mocha --require test/support/env --reporter spec --bail --check-leaks test/",
