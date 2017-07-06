@@ -27,9 +27,10 @@ function logError(...err) {
 /**
  * Import Models from meta-data
  * @param {string} connectString
+ * @param {String} output
  * @param {Object} options
  */
-function exp(connectString, options) {
+function exp(connectString, output, options) {
   try {
     console.log('Exporting metadata from ' + chalk.yellow(connectString));
     console.log('');
@@ -48,12 +49,12 @@ function exp(connectString, options) {
 
     // Build configuration
     const cfg = {};
-    const m = connectString.match(/^(\w+)((:\w+)(:\w+)?)?@(.+)$/);
-    assert(m, 'connectString does not match required format');
+    const m = connectString.match(/^(\w+)(?::?(\w+):?(\w+)?)?@(.+)$/);
+    assert(m, 'connect string "' + connectString + '" is not valid');
     cfg.dialect = m[1];
-    cfg.user = m[3].substring(1);
-    cfg.password = m[4].substring(1);
-    cfg.connectString = m[5];
+    cfg.user = m[2];
+    cfg.password = m[3];
+    cfg.connectString = m[4];
 
     require('sqb-connect-' + cfg.dialect);
 
@@ -65,7 +66,7 @@ function exp(connectString, options) {
     exporter.on('process', (v, v2, v3) => {
       switch (v) {
         case 'connect':
-          console.log('Database: ' + v2);
+          console.log(v2);
           break;
         case 'tables':
         case 'columns':
@@ -73,10 +74,10 @@ function exp(connectString, options) {
         case 'foreign keys':
           switch (v2) {
             case 'query':
-              console.log('Process ' + v + '..');
+              console.log('Processing ' + v + '..');
               break;
             case 'done':
-              console.log('Process ' + v + ': ' + chalk.cyan(v3) + ' ' +
+              console.log('Processing ' + v + ': ' + chalk.cyan(v3) + ' ' +
                   chalk.yellow(v) + ' listed');
               break;
           }
@@ -85,27 +86,25 @@ function exp(connectString, options) {
 
     });
 
-    exporter.execute((err, result) => {
-      if (err)
-        logError('Failed', err);
-      else {
-        const str = JSON.stringify(result, null, '\t');
-        const ms = ((new Date).getTime() - startTime);
-        const sec = Math.round(ms / 10) / 10;
+    exporter.execute().then(result => {
+      const str = JSON.stringify(result, null, '\t');
+      const ms = ((new Date).getTime() - startTime);
+      const sec = Math.round(ms / 10) / 10;
 
-        if (options.write) {
-          fs.writeFile(options.write, str, 'utf8', (err) => {
-            if (err)
-              logError('Write file failed', err);
-            else {
-              console.log(chalk.green('Completed in ' + sec + ' sec'));
-            }
-          });
-        } else {
-          console.log(str);
-          console.log(chalk.green('Completed in ' + sec + ' sec'));
-        }
+      if (output) {
+        fs.writeFile(output, str, 'utf8', (err) => {
+          if (err)
+            logError('Write file failed', err);
+          else {
+            console.log(chalk.green('Completed in ' + sec + ' sec'));
+          }
+        });
+      } else {
+        console.log(str);
+        console.log(chalk.green('Completed in ' + sec + ' sec'));
       }
+    }).catch(err => {
+      logError('Failed', err);
     });
 
   } catch (e) {
@@ -117,15 +116,20 @@ function exp(connectString, options) {
   }
 }
 
+console.log(chalk.black.bold('*** Uniqorm CLI ' + pkg.version + ' ***'));
+
 program
     .version(pkg.version)
-    .command('extract <connectString>')
+    .command('extract <connectString> <output>')
     .description('Extracts meta-data from database\n\n' +
         chalk.black('  connectString:') +
         chalk.yellow(' A formatted string to connect database.\n') +
         chalk.yellow('                 dialect[:user[:password]]@database'),
         chalk.black('  schema:') +
-        chalk.yellow('        Name of the database schema')
+        chalk.yellow('        Name of the database schema'),
+        chalk.black('  output:') +
+        chalk.yellow(' Output filename')
+
     )
     .option('-s, --schema [schema]', 'Comma seperated schema names to be included in export list. All schemas will be exported if not specified')
     .option('-i, --include [table]', 'Comma seperated table names to be included in export list. All tables will be exported if not specified')
@@ -136,12 +140,6 @@ program
 if (!process.argv.slice(2).length) {
   program.outputHelp();
 }
-
-console.log(chalk.yellow('  ******************************'));
-console.log(chalk.yellow('  UNIQORM Command Line Interface'));
-console.log(chalk.yellow('  v' + pkg.version));
-console.log(chalk.yellow('  ******************************'));
-console.log('');
 
 program.parse(process.argv);
 
