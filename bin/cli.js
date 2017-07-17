@@ -55,11 +55,16 @@ function exp(connectString, output, options) {
     cfg.user = m[2];
     cfg.password = m[3];
     cfg.connectString = m[4];
+    cfg.naming = options.naming;
 
     require('sqb-connect-' + cfg.dialect);
 
     const db = sqb.pool(cfg);
-    const exporter = new uniqorm.MetadataExporter(db, includeSchemas, includeTables, excludeTables);
+    const exporter = new uniqorm.MetadataExporter(db, {
+      includeSchemas,
+      includeTables,
+      excludeTables
+    });
 
     //exporter.on('process',
 
@@ -129,11 +134,11 @@ program
         chalk.yellow('        Name of the database schema'),
         chalk.black('  output:') +
         chalk.yellow(' Output filename')
-
     )
-    .option('-s, --schema [schema]', 'Comma seperated schema names to be included in export list. All schemas will be exported if not specified')
-    .option('-i, --include [table]', 'Comma seperated table names to be included in export list. All tables will be exported if not specified')
+    .option('-s, --schema <schema>', 'Comma seperated schema names to be included in export list. All schemas will be exported if not specified')
+    .option('-i, --include <table>', 'Comma seperated table names to be included in export list. All tables will be exported if not specified')
     .option('-e, --exclude <table>', 'Comma seperated table names to be excluded from export list')
+    .option('-n, --naming <rule>', 'Naming enumeration value. (lowercase,uppercase)')
     .option('-w, --write <fileName>', 'Write result json to given file')
     .action(exp);
 
