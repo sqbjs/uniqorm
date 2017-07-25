@@ -57,7 +57,7 @@ function exp(connectString, output, options) {
     cfg.connectString = m[4];
     cfg.naming = options.naming;
 
-    require('sqb-connect-' + cfg.dialect);
+    sqb.use(require('sqb-connect-' + cfg.dialect));
 
     const db = sqb.pool(cfg);
     const exporter = new uniqorm.MetadataExporter(db, {
