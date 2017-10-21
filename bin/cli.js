@@ -14,14 +14,21 @@ const chalk = require('chalk');
 const pkg = require('../package.json');
 const fs = require('fs');
 const assert = require('assert');
+const util = require('util');
 
 const sqb = require('sqb');
 const uniqorm = require('../');
 
-function logError(...err) {
-  for (const s of err) {
-    console.log(chalk.red(s));
+function logError(args) {
+  var s = '';
+  for (var i = 0; i < arguments.length; i++) {
+    if (arguments[i] instanceof Error) {
+      if (process.env.DEBUG)
+        s += ' ' + arguments[i].stack;
+      else s += ' ' + arguments[i].message;
+    } else s += ' ' + arguments[i];
   }
+  console.log(chalk.red(s.trim()));
 }
 
 /**
@@ -61,14 +68,19 @@ function exp(connectString, output, options) {
 
     const db = sqb.pool(cfg);
     const exporter = new uniqorm.MetadataExporter(db, {
-      includeSchemas,
-      includeTables,
-      excludeTables
+      includeSchemas: includeSchemas,
+      includeTables: includeTables,
+      excludeTables: excludeTables
     });
+
+    if (process.env.DEBUG)
+      db.on('execute', function(q) {
+        console.log(q.sql);
+      });
 
     //exporter.on('process',
 
-    exporter.on('process', (v, v2, v3) => {
+    exporter.on('process', function(v, v2, v3) {
       switch (v) {
         case 'connect':
           console.log(v2);
@@ -91,16 +103,17 @@ function exp(connectString, output, options) {
 
     });
 
-    exporter.execute().then(result => {
+    exporter.execute().then(function(result) {
       const str = JSON.stringify(result, null, '\t');
       const ms = ((new Date).getTime() - startTime);
       const sec = Math.round(ms / 10) / 10;
-
       if (output) {
-        fs.writeFile(output, str, 'utf8', (err) => {
+        fs.writeFile(output, str, 'utf8', function(err) {
           if (err)
             logError('Write file failed', err);
           else {
+
+            console.log('Output file created: ' + output);
             console.log(chalk.green('Completed in ' + sec + ' sec'));
           }
         });
@@ -108,12 +121,12 @@ function exp(connectString, output, options) {
         console.log(str);
         console.log(chalk.green('Completed in ' + sec + ' sec'));
       }
-    }).catch(err => {
+    }).catch(function(err) {
       logError('Failed', err);
     });
 
   } catch (e) {
-    logError('Failed', e, '');
+    logError('Failed', e);
     console.log(chalk.yellow('Type ' +
         chalk.black('uniqorm ' + options._name + ' --help') +
         ' for more help'));
