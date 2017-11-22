@@ -14,7 +14,6 @@ const chalk = require('chalk');
 const pkg = require('../package.json');
 const fs = require('fs');
 const assert = require('assert');
-const util = require('util');
 
 const sqb = require('sqb');
 const uniqorm = require('../');
@@ -66,15 +65,15 @@ function exp(connectString, output, options) {
 
     sqb.use(require('sqb-connect-' + cfg.dialect));
 
-    const db = sqb.pool(cfg);
-    const exporter = new uniqorm.MetadataExporter(db, {
+    const pool = sqb.pool(cfg);
+    const exporter = new uniqorm.MetadataExporter(pool, {
       includeSchemas: includeSchemas,
       includeTables: includeTables,
       excludeTables: excludeTables
     });
 
     if (process.env.DEBUG)
-      db.on('execute', function(q) {
+      pool.on('execute', function(q) {
         console.log(q.sql);
       });
 
@@ -123,6 +122,8 @@ function exp(connectString, output, options) {
       }
     }).catch(function(err) {
       logError('Failed', err);
+    }).then(function() {
+      pool.close(true);
     });
 
   } catch (e) {
