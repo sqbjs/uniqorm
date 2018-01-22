@@ -13,10 +13,12 @@ const program = require('commander');
 const chalk = require('chalk');
 const pkg = require('../package.json');
 const fs = require('fs');
-const assert = require('assert');
+const path = require('path');
 
 const sqb = require('sqb');
 const uniqorm = require('../');
+
+const appdir = path.resolve(__dirname, '..');
 
 function logError(args) {
   var s = '';
@@ -32,52 +34,39 @@ function logError(args) {
 
 /**
  * Import Models from meta-data
+ * @param {string} dialect
  * @param {string} connectString
- * @param {String} output
  * @param {Object} options
  */
-function exp(connectString, output, options) {
+function exp(dialect, connectString, options) {
   try {
-    console.log('Exporting metadata from ' + chalk.yellow(connectString));
+    console.log('Exporting metadata..');
     console.log('');
     const startTime = (new Date).getTime();
-    const includeSchemas = options.schema ? options.schema.split(',') : undefined;
-    const includeTables = options.include ? options.include.split(',') : undefined;
-    const excludeTables = options.exclude ? options.exclude.split(',') : undefined;
-
-    if (options.schema)
-      console.log('Schama         : ' + chalk.yellow(options.schema));
-    if (options.include)
-      console.log('Included tables: ' + chalk.yellow(options.include));
-    if (options.exclude)
-      console.log('Excluded tables: ' + chalk.yellow(options.exclude));
-    console.log('');
 
     // Build configuration
     const cfg = {};
-    const m = connectString.match(/^(\w+)(?::?(\w+):?(\w+)?)?@(.+)$/);
-    assert(m, 'connect string "' + connectString + '" is not valid');
-    cfg.dialect = m[1];
-    cfg.user = m[2];
-    cfg.password = m[3];
-    cfg.connectString = m[4];
-    cfg.naming = options.naming;
+    cfg.dialect = dialect;
+    cfg.connectString = connectString;
+    cfg.defaults = {
+      naming: options.naming
+    };
 
-    sqb.use(require('sqb-connect-' + cfg.dialect));
+    try {
+      sqb.use(require('sqb-connect-' + dialect));
+    } catch (e) {
+      console.log(chalk.red('No driver found for dialect "' + dialect + '"'));
+    }
+
 
     const pool = sqb.pool(cfg);
-    const exporter = new uniqorm.MetadataExporter(pool, {
-      includeSchemas: includeSchemas,
-      includeTables: includeTables,
-      excludeTables: excludeTables
+    const exporter = new uniqorm.MetadataExporter();
+    exporter.on('connecting', function() {
+      console.log('Connecting to database..');
     });
-
-    if (process.env.DEBUG)
-      pool.on('execute', function(q) {
-        console.log(q.sql);
-      });
-
-    //exporter.on('process',
+    exporter.on('connected', function() {
+      console.log('Connected');
+    });
 
     exporter.on('process', function(v, v2, v3) {
       switch (v) {
@@ -99,20 +88,21 @@ function exp(connectString, output, options) {
           }
           break;
       }
-
     });
 
-    exporter.execute().then(function(result) {
+    exporter.execute(pool, {
+      filter: options.filter,
+      naming: options.naming
+    }).then(function(result) {
       const str = JSON.stringify(result, null, '\t');
       const ms = ((new Date).getTime() - startTime);
       const sec = Math.round(ms / 10) / 10;
-      if (output) {
-        fs.writeFile(output, str, 'utf8', function(err) {
+      if (options.write) {
+        fs.writeFile(path.resolve(appdir, options.write), str, 'utf8', function(err) {
           if (err)
             logError('Write file failed', err);
           else {
-
-            console.log('Output file created: ' + output);
+            console.log('Output file created: ' + options.write);
             console.log(chalk.green('Completed in ' + sec + ' sec'));
           }
         });
@@ -139,20 +129,19 @@ console.log(chalk.black.bold('*** Uniqorm CLI ' + pkg.version + ' ***'));
 
 program
     .version(pkg.version)
-    .command('extract <connectString> <output>')
+    .command('extract <dialect> <connectString>')
     .description('Extracts meta-data from database\n\n' +
         chalk.black('  connectString:') +
-        chalk.yellow(' A formatted string to connect database.\n') +
-        chalk.yellow('                 dialect[:user[:password]]@database'),
-        chalk.black('  schema:') +
-        chalk.yellow('        Name of the database schema'),
-        chalk.black('  output:') +
-        chalk.yellow(' Output filename')
+        chalk.yellow(' A formatted string to connect database. Format is specific to the dialect.') +
+        chalk.black('  output:') + chalk.yellow(' Output filename')
     )
-    .option('-s, --schema <schema>', 'Comma seperated schema names to be included in export list. All schemas will be exported if not specified')
-    .option('-i, --include <table>', 'Comma seperated table names to be included in export list. All tables will be exported if not specified')
-    .option('-e, --exclude <table>', 'Comma seperated table names to be excluded from export list')
-    .option('-n, --naming <rule>', 'Naming enumeration value. (lowercase,uppercase)')
+    .option('-f, --filter <filter>', 'Filtering pattern\n' +
+        'SCHEMA1.{TABLE1,MY_*}  > extracts tables from SCHEMA1\n' +
+        'SCHEMA2.*  > extracts all tables from SCHEMA2\n' +
+        'TBL_*  > extracts all tables of starts with TBL* word\n' +
+        'SCHEMA1.{TABLE1,MY_*}|SCHEMA2.*|TBL_*  > combine filters'
+    )
+    .option('-n, --naming <value>', 'Naming rule for table and column names. (lowercase,uppercase)')
     .option('-w, --write <fileName>', 'Write result json to given file')
     .action(exp);
 
