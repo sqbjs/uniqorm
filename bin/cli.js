@@ -18,7 +18,7 @@ const path = require('path');
 const sqb = require('sqb');
 const uniqorm = require('../');
 
-const appdir = path.resolve(__dirname, '..');
+const appdir = process.cwd();
 
 function logError(args) {
   var s = '';
