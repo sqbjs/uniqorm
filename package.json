@@ -9,15 +9,16 @@
   "license": "MIT",
   "repository": "panates/uniqorm",
   "main": "lib/index.js",
-  "bin": "./bin/cli.js",
   "keywords": [
     "javascript",
+    "framework",
     "orm",
     "sql",
-    "data-mapping",
     "database",
     "oracle",
-    "framework"
+    "postgres",
+    "pg",
+    "sqlite"
   ],
   "dependencies": {
     "chalk": "^2.3.0",
@@ -29,13 +30,13 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
-    "eslint": "^4.16.0",
+    "eslint": "^4.17.0",
     "eslint-config-google": "^0.9.1",
     "istanbul": "^0.4.5",
-    "mocha": "^4.1.0"
+    "mocha": "^5.0.0"
   },
   "peerDependencies": {
-    "sqb": "^1.0.1-alpha.6"
+    "sqb": "^1.0.1-rc.1"
   },
   "engines": {
     "node": ">= 4.0"
