@@ -1,7 +1,7 @@
 {
   "name": "uniqorm",
   "description": "Easy to use, multi-dialect ORM framework for JavaScript",
-  "version": "1.0.0-alpha.12",
+  "version": "1.0.0-alpha.13",
   "author": "Panates Ltd.",
   "contributors": [
     "Eray Hanoglu <e.hanoglu@panates.com>"
