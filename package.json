@@ -1,7 +1,7 @@
 {
   "name": "uniqorm",
   "description": "Easy to use, multi-dialect ORM framework for JavaScript",
-  "version": "1.0.0-alpha.11",
+  "version": "1.0.0-alpha.12",
   "author": "Panates Ltd.",
   "contributors": [
     "Eray Hanoglu <e.hanoglu@panates.com>"
@@ -36,7 +36,7 @@
     "mocha": "^5.0.0"
   },
   "peerDependencies": {
-    "sqb": "^1.0.1-rc.1"
+    "sqb": "^1.0.1-rc.2"
   },
   "engines": {
     "node": ">= 4.0"
