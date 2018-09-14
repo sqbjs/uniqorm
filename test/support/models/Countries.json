@@ -1,0 +1,21 @@
+{
+  "name": "Countries",
+  "schemaName": "uniqorm_test",
+  "tableName": "countries",
+  "fields": {
+    "id": {
+      "dataType": "VARCHAR",
+      "charLength": 5,
+      "primaryKey": true
+    },
+    "name": {
+      "dataType": "VARCHAR",
+      "notNull": true,
+      "charLength": 20
+    },
+    "phone_code": {
+      "dataType": "SMALLINT",
+      "notNull": true
+    }
+  }
+}

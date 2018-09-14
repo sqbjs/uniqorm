@@ -1,0 +1,37 @@
+{
+  "name": "Cities",
+  "schemaName": "uniqorm_test",
+  "tableName": "cities",
+  "fields": {
+    "id": {
+      "dataType": "VARCHAR",
+      "charLength": 5,
+      "primaryKey": true
+    },
+    "name": {
+      "dataType": "VARCHAR",
+      "notNull": true,
+      "charLength": 20
+    },
+    "country_id": {
+      "dataType": "VARCHAR",
+      "notNull": true,
+      "charLength": 5
+    },
+    "country": {
+      "model": "Countries"
+    },
+    "country_name":{
+      "model": "Countries",
+      "field": "name"
+    }
+  },
+  "associations": [
+    {
+      "name": "fk_cities_country",
+      "model": "Countries",
+      "key": "country_id",
+      "foreignKey": "id"
+    }
+  ]
+}

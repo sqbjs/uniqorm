@@ -1,0 +1,25 @@
+{
+  "name": "Notes",
+  "schemaName": "uniqorm_test",
+  "tableName": "notes",
+  "fields": {
+    "id": {
+      "dataType": "INTEGER",
+      "primaryKey": true
+    },
+    "source": {
+      "dataType": "VARCHAR",
+      "charLength": 20,
+      "notNull": true
+    },
+    "source_key": {
+      "dataType": "INTEGER",
+      "notNull": true
+    },
+    "contents": {
+      "dataType": "VARCHAR",
+      "charLength": 128,
+      "notNull": true
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "CustomerTags",
+  "schemaName": "uniqorm_test",
+  "tableName": "customertags",
+  "fields": {
+    "customer_id": {
+      "dataType": "INTEGER",
+      "primaryKey": true
+    },
+    "tag_id": {
+      "dataType": "INTEGER",
+      "primaryKey": true
+    }
+  },
+  "associations": [
+    {
+      "name": "fk_customertags_customer",
+      "model": "Customers",
+      "key": "customer_id",
+      "foreignKey": "id"
+    },
+    {
+      "name": "fk_customertags_tag",
+      "model": "Tags",
+      "key": "tag_id",
+      "foreignKey": "id"
+    }
+  ]
+}

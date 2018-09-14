@@ -1,0 +1,109 @@
+{
+  "name": "Customers",
+  "schemaName": "uniqorm_test",
+  "tableName": "customers",
+  "fields": {
+    "id": {
+      "dataType": "INTEGER",
+      "notNull": true,
+      "primaryKey": true
+    },
+    "name": {
+      "dataType": "VARCHAR",
+      "charLength": 64,
+      "notNull": true
+    },
+    "street_id": {
+      "dataType": "INTEGER",
+      "notNull": true
+    },
+    "street": {
+      "model": "Streets",
+      "attributes": [
+        "id",
+        "name"
+      ]
+    },
+    "city": {
+      "model": "Cities",
+      "through": "Streets"
+    },
+    "country": {
+      "model": "Countries",
+      "through": {
+        "model": "Cities",
+        "through": "Streets"
+      }
+    },
+    "notes": {
+      "model": "Notes",
+      "key": "id",
+      "hasMany": true,
+      "foreignKey": "source_key",
+      "filter": {
+        "source": "customers"
+      }
+    },
+    "tags": {
+      "model": "Tags",
+      "through": {
+        "model": "CustomerTags",
+        "filter": {
+          "active": 1
+        }
+      },
+      "hasMany": true,
+      "attributes": {
+        "id": null,
+        "name": null
+      }
+    }
+  },
+  "associations": [
+    {
+      "name": "fk_customers_street",
+      "model": "Streets",
+      "key": "street_id",
+      "foreignKey": "id"
+    }
+  ],
+  "f": {
+    "country_name": {
+      "model": "Countries",
+      "field": "name",
+      "through": "Cities"
+    },
+    "street_name": {
+      "model": "Streets",
+      "field": "name"
+    },
+    "city_name": {
+      "model": "Cities",
+      "field": "name"
+    },
+    "city": {
+      "model": "Cities",
+      "through": {
+        "model": "Streets"
+      },
+      "attributes": [
+        "id",
+        "name"
+      ]
+    },
+    "country": {
+      "model": "Countries",
+      "through": {
+        "model": "Cities",
+        "through": {
+          "model": "Streets"
+        }
+      },
+      "attributes": [
+        "id",
+        "name",
+        "phone_code"
+      ]
+    }
+  }
+}

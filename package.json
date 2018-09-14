@@ -23,19 +23,21 @@
   "dependencies": {
     "errorex": "^1.0.6",
     "putil-isplainobject": "^1.0.1",
-    "putil-merge": "^2.0.0",
-    "putil-promisify": "^1.1.0",
-    "putil-waterfall": "^1.2.1"
+    "putil-merge": "^2.0.1",
+    "putil-promisify": "^1.2.0",
+    "putil-waterfall": "^2.0.2"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.6",
-    "eslint": "^5.3.0",
-    "eslint-config-google": "^0.9.1",
+    "babel-eslint": "^9.0.0",
+    "eslint": "^5.5.0",
+    "eslint-config-google": "^0.10.0",
     "istanbul": "^0.4.5",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "sqb": "^3.3.0",
+    "sqb-connect-pg": "^3.0.5"
   },
   "peerDependencies": {
-    "sqb": "^2.0.4"
+    "sqb": ">=3.3.0"
   },
   "engines": {
     "node": ">= 6.0"
@@ -48,6 +50,6 @@
   "scripts": {
     "test": "mocha --require test/support/env --reporter spec --bail --check-leaks test/",
     "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --require test/support/env --reporter dot --check-leaks test/",
-    "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --require test/support/env --reporter spec --check-leaks test/"
+    "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --require test/support/env-travis --reporter spec --check-leaks test/"
   }
 }

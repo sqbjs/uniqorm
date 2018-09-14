@@ -3,4 +3,3 @@ coverage/
 .DS_Store
 .idea
 test.js
-test/*

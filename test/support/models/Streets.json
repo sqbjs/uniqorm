@@ -1,0 +1,31 @@
+{
+  "name": "Streets",
+  "schemaName": "uniqorm_test",
+  "tableName": "streets",
+  "fields": {
+    "id": {
+      "dataType": "INTEGER",
+      "primaryKey": true
+    },
+    "name": {
+      "dataType": "VARCHAR",
+      "notNull": true,
+      "charLength": 64
+    },
+    "city_id": {
+      "dataType": "INTEGER",
+      "notNull": true
+    },
+    "city": {
+      "model": "Cities"
+    }
+  },
+  "associations": [
+    {
+      "name": "fk_street_cities",
+      "model": "Cities",
+      "key": "city_id",
+      "foreignKey": "id"
+    }
+  ]
+}

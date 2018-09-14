@@ -3,15 +3,19 @@ node_js:
   - "6"
   - "7"
   - "8"
-  - "9"
+  - "10"
 sudo: false
 cache:
   directories:
     - node_modules
+services:
+  - postgresql
 before_install:
   - "npm install sqb --save"
   - "test ! -d node_modules || npm prune"
   - "test ! -d node_modules || npm rebuild"
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
 script:
   - "npm run-script test-travis"
 after_script:
