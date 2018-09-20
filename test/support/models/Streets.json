@@ -17,13 +17,20 @@
       "notNull": true
     },
     "city": {
-      "model": "Cities"
+      "foreignModel": "Cities"
+    },
+    "country_name": {
+      "foreignModel": "Cities",
+      "towards": {
+        "foreignModel": "Countries",
+        "field": "name"
+      }
     }
   },
   "associations": [
     {
       "name": "fk_street_cities",
-      "model": "Cities",
+      "foreignModel": "Cities",
       "key": "city_id",
       "foreignKey": "id"
     }

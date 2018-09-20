@@ -19,17 +19,17 @@
       "charLength": 5
     },
     "country": {
-      "model": "Countries"
+      "foreignModel": "Countries"
     },
     "country_name":{
-      "model": "Countries",
+      "foreignModel": "Countries",
       "field": "name"
     }
   },
   "associations": [
     {
       "name": "fk_cities_country",
-      "model": "Countries",
+      "foreignModel": "Countries",
       "key": "country_id",
       "foreignKey": "id"
     }

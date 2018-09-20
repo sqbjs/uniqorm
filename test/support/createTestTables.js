@@ -74,7 +74,6 @@ function createTestTables(client, schemaName) {
                   for (const key of fieldKeys) {
                     params.push(row[key] == null ? null : row[key]);
                   }
-                  console.log(params);
                   client.query({
                     text: insertSql,
                     values: params

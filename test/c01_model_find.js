@@ -2,7 +2,7 @@
 require('./support/env');
 const assert = require('assert');
 const sqb = require('sqb');
-const Uniqorm = require('../');
+const Uniqorm = require('../lib/index');
 const loadModels = require('./support/loadModels');
 
 describe('Model.prototype.find', function() {
@@ -26,14 +26,14 @@ describe('Model.prototype.find', function() {
         naming: 'lowercase'
       }
     });
-    orm = new Uniqorm(pool);
+    orm = new Uniqorm(pool, {showSql: true});
   });
 
   after(() => pool.close(true));
 
   it('load models', function() {
     loadModels(orm);
-    orm.bake();
+    orm.prepare();
     Countries = orm.get('Countries');
     Cities = orm.get('Cities');
     Streets = orm.get('Streets');
@@ -63,12 +63,32 @@ describe('Model.prototype.find', function() {
   });
 
   it('should sort results', function() {
-    return Countries.find({orderBy: 'phone_code'}).then(recs1 => {
+    return Countries.find({sort: 'phone_code'}).then(recs1 => {
       assert.equal(recs1[0].id, 'RUS');
-      return Countries.find({orderBy: '-phone_code'}).then(recs2 => {
+      return Countries.find({sort: '-phone_code'}).then(recs2 => {
         assert.equal(recs2[0].id, 'TUR');
       });
     });
+  });
+
+  it('should sort items must be string type', function(done) {
+    Countries.find({sort: 1})
+        .then(() => done('Failed'))
+        .catch((e) => {
+          if (e.message.includes('Invalid element in "sort" property'))
+            return done();
+          done(e);
+        });
+  });
+
+  it('should sort items must be a valid string', function(done) {
+    Countries.find({sort: '1asdfd'})
+        .then(() => done('Failed'))
+        .catch((e) => {
+          if (e.message.includes('is not a valid order expression'))
+            return done();
+          done(e);
+        });
   });
 
   it('should filter results', function() {
@@ -98,9 +118,31 @@ describe('Model.prototype.find', function() {
         });
   });
 
+  it('should validate attribute names', function(done) {
+    Countries.find({attributes: '1id'})
+        .then(() => done('Failed'))
+        .catch((e) => {
+          if (e.message.includes('is not a valid column name'))
+            return done();
+          done(e);
+        });
+  });
+
+  it('should ignore invalid attribute names in silent mode', function() {
+    return Countries.find({
+      attributes: ['1id', 'name', 'nofield', 123],
+      silent: true
+    })
+        .then(recs => {
+          assert(!recs[0].id);
+          assert(!recs[0].nofield);
+          assert(recs[0].name);
+        });
+  });
+
   describe('O2O associations', function() {
 
-    it('should return associated attributes as object', function() {
+    it('should return associated attributes', function() {
       return Cities.find({
         attributes: ['id', 'name', 'country'],
         filter: {id: 1}
@@ -183,6 +225,18 @@ describe('Model.prototype.find', function() {
       });
     });
 
+    it('should request sub attribute flat', function() {
+      return Cities.find({
+        attributes: ['id', 'name', 'country.name country_name'],
+        filter: {id: 1}
+      }).then(recs => {
+        assert.equal(recs.length, 1);
+        assert.equal(recs[0].id, 1);
+        assert.equal(recs[0].name, 'Munich');
+        assert.equal(recs[0].country_name, 'Germany');
+      });
+    });
+
     it('should request attributes with different name than designed', function() {
       return Cities.find({
         attributes: {
@@ -238,17 +292,24 @@ describe('Model.prototype.find', function() {
       });
     });
 
+    it('should not request O2O associated flat fields sub attribute', function(done) {
+      Cities.find({attributes: ['country_name.name name']})
+          .then(() => done('Failed'))
+          .catch((e) => {
+            if (e.message.includes('has no sub value'))
+              return done();
+            done(e);
+          });
+    });
+
   });
 
   describe('O2M associations', function() {
 
     it('should return associated attributes', function() {
-      const scope = {};
       return Customers.find({
         attributes: ['id', 'name', 'notes'],
-        filter: {id: 19},
-        showSql: true,
-        scope
+        filter: {id: 19}
       }).then(recs => {
         assert.equal(recs.length, 1);
         assert.equal(recs[0].id, 19);
@@ -256,23 +317,133 @@ describe('Model.prototype.find', function() {
         assert.equal(recs[0].notes.length, 2);
         assert.equal(recs[0].notes[0].contents, 'note 1');
         assert.equal(recs[0].notes[1].contents, 'note 2');
+      });
+    });
+
+    it('should not request M2M associated sub attribute as flat', function(done) {
+      Customers.find({attributes: ['notes.contents contents']})
+          .then(() => done('Failed'))
+          .catch((e) => {
+            if (e.message.includes('sub values can not be used'))
+              return done();
+            done(e);
+          });
+    });
+
+    it('should check sub attribute exists', function(done) {
+      Cities.find({attributes: ['country.unknown aaa']})
+          .then(() => done('Failed'))
+          .catch((e) => {
+            if (e.message.includes('has no attribute'))
+              return done();
+            done(e);
+          });
+    });
+
+    it('should check sub attribute exists in child context', function(done) {
+      Cities.find({
+        attributes: {
+          id: '',
+          name: '',
+          country: {
+            attributes: [{unknown: null}]
+          }
+        },
+        filter: {id: 1}
+      }).then(() => done('Failed'))
+          .catch((e) => {
+            if (e.message.includes('has no attribute'))
+              return done();
+            done(e);
+          });
+    });
+
+    it('should filter by O2O associated attribute', function() {
+      const scope = {};
+      return Cities.find({
+        attributes: ['id', 'name'],
+        filter: {country_name: 'France'},
+        scope
+      }).then(recs => {
         assert(scope);
+        assert.equal(recs.length, 2);
+        assert.equal(recs[0].name, 'Paris');
+        assert.equal(recs[1].name, 'Lyon');
+      });
+    });
+
+    it('should filter by O2O associated attribute (towards)', function() {
+      return Streets.find({
+        attributes: ['id', 'name'],
+        filter: {country_name: 'France'}
+      }).then(recs => {
+        assert.equal(recs.length, 4);
+        assert.equal(recs[0].name, 'Rue Cler');
+        assert.equal(recs[1].name, 'Rue des Rosiers');
+      });
+    });
+
+    it('should sort by O2O associated attribute', function() {
+      return Cities.find({
+        attributes: ['id', 'name', 'country_name'],
+        sort: ['-country_name']
+      }).then(recs => {
+        assert.equal(recs[0].name, 'Manchester');
+        assert.equal(recs[1].name, 'Izmir');
       });
     });
 
   });
 
   describe('M2M associations', function() {
+
     it('should return M2M associated attributes (array)', function() {
       return Customers.find({
         attributes: ['id', 'name', 'tags'],
-        filter: {id: 19},
-        showSql: true
+        filter: {id: 19}
       }).then(recs => {
         assert.equal(recs.length, 1);
         assert.equal(recs[0].id, 19);
         assert(Array.isArray(recs[0].tags));
         assert.equal(recs[0].tags.length, 2);
+        assert.equal(recs[0].tags[0].name, 'Red');
+        assert.equal(recs[0].tags[1].name, 'Green');
+      });
+    });
+  });
+
+  describe('Common', function() {
+
+    it('should fill scope object', function() {
+      const scope = {};
+      return Customers.find({
+        attributes: ['id', 'name', 'notes'],
+        filter: {id: 19},
+        scope
+      }).then(recs => {
+        assert(scope.attributes);
+        assert(scope.query);
+        assert(scope.query.sql);
+      });
+    });
+
+    it('should show sql on error', function(done) {
+      orm.define({
+        'name': 'Notexists',
+        'schemaName': 'uniqorm_test',
+        'tableName': 'Notexists',
+        'fields': {
+          'id': 'INTEGER'
+        }
+      });
+      orm.get('Notexists').find({
+        showSql: true
+      }).then(recs => {
+        done('Failed');
+      }).catch(e => {
+        if (e.message.includes('select t.id'))
+          return done();
+        done(e);
       });
     });
   });

@@ -3,7 +3,7 @@ require('./support/env');
 const assert = require('assert');
 const Uniqorm = require('../');
 
-describe('Fields', function() {
+describe('Data Fields', function() {
 
   describe('BOOLEAN', function() {
 
@@ -263,6 +263,15 @@ describe('Fields', function() {
       f.precision = null;
       assert.equal(f.sqlType, 'NUMBER(18,3)');
     });
+
+    it('should set scale to 0 if value is invalid', function() {
+      const NUMBER = Uniqorm.DataField.get('NUMBER');
+      const f = new NUMBER('field1', null, {
+        scale: 'abc'
+      });
+      assert.equal(f.scale, 0);
+    });
+
   });
 
   describe('TEXT', function() {
@@ -378,6 +387,15 @@ describe('Fields', function() {
       f.charLength = undefined;
       assert.equal(f.charLength, null);
     });
+
+    it('should set charLength to null if value is invalid', function() {
+      const VARCHAR = Uniqorm.DataField.get('VARCHAR');
+      const f = new VARCHAR('field1', null, {
+        charLength: 'abc'
+      });
+      assert.equal(f.charLength, null);
+    });
+
   });
 
   describe('CLOB', function() {

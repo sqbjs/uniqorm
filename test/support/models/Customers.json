@@ -18,25 +18,28 @@
       "notNull": true
     },
     "street": {
-      "model": "Streets",
+      "foreignModel": "Streets",
       "attributes": [
         "id",
         "name"
       ]
     },
     "city": {
-      "model": "Cities",
-      "through": "Streets"
+      "foreignModel": "Streets",
+      "towards": "Cities"
     },
     "country": {
-      "model": "Countries",
-      "through": {
-        "model": "Cities",
-        "through": "Streets"
+      "foreignModel": "Streets",
+      "towards": {
+        "foreignModel": "Cities",
+        "filter": {
+          "id>": 0
+        },
+        "towards": "Countries"
       }
     },
     "notes": {
-      "model": "Notes",
+      "foreignModel": "Notes",
       "key": "id",
       "hasMany": true,
       "foreignKey": "source_key",
@@ -45,65 +48,26 @@
       }
     },
     "tags": {
-      "model": "Tags",
-      "through": {
-        "model": "CustomerTags",
-        "filter": {
-          "active": 1
-        }
-      },
       "hasMany": true,
-      "attributes": {
-        "id": null,
-        "name": null
+      "foreignModel": "CustomerTags",
+      "filter": {
+        "active": 1
+      },
+      "towards": {
+        "foreignModel": "Tags",
+        "attributes": {
+          "id": null,
+          "name": null
+        }
       }
     }
   },
   "associations": [
     {
       "name": "fk_customers_street",
-      "model": "Streets",
+      "foreignModel": "Streets",
       "key": "street_id",
       "foreignKey": "id"
     }
-  ],
-  "f": {
-    "country_name": {
-      "model": "Countries",
-      "field": "name",
-      "through": "Cities"
-    },
-    "street_name": {
-      "model": "Streets",
-      "field": "name"
-    },
-    "city_name": {
-      "model": "Cities",
-      "field": "name"
-    },
-    "city": {
-      "model": "Cities",
-      "through": {
-        "model": "Streets"
-      },
-      "attributes": [
-        "id",
-        "name"
-      ]
-    },
-    "country": {
-      "model": "Countries",
-      "through": {
-        "model": "Cities",
-        "through": {
-          "model": "Streets"
-        }
-      },
-      "attributes": [
-        "id",
-        "name",
-        "phone_code"
-      ]
-    }
-  }
+  ]
 }

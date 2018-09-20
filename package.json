@@ -29,10 +29,11 @@
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
+    "coveralls": "^3.0.2",
     "eslint": "^5.5.0",
     "eslint-config-google": "^0.10.0",
-    "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
+    "nyc": "^13.0.1",
     "sqb": "^3.3.0",
     "sqb-connect-pg": "^3.0.5"
   },
@@ -47,9 +48,13 @@
     "README.md",
     "lib/"
   ],
+  "nyc": {
+    "temp-directory": "./coverage/.nyc_output"
+  },
   "scripts": {
-    "test": "mocha --require test/support/env --reporter spec --bail --check-leaks test/",
-    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --require test/support/env --reporter dot --check-leaks test/",
-    "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --require test/support/env-travis --reporter spec --check-leaks test/"
+    "test": "mocha --require ./test/support/env --reporter spec --bail --check-leaks test/",
+    "cover": "nyc --reporter html --reporter text npm run test",
+    "travis-test": "mocha --require ./test/support/env --require ./test/support/env-travis --reporter spec --check-leaks test/",
+    "travis-cover": "nyc --reporter lcovonly npm run travis-test"
   }
 }

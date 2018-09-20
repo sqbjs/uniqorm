@@ -1,9 +1,9 @@
 /* eslint-disable */
-require('./support/env');
+require('./env');
 const assert = require('assert');
 const sqb = require('sqb');
-const Uniqorm = require('../');
-const loadModels = require('./support/loadModels');
+const Uniqorm = require('../../lib/index');
+const loadModels = require('./loadModels');
 
 describe('Model.prototype.find', function() {
 
@@ -33,7 +33,7 @@ describe('Model.prototype.find', function() {
 
   it('load models', function() {
     loadModels(orm);
-    orm.bake();
+    orm.prepare();
     Countries = orm.get('Countries');
     Cities = orm.get('Cities');
     Streets = orm.get('Streets');

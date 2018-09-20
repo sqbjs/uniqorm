@@ -10,18 +10,22 @@
     "tag_id": {
       "dataType": "INTEGER",
       "primaryKey": true
+    },
+    "active": {
+      "dataType": "SMALLINT",
+      "defaultValue": 1
     }
   },
   "associations": [
     {
       "name": "fk_customertags_customer",
-      "model": "Customers",
+      "foreignModel": "Customers",
       "key": "customer_id",
       "foreignKey": "id"
     },
     {
       "name": "fk_customertags_tag",
-      "model": "Tags",
+      "foreignModel": "Tags",
       "key": "tag_id",
       "foreignKey": "id"
     }
