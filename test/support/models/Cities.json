@@ -23,7 +23,7 @@
     },
     "country_name":{
       "foreignModel": "Countries",
-      "field": "name"
+      "fieldName": "name"
     }
   },
   "associations": [

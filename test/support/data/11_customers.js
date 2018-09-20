@@ -3,7 +3,7 @@ module.exports = {
   createSql: (`
 CREATE TABLE uniqorm_test.customers
 (
-    id integer NOT NULL,
+    id SERIAL NOT NULL,
     name character varying(20) COLLATE pg_catalog."default" NOT NULL,
     street_id integer NOT NULL,
     CONSTRAINT customers_pkey PRIMARY KEY (id),

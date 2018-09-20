@@ -4,5 +4,5 @@
   "password": "pgdata-",
   "host": "localhost",
   "database": "test",
-  "skip_create_tables": 1
+  "skip_create_tables": 0
 }

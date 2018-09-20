@@ -127,7 +127,7 @@ describe('Associated Fields', function() {
       foreignKey: 'id',
       key: 'country_id',
       filter: {id: 1},
-      field: 'name'
+      fieldName: 'name'
     };
     statesDef.fields.country2 = {
       foreignModel: 'countries',
@@ -135,7 +135,7 @@ describe('Associated Fields', function() {
       key: 'country_id',
       filter: {id: 1},
       attributes: {id: null, name: null},
-      field: 'name'
+      fieldName: 'name'
     };
     const states = orm.define(statesDef);
     orm.prepare();

@@ -23,7 +23,7 @@
       "foreignModel": "Cities",
       "towards": {
         "foreignModel": "Countries",
-        "field": "name"
+        "fieldName": "name"
       }
     }
   },

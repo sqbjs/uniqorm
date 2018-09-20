@@ -188,7 +188,7 @@ describe('Model.prototype.find', function() {
           id: '',
           _name: 'name',
           _country: {
-            field: 'country',
+            fieldName: 'country',
             attributes: {name_alias: 'name', 'phone_code_alias': 'phone_code'}
           }
         },
