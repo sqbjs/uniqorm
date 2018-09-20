@@ -1,9 +1,9 @@
 /* eslint-disable */
-require('./env');
+require('./support/env');
 const assert = require('assert');
 const sqb = require('sqb');
-const Uniqorm = require('../../lib/index');
-const loadModels = require('./loadModels');
+const Uniqorm = require('../lib/index');
+const loadModels = require('./support/loadModels');
 
 describe('Model.prototype.find', function() {
 
