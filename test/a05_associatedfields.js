@@ -141,11 +141,11 @@ describe('Associated Fields', function() {
     orm.prepare();
     let f = states.fields.get('country');
     assert(f);
-    assert.equal(f.field, 'name');
+    assert.equal(f.fieldName, 'name');
 
     f = states.fields.get('country2');
     assert(f);
-    assert.equal(f.field, null);
+    assert.equal(f.fieldName, null);
     assert.deepEqual(f.attributes, {
       id: null,
       name: null
