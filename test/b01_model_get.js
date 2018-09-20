@@ -5,7 +5,7 @@ const sqb = require('sqb');
 const Uniqorm = require('../lib/index');
 const loadModels = require('./support/loadModels');
 
-describe('Model.prototype.find', function() {
+describe('Model.prototype.get', function() {
 
   let pool;
   let orm;

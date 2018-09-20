@@ -152,7 +152,7 @@ describe('Associated Fields', function() {
     });
   });
 
-  it('should set discover key fields if not provided', function() {
+  it('should discover key fields if not provided', function() {
     const orm = new Uniqorm();
     const countriesDef = merge.clone(defs.countries);
     const citiesDef = merge.clone(defs.cities);
