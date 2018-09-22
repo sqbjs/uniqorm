@@ -1,4 +1,4 @@
-# UNIQ-ORM
+# Uniqorm
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
@@ -9,14 +9,14 @@
 [![DevDependencies][devdependencies-image]][devdependencies-url]
 [![Package Quality][quality-image]][quality-url]
 
-## About UniqORM
+## About Uniqorm
 
-UniqORM is an multi dialect and multi schema ORM framework for enterprise level NodeJS applications;
+Uniqorm is an multi dialect and multi schema ORM framework for enterprise level NodeJS applications;
  
 
 ## Main features
 
-- Can work with any dialect that SQB[https://github.com/panates/sqb] supports
+- Can work with any dialect that [SQB](https://github.com/panates/sqb) supports
 - Supports multi schemas
 - Helps keeping server resources with "use-resources-on-demand" feature.
 - Offers very high performance for graph queries.
