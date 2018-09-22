@@ -31,8 +31,8 @@ Uniqorm is an multi dialect and multi schema ORM framework for enterprise level 
 
 [npm-image]: https://img.shields.io/npm/v/uniqorm.svg
 [npm-url]: https://npmjs.org/package/uniqorm
-[travis-image]: https://img.shields.io/travis/panates/uniqorm/master.svg
-[travis-url]: https://travis-ci.org/panates/uniqorm
+[travis-image]: https://travis-ci.org/panates/uniqorm.svg?branch=master
+[travis-url]: https://travis-ci.org/panates/uniqorm#
 [coveralls-image]: https://img.shields.io/coveralls/panates/uniqorm/master.svg
 [coveralls-url]: https://coveralls.io/r/panates/uniqorm
 [downloads-image]: https://img.shields.io/npm/dm/uniqorm.svg
