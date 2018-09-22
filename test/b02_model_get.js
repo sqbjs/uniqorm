@@ -34,10 +34,10 @@ describe('Model.prototype.get', function() {
   it('load models', function() {
     loadModels(orm);
     orm.prepare();
-    Countries = orm.get('Countries');
-    Cities = orm.get('Cities');
-    Streets = orm.get('Streets');
-    Customers = orm.get('Customers');
+    Countries = orm.get('uniqorm_1.Countries');
+    Cities = orm.get('uniqorm_1.Cities');
+    Streets = orm.get('uniqorm_1.Streets');
+    Customers = orm.get('uniqorm_2.Customers');
   });
 
   it('should get() retrieve single instance', function() {

@@ -34,10 +34,10 @@ describe('Model.prototype.find', function() {
   it('load models', function() {
     loadModels(orm);
     orm.prepare();
-    Countries = orm.get('Countries');
-    Cities = orm.get('Cities');
-    Streets = orm.get('Streets');
-    Customers = orm.get('Customers');
+    Countries = orm.get('uniqorm_1', 'Countries');
+    Cities = orm.get('uniqorm_1', 'Cities');
+    Streets = orm.get('uniqorm_1', 'Streets');
+    Customers = orm.get('uniqorm_2', 'Customers');
   });
 
   it('should retrieve array of instances', function() {
@@ -111,9 +111,9 @@ describe('Model.prototype.find', function() {
               country_name: 'name'
             }
           }).then(recs2 => {
-            assert(Object.getOwnPropertyNames(recs1[0]), 2);
-            assert(recs1[0].country_id);
-            assert(recs1[0].country_name);
+            assert(Object.getOwnPropertyNames(recs2[0]), 2);
+            assert(recs2[0].country_id);
+            assert(recs2[0].country_name);
           });
         });
   });
@@ -209,9 +209,7 @@ describe('Model.prototype.find', function() {
         attributes: {
           id: '',
           _name: 'name',
-          country: {
-            attributes: ['name', 'phone_code']
-          }
+          country: ['name', 'phone_code']
         },
         filter: {id: 1}
       }).then(recs => {
@@ -420,7 +418,7 @@ describe('Model.prototype.find', function() {
         attributes: ['id', 'name', 'notes'],
         filter: {id: 19},
         scope
-      }).then(recs => {
+      }).then(() => {
         assert(scope.attributes);
         assert(scope.query);
         assert(scope.query.sql);
@@ -429,16 +427,16 @@ describe('Model.prototype.find', function() {
 
     it('should show sql on error', function(done) {
       orm.define({
-        'name': 'Notexists',
-        'schemaName': 'uniqorm_test',
-        'tableName': 'Notexists',
-        'fields': {
-          'id': 'INTEGER'
+        name: 'Notexists',
+        schema: 'uniqorm_1',
+        tableName: 'Notexists',
+        fields: {
+          id: 'INTEGER'
         }
       });
-      orm.get('Notexists').find({
+      orm.get('uniqorm_1.Notexists').find({
         showSql: true
-      }).then(recs => {
+      }).then(() => {
         done('Failed');
       }).catch(e => {
         if (e.message.includes('select t.id'))

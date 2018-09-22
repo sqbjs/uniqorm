@@ -8,7 +8,7 @@ describe('Model', function() {
 
   const model1Def = {
     name: 'model1',
-    schemaName: 'schema1',
+    schema: 'schema1',
     tableName: 'table1',
     fields: {
       id: {
@@ -23,7 +23,7 @@ describe('Model', function() {
 
   const model2Def = {
     name: 'model2',
-    schemaName: 'schema1',
+    schema: 'schema1',
     tableName: 'table2',
     fields: {
       id: {
@@ -75,7 +75,7 @@ describe('Model', function() {
     assert.deepEqual(model1.tableNameFull, 'schema1.table1');
     const model2Def = merge.clone(model1Def);
     model2Def.name = 'model2';
-    delete model2Def.schemaName;
+    delete model2Def.schema;
     const model2 = orm.define(model2Def);
     assert.deepEqual(model2.tableNameFull, 'table1');
   });
@@ -163,6 +163,13 @@ describe('Model', function() {
     });
     const a = model2.getDataFields();
     assert.equal(a.length, 2);
+  });
+
+  it('should toString() return custom formatted text', function() {
+    const orm = new Uniqorm();
+    const model2 = orm.define(model2Def);
+    assert.equal(String(model2), '[object Model<model2>]');
+    assert.equal(model2.inspect(), '[object Model<model2>]');
   });
 
 });

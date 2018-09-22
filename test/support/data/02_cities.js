@@ -1,14 +1,14 @@
 module.exports = {
-  name: 'uniqorm_test.cities',
+  name: 'uniqorm_1.cities',
   createSql: (`
-CREATE TABLE uniqorm_test.cities
+CREATE TABLE uniqorm_1.cities
 (
     id integer NOT NULL,
-    country_id character varying (5),
+    country_id character varying (5) NOT NULL,
     name character varying (20) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT cities_pkey PRIMARY KEY (id),
     CONSTRAINT fk_cities_country FOREIGN KEY (country_id)
-        REFERENCES uniqorm_test.countries (id) MATCH SIMPLE
+        REFERENCES uniqorm_1.countries (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )

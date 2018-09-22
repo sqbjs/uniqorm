@@ -18,13 +18,11 @@ describe('Uniqorm', function() {
 
   it('should initialize', function() {
     let orm = new Uniqorm();
-    assert(orm.models);
+    assert(orm.schemas);
     orm = new Uniqorm(null, {silent: true});
-    assert(orm.models);
     assert.equal(orm.options.silent, true);
     orm = new Uniqorm(pool);
     assert(orm);
-    assert(orm.models);
   });
 
   it('should validate arguments on create', function() {
@@ -50,7 +48,7 @@ describe('Uniqorm', function() {
         }
       }
     });
-    const model1 = orm.get('model1');
+    orm.get('model1');
   });
 
   it('should check modelDef argument exists in define() function', function() {
@@ -130,12 +128,35 @@ describe('Uniqorm', function() {
     }
   });
 
-  it('should not get unknown model', function() {
+  it('should not get unknown schema', function() {
     const orm = new Uniqorm();
     try {
       orm.get('model1234');
     } catch (e) {
-      if (e.message.includes('not found'))
+      if (e.message.includes('No such'))
+        return;
+      throw e;
+    }
+  });
+
+  it('should not get unknown model', function() {
+    const orm = new Uniqorm();
+    orm.define({
+      name: 'model1',
+      schema: 'schema1',
+      fields: {
+        field1: {
+          dataType: 'INTEGER'
+        },
+        field2: {
+          dataType: 'VARCHAR'
+        }
+      }
+    });
+    try {
+      orm.get('model1234');
+    } catch (e) {
+      if (e.message.includes('Schema "schema1" has no model'))
         return;
       throw e;
     }

@@ -1,7 +1,6 @@
 /* eslint-disable */
 require('./support/env');
 const assert = require('assert');
-const merge = require('putil-merge');
 const Uniqorm = require('../');
 
 describe('Associated Fields', function() {
@@ -76,17 +75,18 @@ describe('Associated Fields', function() {
   it('should init', function() {
     const orm = new Uniqorm();
     orm.define(defs.countries);
-    const statesDef = merge.clone(defs.states);
-    statesDef.fields.country = {
+    const States = orm.define(defs.states);
+    States.hasMany('country', {
       foreignModel: 'countries',
       foreignKey: 'id',
       key: 'country_id',
-      hasMany: true,
       attributes: ['id', 'name'],
       filter: [{id: 1}]
-    };
-    const states = orm.define(statesDef);
-    const f = states.fields.get('country');
+    });
+    States.hasMany('country2', 'countries');
+    orm.prepare();
+
+    let f = States.fields.get('country');
     assert(f);
     assert.equal(f.foreignModel.name, 'countries');
     assert.equal(f.foreignKey, 'id');
@@ -97,20 +97,25 @@ describe('Associated Fields', function() {
       id: null,
       name: null
     });
+    f = States.fields.get('country2');
+    assert(f);
+    assert.equal(f.foreignModel.name, 'countries');
+    assert.equal(f.foreignKey, 'id');
+    assert.equal(f.key, 'country_id');
+    assert.equal(f.hasMany, true);
   });
 
   it('should set "filter" if not provided as array', function() {
     const orm = new Uniqorm();
     orm.define(defs.countries);
-    const statesDef = merge.clone(defs.states);
-    statesDef.fields.country = {
+    const States = orm.define(defs.states);
+    States.hasOne('country', {
       foreignModel: 'countries',
       foreignKey: 'id',
       key: 'country_id',
       filter: {id: 1}
-    };
-    const states = orm.define(statesDef);
-    const f = states.fields.get('country');
+    });
+    const f = States.fields.get('country');
     assert(f);
     assert.equal(f.foreignModel.name, 'countries');
     assert.equal(f.foreignKey, 'id');
@@ -121,29 +126,28 @@ describe('Associated Fields', function() {
   it('should set "field" if attributes is not provided', function() {
     let orm = new Uniqorm();
     orm.define(defs.countries);
-    const statesDef = merge.clone(defs.states);
-    statesDef.fields.country = {
+    const States = orm.define(defs.states);
+    States.hasOne('country', {
       foreignModel: 'countries',
       foreignKey: 'id',
       key: 'country_id',
       filter: {id: 1},
       fieldName: 'name'
-    };
-    statesDef.fields.country2 = {
+    });
+    States.hasOne('country2', {
       foreignModel: 'countries',
       foreignKey: 'id',
       key: 'country_id',
       filter: {id: 1},
       attributes: {id: null, name: null},
       fieldName: 'name'
-    };
-    const states = orm.define(statesDef);
+    });
     orm.prepare();
-    let f = states.fields.get('country');
+    let f = States.fields.get('country');
     assert(f);
     assert.equal(f.fieldName, 'name');
 
-    f = states.fields.get('country2');
+    f = States.fields.get('country2');
     assert(f);
     assert.equal(f.fieldName, null);
     assert.deepEqual(f.attributes, {
@@ -154,9 +158,8 @@ describe('Associated Fields', function() {
 
   it('should discover key fields if not provided', function() {
     const orm = new Uniqorm();
-    const countriesDef = merge.clone(defs.countries);
-    const citiesDef = merge.clone(defs.cities);
-    countriesDef.fields.cities = {
+    const Countries = orm.define(defs.countries);
+    Countries.hasMany('cities', {
       foreignModel: 'states',
       foreignKey: 'country_id',
       key: 'id',
@@ -164,7 +167,6 @@ describe('Associated Fields', function() {
         state_name: 'name'
       },
       filter: {'id>=': 1},
-      hasMany: true,
       towards: {
         foreignModel: 'cities',
         foreignKey: 'state_id',
@@ -172,18 +174,14 @@ describe('Associated Fields', function() {
         filter: {'id>': 0},
         attributes: ['id', 'name']
       }
-    };
-    countriesDef.fields.cities2 = {
+    });
+    Countries.hasOne('cities2', {
       foreignModel: 'states',
       towards: 'cities'
-    };
-    citiesDef.fields.state = {
-      foreignModel: 'states'
-    };
-
-    orm.define(countriesDef);
+    });
     orm.define(defs.states);
-    orm.define(citiesDef);
+    const Cities = orm.define(defs.cities);
+    Cities.hasOne('state', 'states');
     orm.define(defs.streets);
     orm.define(defs.roads);
     orm.prepare();

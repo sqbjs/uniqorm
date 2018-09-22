@@ -1,13 +1,15 @@
 module.exports = {
-  name: 'uniqorm_test.countries',
+  name: 'uniqorm_1.countries',
   createSql: (`
-CREATE TABLE uniqorm_test.countries
+CREATE TABLE uniqorm_1.countries
 (
     id character varying (5) COLLATE pg_catalog."default" NOT NULL,
     name character varying (20) COLLATE pg_catalog."default" NOT NULL,
     phone_code smallint,
     CONSTRAINT countries_pkey PRIMARY KEY (id)
-)
+);
+COMMENT ON TABLE uniqorm_1.countries IS 'countries table';
+COMMENT ON COLUMN uniqorm_1.countries.phone_code IS 'Universal phone code number';    
   `),
   rows: [
     {

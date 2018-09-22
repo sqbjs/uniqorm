@@ -1,6 +1,6 @@
 {
   "name": "Notes",
-  "schemaName": "uniqorm_test",
+  "schema": "uniqorm_2",
   "tableName": "notes",
   "fields": {
     "id": {

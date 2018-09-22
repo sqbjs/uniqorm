@@ -4,12 +4,23 @@
 [![NPM Downloads][downloads-image]][downloads-url]
 [![Build Status][travis-image]][travis-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
+
 [![Dependencies][dependencies-image]][dependencies-url]
 [![DevDependencies][devdependencies-image]][devdependencies-url]
+[![Package Quality][quality-image]][quality-url]
 
-UNIQ-ORM is a easy to use, multi-dialect ORM framework for JavaScript;
+## About UniqORM
 
-Note: UNIQ-ORM is in alpha state. Use it only for testing purposes only! 
+UniqORM is an multi dialect and multi schema ORM framework for enterprise level NodeJS applications;
+ 
+
+## Main features
+
+- Can work with any dialect that SQB[https://github.com/panates/sqb] supports
+- Supports multi schemas
+- Helps keeping server resources with "use-resources-on-demand" feature.
+- Offers very high performance for graph queries.
+- Support latest JavaScript language standards
 
 
 ## Node Compatibility

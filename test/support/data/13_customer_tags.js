@@ -1,18 +1,18 @@
 module.exports = {
-  name: 'uniqorm_test.customertags',
+  name: 'uniqorm_2.customer_tags',
   createSql: (`
-CREATE TABLE uniqorm_test.customertags
+CREATE TABLE uniqorm_2.customer_tags
 (
     customer_id integer NOT NULL,
     tag_id integer NOT NULL,
-    active smallint NOT NULL,
-    CONSTRAINT customertags_pkey PRIMARY KEY (customer_id, tag_id),
-    CONSTRAINT fk_customertags_customer FOREIGN KEY (customer_id)
-        REFERENCES uniqorm_test.customers (id) MATCH SIMPLE
+    active smallint NOT NULL default 1,
+    CONSTRAINT customer_tags_pkey PRIMARY KEY (customer_id, tag_id),
+    CONSTRAINT fk_customer_tags_customer FOREIGN KEY (customer_id)
+        REFERENCES uniqorm_2.customers (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
-    CONSTRAINT fk_customertags_tag FOREIGN KEY (tag_id)
-        REFERENCES uniqorm_test.tags (id) MATCH SIMPLE
+    CONSTRAINT fk_customer_tags_tag FOREIGN KEY (tag_id)
+        REFERENCES uniqorm_1.tags (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )

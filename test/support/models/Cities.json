@@ -1,11 +1,10 @@
 {
   "name": "Cities",
-  "schemaName": "uniqorm_test",
+  "schema": "uniqorm_1",
   "tableName": "cities",
   "fields": {
     "id": {
-      "dataType": "VARCHAR",
-      "charLength": 5,
+      "dataType": "INTEGER",
       "primaryKey": true
     },
     "name": {
@@ -17,19 +16,12 @@
       "dataType": "VARCHAR",
       "notNull": true,
       "charLength": 5
-    },
-    "country": {
-      "foreignModel": "Countries"
-    },
-    "country_name":{
-      "foreignModel": "Countries",
-      "fieldName": "name"
     }
   },
   "associations": [
     {
       "name": "fk_cities_country",
-      "foreignModel": "Countries",
+      "foreignModel": "uniqorm_1.Countries",
       "key": "country_id",
       "foreignKey": "id"
     }

@@ -2,20 +2,23 @@ const fs = require('fs');
 const path = require('path');
 const waterfall = require('putil-waterfall');
 
-function createTestTables(client, schemaName) {
+function createTestTables(client, options) {
 
   const jsons = [];
 
   return waterfall([
 
-        /* Create sqb_test schema */
-        (next) => {
-          client.query('CREATE SCHEMA ' + schemaName + ' AUTHORIZATION postgres;',
-              (err) => {
-                if (!err || err.message.indexOf('already exists'))
-                  return next();
-                next(err);
-              });
+        /* Create schema */
+        () => {
+          return waterfall.every(options.schemas, (next, schemaName) => {
+            client.query('CREATE SCHEMA ' + schemaName +
+                ' AUTHORIZATION postgres;',
+                (err) => {
+                  if (!err || err.message.indexOf('already exists'))
+                    return next();
+                  next(err);
+                });
+          });
         },
 
         /* Load jsons */

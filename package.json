@@ -1,7 +1,7 @@
 {
   "name": "uniqorm",
-  "description": "Easy to use, multi-dialect ORM framework for JavaScript",
-  "version": "1.6.3",
+  "description": "Multi dialect and multi schema ORM framework for enterprise level NodeJS applications",
+  "version": "2.0.0",
   "author": "Panates Ltd.",
   "contributors": [
     "Eray Hanoglu <e.hanoglu@panates.com>"
@@ -24,21 +24,20 @@
     "errorex": "^1.0.6",
     "putil-isplainobject": "^1.0.1",
     "putil-merge": "^2.0.1",
-    "putil-promisify": "^1.2.0",
     "putil-waterfall": "^2.0.2"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
     "coveralls": "^3.0.2",
-    "eslint": "^5.5.0",
+    "eslint": "^5.6.0",
     "eslint-config-google": "^0.10.0",
     "mocha": "^5.2.0",
     "nyc": "^13.0.1",
-    "sqb": "^3.3.0",
-    "sqb-connect-pg": "^3.0.5"
+    "sqb": "^3.4.2",
+    "sqb-connect-pg": "^3.0.7"
   },
   "peerDependencies": {
-    "sqb": ">=3.3.0"
+    "sqb": ">=3.4.2"
   },
   "engines": {
     "node": ">= 6.0"
@@ -54,7 +53,7 @@
   "scripts": {
     "test": "mocha --require ./test/support/env --reporter spec --bail --check-leaks test/",
     "cover": "nyc --reporter html --reporter text npm run test",
-    "travis-test": "mocha --require ./test/support/env --require ./test/support/env-travis --reporter spec --check-leaks test/",
+    "travis-test": "mocha --require ./test/support/env-travis --require ./test/support/env --reporter spec --check-leaks test/",
     "travis-cover": "nyc --reporter lcovonly npm run travis-test"
   }
 }

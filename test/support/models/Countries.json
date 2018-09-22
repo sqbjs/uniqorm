@@ -1,7 +1,8 @@
 {
   "name": "Countries",
-  "schemaName": "uniqorm_test",
+  "schema": "uniqorm_1",
   "tableName": "countries",
+  "comments": "countries table",
   "fields": {
     "id": {
       "dataType": "VARCHAR",
@@ -15,7 +16,7 @@
     },
     "phone_code": {
       "dataType": "SMALLINT",
-      "notNull": true
+      "comments": "Universal phone code number"
     }
   }
 }

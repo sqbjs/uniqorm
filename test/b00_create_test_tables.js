@@ -25,7 +25,7 @@ describe('Create test tables', function() {
         }
       });
       return pool.acquire(connection => {
-        return createTestTables(connection._client.intlcon, 'uniqorm_test');
+        return createTestTables(connection._client.intlcon, {schemas: ['uniqorm_1', 'uniqorm_2']});
       });
     }).timeout(5000);
 

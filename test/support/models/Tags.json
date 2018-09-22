@@ -1,6 +1,6 @@
 {
   "name": "Tags",
-  "schemaName": "uniqorm_test",
+  "schema": "uniqorm_1",
   "tableName": "tags",
   "fields": {
     "id": {

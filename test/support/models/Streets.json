@@ -1,6 +1,6 @@
 {
   "name": "Streets",
-  "schemaName": "uniqorm_test",
+  "schema": "uniqorm_1",
   "tableName": "streets",
   "fields": {
     "id": {
@@ -15,22 +15,12 @@
     "city_id": {
       "dataType": "INTEGER",
       "notNull": true
-    },
-    "city": {
-      "foreignModel": "Cities"
-    },
-    "country_name": {
-      "foreignModel": "Cities",
-      "towards": {
-        "foreignModel": "Countries",
-        "fieldName": "name"
-      }
     }
   },
   "associations": [
     {
-      "name": "fk_street_cities",
-      "foreignModel": "Cities",
+      "name": "fk_streets_city",
+      "foreignModel": "uniqorm_1.Cities",
       "key": "city_id",
       "foreignKey": "id"
     }

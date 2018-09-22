@@ -1,7 +1,7 @@
 module.exports = {
-  name: 'uniqorm_test.notes',
+  name: 'uniqorm_2.notes',
   createSql: (`
-CREATE TABLE uniqorm_test.notes
+CREATE TABLE uniqorm_2.notes
 (
     id SERIAL NOT NULL,
     source character varying (20) COLLATE pg_catalog."default" NOT NULL,

@@ -1,11 +1,10 @@
 {
   "name": "Customers",
-  "schemaName": "uniqorm_test",
+  "schema": "uniqorm_2",
   "tableName": "customers",
   "fields": {
     "id": {
       "dataType": "INTEGER",
-      "notNull": true,
       "primaryKey": true
     },
     "name": {
@@ -17,55 +16,16 @@
       "dataType": "INTEGER",
       "notNull": true
     },
-    "street": {
-      "foreignModel": "Streets",
-      "attributes": [
-        "id",
-        "name"
-      ]
-    },
-    "city": {
-      "foreignModel": "Streets",
-      "towards": "Cities"
-    },
-    "country": {
-      "foreignModel": "Streets",
-      "towards": {
-        "foreignModel": "Cities",
-        "filter": {
-          "id>": 0
-        },
-        "towards": "Countries"
-      }
-    },
-    "notes": {
-      "foreignModel": "Notes",
-      "key": "id",
-      "hasMany": true,
-      "foreignKey": "source_key",
-      "filter": {
-        "source": "customers"
-      }
-    },
-    "tags": {
-      "hasMany": true,
-      "foreignModel": "CustomerTags",
-      "filter": {
-        "active": 1
-      },
-      "towards": {
-        "foreignModel": "Tags",
-        "attributes": {
-          "id": null,
-          "name": null
-        }
-      }
+    "balance": {
+      "dataType": "NUMBER",
+      "precision": 12,
+      "scale": 4
     }
   },
   "associations": [
     {
       "name": "fk_customers_street",
-      "foreignModel": "Streets",
+      "foreignModel": "uniqorm_1.Streets",
       "key": "street_id",
       "foreignKey": "id"
     }

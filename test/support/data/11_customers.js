@@ -1,14 +1,15 @@
 module.exports = {
-  name: 'uniqorm_test.customers',
+  name: 'uniqorm_2.customers',
   createSql: (`
-CREATE TABLE uniqorm_test.customers
+CREATE TABLE uniqorm_2.customers
 (
     id SERIAL NOT NULL,
-    name character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    name character varying(64) COLLATE pg_catalog."default" NOT NULL,
     street_id integer NOT NULL,
+    balance numeric(12,4),
     CONSTRAINT customers_pkey PRIMARY KEY (id),
     CONSTRAINT fk_customers_street FOREIGN KEY (street_id)
-        REFERENCES uniqorm_test.streets (id) MATCH SIMPLE
+        REFERENCES uniqorm_1.streets (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
