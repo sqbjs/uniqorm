@@ -17,9 +17,11 @@ Uniqorm is an multi dialect and multi schema ORM framework for enterprise level 
 
 - Can work with any dialect that [SQB](https://github.com/panates/sqb) supports
 - Supports multi schemas
+- Supports One2One, One2Many, Many2Many associations
+- Supports reading DBms metadata and importing model schemas
 - Helps keeping server resources with "use-resources-on-demand" feature.
 - Offers very high performance for graph queries.
-- Support latest JavaScript language standards
+- Supports latest JavaScript language standards
 
 
 ## Node Compatibility
