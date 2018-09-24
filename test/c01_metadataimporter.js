@@ -36,10 +36,50 @@ describe('MetadataImporter', function() {
     });
   });
 
+  it('should should format model names as capitalize first letter', function() {
+    const importer = new Uniqorm.MetadataImporter(pool);
+    return importer.importSchema('uniqorm_2', {
+      modelNameFormat: Uniqorm.MetadataImporter.NameFormat.CAPITALIZE_FIRST_LETTER
+    }).then(result => {
+      assert.equal(typeof result, 'object');
+      assert(result.CustomerTags);
+    });
+  });
+
+  it('should format model names as camel case', function() {
+    const importer = new Uniqorm.MetadataImporter(pool);
+    return importer.importSchema('uniqorm_2', {
+      modelNameFormat: Uniqorm.MetadataImporter.NameFormat.CAMEL_CASE
+    }).then(result => {
+      assert.equal(typeof result, 'object');
+      assert(result.customerTags);
+    });
+  });
+
+  it('should should format field names as capitalize first letter', function() {
+    const importer = new Uniqorm.MetadataImporter(pool);
+    return importer.importSchema('uniqorm_2', {
+      fieldNameFormat: Uniqorm.MetadataImporter.NameFormat.CAPITALIZE_FIRST_LETTER
+    }).then(result => {
+      assert.equal(typeof result, 'object');
+      assert(result.notes.fields.SourceKey);
+    });
+  });
+
+  it('should should format field names as camel case', function() {
+    const importer = new Uniqorm.MetadataImporter(pool);
+    return importer.importSchema('uniqorm_2', {
+      fieldNameFormat: Uniqorm.MetadataImporter.NameFormat.CAMEL_CASE
+    }).then(result => {
+      assert.equal(typeof result, 'object');
+      assert(result.notes.fields.sourceKey);
+    });
+  });
+
   it('should import schema', function() {
     const importer = new Uniqorm.MetadataImporter(pool);
     return waterfall.every(['uniqorm_1', 'uniqorm_2'], (next, s) => {
-      return importer.importSchema(s, {capitalize: 1}).then(result => {
+      return importer.importSchema(s, {modelNameFormat: 2}).then(result => {
         assert.equal(typeof result, 'object');
         for (const key of Object.keys(result)) {
           const o = result[key];
@@ -60,18 +100,30 @@ describe('MetadataImporter', function() {
         });
   });
 
-  it('should import manipulate model names with nameModifier()', function() {
+  it('should import manipulate model names with modelNameModifier()', function() {
     const importer = new Uniqorm.MetadataImporter(pool);
     return importer.importSchema('uniqorm_1', {
-      nameModifier: (modelName, schemaName, tableName) => {
-        return schemaName+'_'+tableName;
+      modelNameModifier: (modelName, schemaName, tableName) => {
+        return schemaName + '_' + tableName;
       }
     }).then(result => {
       assert.equal(typeof result, 'object');
       for (const key of Object.keys(result)) {
         const o = result[key];
-        assert.equal(o.name, o.schema+'_'+o.tableName);
+        assert.equal(o.name, o.schema + '_' + o.tableName);
       }
+    });
+  });
+
+  it('should import manipulate model names with fieldNameModifier()', function() {
+    const importer = new Uniqorm.MetadataImporter(pool);
+    return importer.importSchema('uniqorm_1', {
+      fieldNameModifier: (fieldName, original) => {
+        return original + '_';
+      }
+    }).then(result => {
+      assert.equal(typeof result, 'object');
+      assert(result.countries.fields.id_);
     });
   });
 
