@@ -22,7 +22,7 @@ module.exports = merge.deep({}, require('./Customers.json'), {
       foreignModel: 'uniqorm_2.Notes',
       key: 'id',
       hasMany: true,
-      foreignKey: 'source_key',
+      foreignKey: 'sourceKey',
       filter: {source: 'customers'}
     },
     tags: {

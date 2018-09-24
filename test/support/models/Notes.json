@@ -12,8 +12,9 @@
       "charLength": 20,
       "notNull": true
     },
-    "source_key": {
+    "sourceKey": {
       "dataType": "INTEGER",
+      "fieldName": "source_key",
       "notNull": true
     },
     "contents": {

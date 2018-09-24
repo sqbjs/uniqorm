@@ -40,7 +40,7 @@ describe('Model.prototype.create', function() {
   after(() => pool.close(true));
 
   it('should create record', function() {
-    return Countries.create({id: 'ITA', name: 'Italy', phone_code: 39})
+    return Countries.create({id: 'ITA', name: 'Italy', phoneCode: 39})
         .then(result => {
           assert.equal(result, true);
         });
@@ -49,20 +49,20 @@ describe('Model.prototype.create', function() {
   it('should return own fields', function() {
     return Notes.create({
           source: 'customers',
-          source_key: 2,
+          sourceKey: 2,
           contents: 'any content'
         },
-        {returning: ['id', 'source_key'], silent: false})
+        {returning: ['id', 'sourceKey'], silent: false})
         .then(result => {
           assert.notEqual(result.id, undefined);
-          assert.equal(result.source_key, 2);
+          assert.equal(result.sourceKey, 2);
         });
   });
 
   it('should return all data fields if requested "*"', function() {
     return Notes.create({
           source: 'customers',
-          source_key: 2,
+          sourceKey: 2,
           contents: 'any content'
         },
         {returning: '*', silent: false})
@@ -74,7 +74,7 @@ describe('Model.prototype.create', function() {
   it('should return single fields if requested as string attribute', function() {
     return Notes.create({
           source: 'customers',
-          source_key: 2,
+          sourceKey: 2,
           contents: 'any content'
         },
         {returning: 'id', silent: false})
@@ -85,10 +85,10 @@ describe('Model.prototype.create', function() {
   });
 
   it('should return O2O associated fields', function() {
-    return Cities.create({id: 1000, name: 'Test City', country_id: 'TUR'},
-        {returning: ['country_name', 'country']})
+    return Cities.create({id: 1000, name: 'Test City', countryId: 'TUR'},
+        {returning: ['countryName', 'country']})
         .then(result => {
-          assert.equal(result.country_name, 'Turkey');
+          assert.equal(result.countryName, 'Turkey');
           assert.equal(typeof result.country, 'object');
           assert.equal(result.country.name, 'Turkey');
         });

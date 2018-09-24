@@ -63,9 +63,9 @@ describe('Model.prototype.find', function() {
   });
 
   it('should sort results', function() {
-    return Countries.find({sort: 'phone_code'}).then(recs1 => {
+    return Countries.find({sort: 'phoneCode'}).then(recs1 => {
       assert.equal(recs1[0].id, 'RUS');
-      return Countries.find({sort: '-phone_code'}).then(recs2 => {
+      return Countries.find({sort: '-phoneCode'}).then(recs2 => {
         assert.equal(recs2[0].id, 'TUR');
       });
     });
@@ -158,13 +158,13 @@ describe('Model.prototype.find', function() {
 
     it('should return associated single value', function() {
       return Cities.find({
-        attributes: ['id', 'name', 'country_name'],
+        attributes: ['id', 'name', 'countryName'],
         filter: {id: 1}
       }).then(recs => {
         assert.equal(recs.length, 1);
         assert.equal(recs[0].id, 1);
         assert.equal(recs[0].name, 'Munich');
-        assert.equal(recs[0].country_name, 'Germany');
+        assert.equal(recs[0].countryName, 'Germany');
       });
     });
 
@@ -189,7 +189,7 @@ describe('Model.prototype.find', function() {
           _name: 'name',
           _country: {
             fieldName: 'country',
-            attributes: {name_alias: 'name', 'phone_code_alias': 'phone_code'}
+            attributes: {name_alias: 'name', 'phone_code_alias': 'phoneCode'}
           }
         },
         filter: {id: 1}
@@ -209,7 +209,7 @@ describe('Model.prototype.find', function() {
         attributes: {
           id: '',
           _name: 'name',
-          country: ['name', 'phone_code']
+          country: ['name', 'phoneCode']
         },
         filter: {id: 1}
       }).then(recs => {
@@ -219,7 +219,7 @@ describe('Model.prototype.find', function() {
         assert.equal(typeof recs[0].country, 'object');
         assert.equal(Object.getOwnPropertyNames(recs[0].country).length, 2);
         assert.equal(recs[0].country.name, 'Germany');
-        assert.equal(recs[0].country.phone_code, 49);
+        assert.equal(recs[0].country.phoneCode, 49);
       });
     });
 
@@ -250,7 +250,7 @@ describe('Model.prototype.find', function() {
         assert.equal(typeof recs[0]._country, 'object');
         assert.equal(Object.getOwnPropertyNames(recs[0]._country).length, 3);
         assert.equal(recs[0]._country.name, 'Germany');
-        assert.equal(recs[0]._country.phone_code, 49);
+        assert.equal(recs[0]._country.phoneCode, 49);
       });
     });
 
@@ -270,7 +270,7 @@ describe('Model.prototype.find', function() {
         assert(!Array.isArray(recs[0].country));
         assert.equal(Object.getOwnPropertyNames(recs[0].country).length, 3);
         assert.equal(recs[0].country.name, 'Germany');
-        assert.equal(recs[0].country.phone_code, 49);
+        assert.equal(recs[0].country.phoneCode, 49);
       });
     });
 
@@ -291,7 +291,7 @@ describe('Model.prototype.find', function() {
     });
 
     it('should not request O2O associated flat fields sub attribute', function(done) {
-      Cities.find({attributes: ['country_name.name name']})
+      Cities.find({attributes: ['countryName.name name']})
           .then(() => done('Failed'))
           .catch((e) => {
             if (e.message.includes('has no sub value'))
@@ -360,7 +360,7 @@ describe('Model.prototype.find', function() {
       const scope = {};
       return Cities.find({
         attributes: ['id', 'name'],
-        filter: {country_name: 'France'},
+        filter: {countryName: 'France'},
         scope
       }).then(recs => {
         assert(scope);
@@ -373,7 +373,7 @@ describe('Model.prototype.find', function() {
     it('should filter by O2O associated attribute (towards)', function() {
       return Streets.find({
         attributes: ['id', 'name'],
-        filter: {country_name: 'France'}
+        filter: {countryName: 'France'}
       }).then(recs => {
         assert.equal(recs.length, 4);
         assert.equal(recs[0].name, 'Rue Cler');
@@ -383,8 +383,8 @@ describe('Model.prototype.find', function() {
 
     it('should sort by O2O associated attribute', function() {
       return Cities.find({
-        attributes: ['id', 'name', 'country_name'],
-        sort: ['-country_name']
+        attributes: ['id', 'name', 'countryName'],
+        sort: ['-countryName']
       }).then(recs => {
         assert.equal(recs[0].name, 'Manchester');
         assert.equal(recs[1].name, 'Izmir');

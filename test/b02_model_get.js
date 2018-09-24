@@ -45,7 +45,7 @@ describe('Model.prototype.get', function() {
       assert.equal(typeof rec, 'object');
       assert(!Array.isArray(rec), 'Record is array');
       assert.equal(rec.id, 'DEU');
-      assert.equal(rec.phone_code, 49);
+      assert.equal(rec.phoneCode, 49);
     });
   });
 

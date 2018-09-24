@@ -3,13 +3,15 @@
   "schema": "uniqorm_2",
   "tableName": "customer_tags",
   "fields": {
-    "customer_id": {
+    "customerId": {
       "dataType": "INTEGER",
-      "primaryKey": true
+      "primaryKey": true,
+      "fieldName": "customer_id"
     },
-    "tag_id": {
+    "tagId": {
       "dataType": "INTEGER",
-      "primaryKey": true
+      "primaryKey": true,
+      "fieldName": "tag_id"
     },
     "active": {
       "dataType": "SMALLINT",
@@ -21,13 +23,13 @@
     {
       "name": "fk_customer_tags_customer",
       "foreignModel": "uniqorm_2.Customers",
-      "key": "customer_id",
+      "key": "customerId",
       "foreignKey": "id"
     },
     {
       "name": "fk_customer_tags_tag",
       "foreignModel": "uniqorm_1.Tags",
-      "key": "tag_id",
+      "key": "tagId",
       "foreignKey": "id"
     }
   ]

@@ -81,7 +81,7 @@ describe('MetadataImporter', function() {
   it('should import schema', function() {
     const importer = new Uniqorm.MetadataImporter(pool);
     return waterfall.every(['uniqorm_1', 'uniqorm_2'], (next, s) => {
-      return importer.importSchema(s, {modelNameFormat: 2}).then(result => {
+      return importer.importSchema(s, {modelNameFormat: 2, fieldNameFormat: 1}).then(result => {
         assert.equal(typeof result, 'object');
         for (const key of Object.keys(result)) {
           const o = result[key];

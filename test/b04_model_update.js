@@ -73,10 +73,10 @@ describe('Model.prototype.update', function() {
   });
 
   it('should return O2O associated fields', function() {
-    return Cities.update({id: 1000, name: 'Test City2', country_id: 'ITA'},
-        {returning: ['country_name', 'country']})
+    return Cities.update({id: 1000, name: 'Test City2', countryId: 'ITA'},
+        {returning: ['countryName', 'country']})
         .then(result => {
-          assert.equal(result.country_name, 'Italy');
+          assert.equal(result.countryName, 'Italy');
           assert.equal(typeof result.country, 'object');
           assert.equal(result.country.name, 'Italy');
         });

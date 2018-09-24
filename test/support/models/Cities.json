@@ -12,8 +12,9 @@
       "notNull": true,
       "charLength": 20
     },
-    "country_id": {
+    "countryId": {
       "dataType": "VARCHAR",
+      "fieldName": "country_id",
       "notNull": true,
       "charLength": 5
     }
@@ -22,7 +23,7 @@
     {
       "name": "fk_cities_country",
       "foreignModel": "uniqorm_1.Countries",
-      "key": "country_id",
+      "key": "countryId",
       "foreignKey": "id"
     }
   ]

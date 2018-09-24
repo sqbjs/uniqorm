@@ -5,7 +5,7 @@ module.exports = merge.deep({}, require('./Streets.json'), {
     city: {
       foreignModel: 'uniqorm_1.Cities'
     },
-    country_name: {
+    countryName: {
       foreignModel: 'uniqorm_1.Cities',
       towards: {
         foreignModel: 'uniqorm_1.Countries',

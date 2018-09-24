@@ -14,8 +14,9 @@
       "notNull": true,
       "charLength": 20
     },
-    "phone_code": {
+    "phoneCode": {
       "dataType": "SMALLINT",
+      "fieldName": "phone_code",
       "comments": "Universal phone code number"
     }
   }

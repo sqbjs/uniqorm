@@ -12,8 +12,9 @@
       "notNull": true,
       "charLength": 64
     },
-    "city_id": {
+    "cityId": {
       "dataType": "INTEGER",
+      "fieldName": "city_id",
       "notNull": true
     }
   },
@@ -21,7 +22,7 @@
     {
       "name": "fk_streets_city",
       "foreignModel": "uniqorm_1.Cities",
-      "key": "city_id",
+      "key": "cityId",
       "foreignKey": "id"
     }
   ]

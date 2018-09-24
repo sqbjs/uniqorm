@@ -12,8 +12,9 @@
       "charLength": 64,
       "notNull": true
     },
-    "street_id": {
+    "streetId": {
       "dataType": "INTEGER",
+      "fieldName": "street_id",
       "notNull": true
     },
     "balance": {
@@ -26,7 +27,7 @@
     {
       "name": "fk_customers_street",
       "foreignModel": "uniqorm_1.Streets",
-      "key": "street_id",
+      "key": "streetId",
       "foreignKey": "id"
     }
   ]
