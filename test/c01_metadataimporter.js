@@ -63,6 +63,7 @@ describe('MetadataImporter', function() {
     }).then(result => {
       assert.equal(typeof result, 'object');
       assert(result.notes.fields.SourceKey);
+      assert.equal(result.notes.fields.SourceKey.fieldName, 'source_key');
     });
   });
 
@@ -73,6 +74,7 @@ describe('MetadataImporter', function() {
     }).then(result => {
       assert.equal(typeof result, 'object');
       assert(result.notes.fields.sourceKey);
+      assert.equal(result.notes.fields.sourceKey.fieldName, 'source_key');
     });
   });
 
@@ -124,6 +126,7 @@ describe('MetadataImporter', function() {
     }).then(result => {
       assert.equal(typeof result, 'object');
       assert(result.countries.fields.id_);
+      assert.equal(result.countries.fields.id_.fieldName, 'id');
     });
   });
 
