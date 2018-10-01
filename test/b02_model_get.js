@@ -40,8 +40,17 @@ describe('Model.prototype.get', function() {
     Customers = orm.get('uniqorm_2.Customers');
   });
 
-  it('should get() retrieve single instance', function() {
+  it('should retrieve single instance', function() {
     return Countries.get({id: 'DEU'}).then(rec => {
+      assert.equal(typeof rec, 'object');
+      assert(!Array.isArray(rec), 'Record is array');
+      assert.equal(rec.id, 'DEU');
+      assert.equal(rec.phoneCode, 49);
+    });
+  });
+
+  it('should retrieve with key value', function() {
+    return Countries.get('DEU').then(rec => {
       assert.equal(typeof rec, 'object');
       assert(!Array.isArray(rec), 'Record is array');
       assert.equal(rec.id, 'DEU');
