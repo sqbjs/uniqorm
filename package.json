@@ -34,7 +34,7 @@
     "mocha": "^5.2.0",
     "nyc": "^13.0.1",
     "sqb": "^3.4.3",
-    "sqb-connect-pg": "^3.0.10"
+    "sqb-connect-pg": "^3.0.12"
   },
   "peerDependencies": {
     "sqb": ">=3.4.3"

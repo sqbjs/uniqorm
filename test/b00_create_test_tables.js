@@ -2,7 +2,7 @@
 require('./support/env');
 const assert = require('assert');
 const sqb = require('sqb');
-const createTestTables = require('./support/createTestTables');
+const createDatabase = require('./support/createDatabase');
 
 describe('Create test tables', function() {
 
@@ -25,7 +25,10 @@ describe('Create test tables', function() {
         }
       });
       return pool.acquire(connection => {
-        return createTestTables(connection._client.intlcon, {schemas: ['uniqorm_1', 'uniqorm_2']});
+        return createDatabase(connection._client.intlcon, {
+          structureScript: 'db_structure.sql',
+          dataFiles: 'table-data/*.json'
+        });
       });
     }).timeout(5000);
 

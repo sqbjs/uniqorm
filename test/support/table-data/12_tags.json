@@ -1,0 +1,17 @@
+{
+  "name": "uniqorm_1.tags",
+  "rows": [
+    {
+      "id": 1,
+      "name": "Yellow"
+    },
+    {
+      "id": 2,
+      "name": "Red"
+    },
+    {
+      "id": 3,
+      "name": "Green"
+    }
+  ]
+}

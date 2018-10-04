@@ -1,0 +1,35 @@
+{
+  "name": "uniqorm_1.countries",
+  "rows": [
+    {
+      "id": "DEU",
+      "name": "Germany",
+      "phone_code": 49
+    },
+    {
+      "id": "ESP",
+      "name": "Spain",
+      "phone_code": 34
+    },
+    {
+      "id": "FRA",
+      "name": "France",
+      "phone_code": 33
+    },
+    {
+      "id": "GBR",
+      "name": "United Kingdom",
+      "phone_code": 44
+    },
+    {
+      "id": "RUS",
+      "name": "Russia",
+      "phone_code": 7
+    },
+    {
+      "id": "TUR",
+      "name": "Turkey",
+      "phone_code": 90
+    }
+  ]
+}
