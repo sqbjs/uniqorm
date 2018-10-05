@@ -37,6 +37,11 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, true);
       assert.equal(f.defaultValue, true);
       assert.equal(f.primaryKey, true);
+      assert.equal(f.parseValue(0), false);
+      assert.equal(f.parseValue(1), true);
+      assert.equal(f.parseValue({}), true);
+      assert.equal(f.parseValue(NaN), false);
+      assert.equal(f.parseValue(undefined), null);
     });
   });
 
@@ -54,6 +59,12 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, null);
       assert.equal(f.defaultValue, null);
       assert.equal(f.primaryKey, null);
+      assert.equal(f.parseValue(0), 0);
+      assert.equal(f.parseValue(1), 1);
+      assert.equal(f.parseValue('123'), 123);
+      assert.equal(f.parseValue('123.5'), 123);
+      assert.equal(f.parseValue(NaN), null);
+      assert.equal(f.parseValue(undefined), null);
 
       assert.equal(f.jsType, 'Number');
       assert.equal(f.sqlType, 'INTEGER');
@@ -89,6 +100,12 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, null);
       assert.equal(f.defaultValue, null);
       assert.equal(f.primaryKey, null);
+      assert.equal(f.parseValue(0), 0);
+      assert.equal(f.parseValue(1), 1);
+      assert.equal(f.parseValue('123'), 123);
+      assert.equal(f.parseValue('123.5'), 123);
+      assert.equal(f.parseValue(NaN), null);
+      assert.equal(f.parseValue(undefined), null);
 
       assert.equal(f.jsType, 'Number');
       assert.equal(f.sqlType, 'BIGINT');
@@ -124,6 +141,12 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, null);
       assert.equal(f.defaultValue, null);
       assert.equal(f.primaryKey, null);
+      assert.equal(f.parseValue(0), 0);
+      assert.equal(f.parseValue(1), 1);
+      assert.equal(f.parseValue('123'), 123);
+      assert.equal(f.parseValue('123.5'), 123);
+      assert.equal(f.parseValue(NaN), null);
+      assert.equal(f.parseValue(undefined), null);
 
       assert.equal(f.jsType, 'Number');
       assert.equal(f.sqlType, 'SMALLINT');
@@ -159,6 +182,12 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, null);
       assert.equal(f.defaultValue, null);
       assert.equal(f.primaryKey, null);
+      assert.equal(f.parseValue(0), 0);
+      assert.equal(f.parseValue(1), 1);
+      assert.equal(f.parseValue('123'), 123);
+      assert.equal(f.parseValue('123.5'), 123.5);
+      assert.equal(f.parseValue(NaN), null);
+      assert.equal(f.parseValue(undefined), null);
 
       assert.equal(f.jsType, 'Number');
       assert.equal(f.sqlType, 'DOUBLE');
@@ -194,6 +223,12 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, null);
       assert.equal(f.defaultValue, null);
       assert.equal(f.primaryKey, null);
+      assert.equal(f.parseValue(0), 0);
+      assert.equal(f.parseValue(1), 1);
+      assert.equal(f.parseValue('123'), 123);
+      assert.equal(f.parseValue('123.5'), 123.5);
+      assert.equal(f.parseValue(NaN), null);
+      assert.equal(f.parseValue(undefined), null);
 
       assert.equal(f.jsType, 'Number');
       assert.equal(f.sqlType, 'FLOAT');
@@ -288,6 +323,12 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, null);
       assert.equal(f.defaultValue, null);
       assert.equal(f.primaryKey, null);
+      assert.equal(f.parseValue(0), '0');
+      assert.equal(f.parseValue(1), '1');
+      assert.equal(f.parseValue('123'), '123');
+      assert.equal(f.parseValue('123.5'), '123.5');
+      assert.equal(f.parseValue(NaN), 'NaN');
+      assert.equal(f.parseValue(undefined), null);
 
       assert.equal(f.jsType, 'String');
       assert.equal(f.sqlType, 'TEXT');
@@ -324,6 +365,12 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, null);
       assert.equal(f.defaultValue, null);
       assert.equal(f.primaryKey, null);
+      assert.equal(f.parseValue(0), '0');
+      assert.equal(f.parseValue(1), '1');
+      assert.equal(f.parseValue('123'), '123');
+      assert.equal(f.parseValue('123.5'), '123.5');
+      assert.equal(f.parseValue(NaN), 'NaN');
+      assert.equal(f.parseValue(undefined), null);
 
       assert.equal(f.jsType, 'String');
       assert.equal(f.sqlType, 'CHAR');
@@ -362,6 +409,12 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, null);
       assert.equal(f.defaultValue, null);
       assert.equal(f.primaryKey, null);
+      assert.equal(f.parseValue(0), '0');
+      assert.equal(f.parseValue(1), '1');
+      assert.equal(f.parseValue('123'), '123');
+      assert.equal(f.parseValue('123.5'), '123.5');
+      assert.equal(f.parseValue(NaN), 'NaN');
+      assert.equal(f.parseValue(undefined), null);
 
       assert.equal(f.jsType, 'String');
       assert.equal(f.sqlType, 'VARCHAR');
@@ -412,6 +465,12 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, null);
       assert.equal(f.defaultValue, null);
       assert.equal(f.primaryKey, null);
+      assert.equal(f.parseValue(0), '0');
+      assert.equal(f.parseValue(1), '1');
+      assert.equal(f.parseValue('123'), '123');
+      assert.equal(f.parseValue('123.5'), '123.5');
+      assert.equal(f.parseValue(NaN), 'NaN');
+      assert.equal(f.parseValue(undefined), null);
 
       assert.equal(f.jsType, 'String');
       assert.equal(f.sqlType, 'CLOB');
@@ -447,6 +506,12 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, null);
       assert.equal(f.defaultValue, null);
       assert.equal(f.primaryKey, null);
+      assert.deepEqual(f.parseValue(0), new Date(0));
+      assert.deepEqual(f.parseValue(new Date(1)), new Date(1));
+      assert.deepEqual(f.parseValue('2018-11-05'), new Date(2018, 10, 5));
+      assert.deepEqual(f.parseValue('2018-11-05 10:15:30.654'), new Date(2018, 10, 5, 10, 15, 30, 654));
+      assert.deepEqual(f.parseValue('2018-11-05T10:15:30.654'), new Date(2018, 10, 5, 10, 15, 30, 654));
+      assert.deepEqual(f.parseValue(undefined), null);
 
       assert.equal(f.jsType, 'Date');
       assert.equal(f.sqlType, 'TIMESTAMP');
@@ -486,6 +551,16 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, null);
       assert.equal(f.defaultValue, null);
       assert.equal(f.primaryKey, null);
+      const d1 = new Date(0);
+      const d2 = new Date(2018, 10, 5, 10, 15, 30, 654);
+      d1.setHours(0, 0, 0, 0);
+      d2.setHours(0, 0, 0, 0);
+      assert.deepEqual(f.parseValue(0), d1);
+      assert.deepEqual(f.parseValue(new Date(0)), d1);
+      assert.deepEqual(f.parseValue('2018-11-05'), new Date(2018, 10, 5));
+      assert.deepEqual(f.parseValue('2018-11-05 10:15:30.654'), d2);
+      assert.deepEqual(f.parseValue('2018-11-05T10:15:30.654'), d2);
+      assert.deepEqual(f.parseValue(undefined), null);
 
       assert.equal(f.jsType, 'Date');
       assert.equal(f.sqlType, 'DATE');
@@ -527,6 +602,15 @@ describe('Data Fields', function() {
       assert.equal(f.notNull, null);
       assert.equal(f.defaultValue, null);
       assert.equal(f.primaryKey, null);
+      const d1 = new Date(0);
+      const d2 = new Date(2018, 10, 5, 10, 15, 30, 654);
+      d1.setFullYear(0, 0, 0);
+      d2.setFullYear(0, 0, 0);
+      assert.deepEqual(f.parseValue(0), d1);
+      assert.deepEqual(f.parseValue(new Date(0)), d1);
+      assert.deepEqual(f.parseValue('2018-11-05 10:15:30.654'), d2);
+      assert.deepEqual(f.parseValue('2018-11-05T10:15:30.654'), d2);
+      assert.deepEqual(f.parseValue(undefined), null);
 
       assert.equal(f.jsType, 'Date');
       assert.equal(f.sqlType, 'TIME');
