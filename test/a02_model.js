@@ -100,13 +100,13 @@ describe('Model', function() {
     }
   });
 
-  it('should fields.set() validate definition object', function() {
+  it('should addField() validate definition object', function() {
     const orm = new Uniqorm();
     const model1 = orm.define(model1Def);
     try {
-      model1.fields.set('field3', 123);
+      model1.addField('field3', 123);
     } catch (e) {
-      if (e.message.includes('is not valid'))
+      if (e.message.includes('You must provide object instance'))
         return;
       throw e;
     }
@@ -116,10 +116,10 @@ describe('Model', function() {
     const orm = new Uniqorm();
     orm.define(model1Def);
     const model2 = orm.define(model2Def);
-    model2.fields.set('field2', {
+    model2.addField('field2', {
       dataType: 'DATE'
     });
-    const field3 = model2.fields.get('field2');
+    const field3 = model2.fields.field2;
     assert(field3);
     assert.equal(field3.dataType, 'DATE');
     assert.equal(field3.jsType, 'Date');
@@ -129,12 +129,12 @@ describe('Model', function() {
     const orm = new Uniqorm();
     orm.define(model1Def);
     const model2 = orm.define(model2Def);
-    model2.fields.set('field3', {
+    model2.addField('field3', {
       foreignModel: 'model1',
       key: 'id',
       foreignKey: 'model1_id'
     });
-    const field3 = model2.fields.get('field3');
+    const field3 = model2.fields.field3;
     assert(field3);
     assert.equal(field3.foreignModel.name, 'model1');
   });
@@ -144,9 +144,9 @@ describe('Model', function() {
     orm.define(model1Def);
     const model2 = orm.define(model2Def);
     try {
-      model2.fields.set('field2', {});
+      model2.addField('field2', {});
     } catch (e) {
-      if (e.message.includes('Data type is not defined'))
+      if (e.message.includes('You must provide "dataType" property'))
         return;
       throw e;
     }
@@ -156,7 +156,7 @@ describe('Model', function() {
     const orm = new Uniqorm();
     orm.define(model1Def);
     const model2 = orm.define(model2Def);
-    model2.fields.set('field3', {
+    model2.addField('field3', {
       foreignModel: 'model1',
       key: 'id',
       foreignKey: 'model1_id'

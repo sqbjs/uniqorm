@@ -86,7 +86,7 @@ describe('Associated Fields', function() {
     States.hasMany('country2', 'countries');
     orm.prepare();
 
-    let f = States.fields.get('country');
+    let f = States.fields.country;
     assert(f);
     assert.equal(f.foreignModel.name, 'countries');
     assert.equal(f.foreignKey, 'id');
@@ -97,7 +97,7 @@ describe('Associated Fields', function() {
       id: null,
       name: null
     });
-    f = States.fields.get('country2');
+    f = States.fields.country2;
     assert(f);
     assert.equal(f.foreignModel.name, 'countries');
     assert.equal(f.foreignKey, 'id');
@@ -115,7 +115,7 @@ describe('Associated Fields', function() {
       key: 'country_id',
       filter: {id: 1}
     });
-    const f = States.fields.get('country');
+    const f = States.fields.country;
     assert(f);
     assert.equal(f.foreignModel.name, 'countries');
     assert.equal(f.foreignKey, 'id');
@@ -143,11 +143,11 @@ describe('Associated Fields', function() {
       fieldName: 'name'
     });
     orm.prepare();
-    let f = States.fields.get('country');
+    let f = States.fields.country;
     assert(f);
     assert.equal(f.fieldName, 'name');
 
-    f = States.fields.get('country2');
+    f = States.fields.country2;
     assert(f);
     assert.equal(f.fieldName, null);
     assert.deepEqual(f.attributes, {
@@ -187,7 +187,7 @@ describe('Associated Fields', function() {
     orm.prepare();
 
     let model = orm.get('countries');
-    let f = model.fields.get('cities');
+    let f = model.fields.cities;
     assert(f);
     assert.equal(f.foreignModel.name, 'states');
     assert.equal(f.foreignKey, 'country_id');
@@ -200,7 +200,7 @@ describe('Associated Fields', function() {
     assert.deepEqual(f.towards.filter, [{'id>': 0}]);
     assert.deepEqual(f.towards.attributes, {id: null, name: null});
 
-    f = model.fields.get('cities2');
+    f = model.fields.cities2;
     assert(f);
     assert.equal(f.foreignModel.name, 'states');
     assert.equal(f.foreignKey, 'country_id');
@@ -217,21 +217,21 @@ describe('Associated Fields', function() {
     });
 
     model = orm.get('cities');
-    f = model.fields.get('state');
+    f = model.fields.state;
     assert(f);
     assert.equal(f.foreignModel.name, 'states');
     assert.equal(f.foreignKey, 'id');
     assert.equal(f.key, 'state_id');
 
     model = orm.get('streets');
-    f = model.fields.get('city');
+    f = model.fields.city;
     assert(f);
     assert.equal(f.foreignModel.name, 'cities');
     assert.equal(f.foreignKey, 'id');
     assert.equal(f.key, 'cities_id');
 
     model = orm.get('roads');
-    f = model.fields.get('state');
+    f = model.fields.state;
     assert(f);
     assert.equal(f.foreignModel.name, 'states');
     assert.equal(f.foreignKey, 'id');
