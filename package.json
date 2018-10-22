@@ -1,7 +1,7 @@
 {
   "name": "uniqorm",
   "description": "Multi dialect and multi schema ORM framework for enterprise level NodeJS applications",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "author": "Panates Ltd.",
   "contributors": [
     "Eray Hanoglu <e.hanoglu@panates.com>"
@@ -21,20 +21,20 @@
     "sqlite"
   ],
   "dependencies": {
-    "errorex": "^1.0.6",
+    "errorex": "^2.0.3",
     "putil-isplainobject": "^1.0.1",
-    "putil-merge": "^2.0.1",
-    "putil-waterfall": "^2.0.3"
+    "putil-merge": "^2.0.2",
+    "putil-waterfall": "^2.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "coveralls": "^3.0.2",
-    "eslint": "^5.6.1",
-    "eslint-config-google": "^0.10.0",
+    "eslint": "^5.7.0",
+    "eslint-config-google": "^0.11.0",
     "mocha": "^5.2.0",
-    "nyc": "^13.0.1",
-    "sqb": "^3.4.3",
-    "sqb-connect-pg": "^3.0.12"
+    "nyc": "^13.1.0",
+    "sqb": "^3.5.3",
+    "sqb-connect-pg": "^3.0.15"
   },
   "peerDependencies": {
     "sqb": ">=3.4.3"
