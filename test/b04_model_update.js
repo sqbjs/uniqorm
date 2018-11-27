@@ -30,11 +30,11 @@ describe('Model.prototype.update', function() {
     orm = new Uniqorm(pool);
     loadModels(orm);
     orm.prepare();
-    Countries = orm.get('uniqorm_1.Countries');
-    Cities = orm.get('uniqorm_1.Cities');
-    Streets = orm.get('uniqorm_1.Streets');
-    Customers = orm.get('uniqorm_2.Customers');
-    Notes = orm.get('uniqorm_2.Notes');
+    Countries = orm.getModel('uniqorm_1.Countries');
+    Cities = orm.getModel('uniqorm_1.Cities');
+    Streets = orm.getModel('uniqorm_1.Streets');
+    Customers = orm.getModel('uniqorm_2.Customers');
+    Notes = orm.getModel('uniqorm_2.Notes');
   });
 
   after(() => pool.close(true));

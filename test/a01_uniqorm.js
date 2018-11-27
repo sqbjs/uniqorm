@@ -48,7 +48,7 @@ describe('Uniqorm', function() {
         }
       }
     });
-    orm.get('model1');
+    orm.getModel('model1');
   });
 
   it('should check modelDef argument exists in define() function', function() {
@@ -131,7 +131,7 @@ describe('Uniqorm', function() {
   it('should not get unknown schema', function() {
     const orm = new Uniqorm();
     try {
-      orm.get('model1234');
+      orm.getModel('model1234');
     } catch (e) {
       if (e.message.includes('No such'))
         return;
@@ -154,7 +154,7 @@ describe('Uniqorm', function() {
       }
     });
     try {
-      orm.get('model1234');
+      orm.getModel('model1234');
     } catch (e) {
       if (e.message.includes('Schema "schema1" has no model'))
         return;

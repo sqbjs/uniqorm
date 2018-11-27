@@ -24,17 +24,16 @@
     "errorex": "^2.0.3",
     "putil-isplainobject": "^1.0.1",
     "putil-merge": "^2.0.2",
-    "putil-waterfall": "^2.1.0"
+    "putil-waterfall": "^2.1.1"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
-    "coveralls": "^3.0.2",
-    "eslint": "^5.7.0",
+    "eslint": "^5.9.0",
     "eslint-config-google": "^0.11.0",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
-    "sqb": "^3.5.3",
-    "sqb-connect-pg": "^3.0.15"
+    "sqb": "^3.5.5",
+    "sqb-connect-pg": "^3.0.16"
   },
   "peerDependencies": {
     "sqb": ">=3.4.3"
@@ -48,7 +47,7 @@
     "lib/"
   ],
   "nyc": {
-    "temp-directory": "./coverage/.nyc_output"
+    "temp-dir": "./coverage/.nyc_output"
   },
   "scripts": {
     "test": "mocha --require ./test/support/env --reporter spec --bail --check-leaks test/",

@@ -186,7 +186,7 @@ describe('Associated Fields', function() {
     orm.define(defs.roads);
     orm.prepare();
 
-    let model = orm.get('countries');
+    let model = orm.getModel('countries');
     let f = model.fields.cities;
     assert(f);
     assert.equal(f.foreignModel.name, 'states');
@@ -216,21 +216,21 @@ describe('Associated Fields', function() {
       name: null
     });
 
-    model = orm.get('cities');
+    model = orm.getModel('cities');
     f = model.fields.state;
     assert(f);
     assert.equal(f.foreignModel.name, 'states');
     assert.equal(f.foreignKey, 'id');
     assert.equal(f.key, 'state_id');
 
-    model = orm.get('streets');
+    model = orm.getModel('streets');
     f = model.fields.city;
     assert(f);
     assert.equal(f.foreignModel.name, 'cities');
     assert.equal(f.foreignKey, 'id');
     assert.equal(f.key, 'cities_id');
 
-    model = orm.get('roads');
+    model = orm.getModel('roads');
     f = model.fields.state;
     assert(f);
     assert.equal(f.foreignModel.name, 'states');

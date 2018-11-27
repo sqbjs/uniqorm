@@ -100,7 +100,7 @@ describe('Associations', function() {
         }
       ]
     });
-    const details = orm.get('details');
+    const details = orm.getModel('details');
     assert.equal(details.associations.length, 1);
     assert.equal(details.associations[0].orm, orm);
     assert.equal(details.associations[0].name, 'fk_details_master');

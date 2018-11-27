@@ -58,14 +58,14 @@ describe('Model', function() {
     const orm = new Uniqorm();
     orm.define(model1Def);
     orm.prepare();
-    const model1 = orm.get('model1');
+    const model1 = orm.getModel('model1');
     assert.deepEqual(model1.keyFields, ['id']);
   });
 
   it('should manipulate toString()', function() {
     const orm = new Uniqorm();
     orm.define(model1Def);
-    const model1 = orm.get('model1');
+    const model1 = orm.getModel('model1');
     assert.deepEqual(String(model1), '[object Model<model1>]');
   });
 
