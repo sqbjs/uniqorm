@@ -492,6 +492,53 @@ describe('Data Fields', function() {
     });
   });
 
+  describe('TIMESTAMPTZ', function() {
+
+    it('should be registered', function() {
+      assert(Uniqorm.DataField.get('TIMESTAMPTZ'));
+    });
+
+    it('should create', function() {
+      const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMPTZ');
+      const f = new TIMESTAMP('field1');
+      assert.equal(f.name, 'field1');
+      assert.equal(f.fieldName, 'field1');
+      assert.equal(f.notNull, null);
+      assert.equal(f.defaultValue, null);
+      assert.equal(f.primaryKey, null);
+      assert.deepEqual(f.parseValue(0), new Date(0));
+      assert.deepEqual(f.parseValue(new Date(1)), new Date(1));
+      assert.deepEqual(f.parseValue('2018-11-05'), new Date(2018, 10, 5));
+      assert.deepEqual(f.parseValue('20181105'), new Date(2018, 10, 5));
+      assert.deepEqual(f.parseValue('2018-11-05 10:15:30.654+03'), new Date('2018-11-05T10:15:30.654+03:00'));
+      assert.deepEqual(f.parseValue('20181105 101530.654+03'), new Date('2018-11-05T10:15:30.654+03:00'));
+      assert.deepEqual(f.parseValue('2018-11-05T10:15:30.654+03'), new Date('2018-11-05T10:15:30.654+03:00'));
+      assert.deepEqual(f.parseValue(undefined), null);
+
+      assert.equal(f.jsType, 'Date');
+      assert.equal(f.sqlType, 'TIMESTAMPTZ');
+    });
+
+    it('should create with properties', function() {
+      const d = new Date();
+      const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMPTZ');
+      const f = new TIMESTAMP('field1', null, {
+        notNull: 1,
+        defaultValue: d.getTime(),
+        primaryKey: 8,
+        fieldName: 'f1',
+        charLength: 10
+      });
+      assert.equal(f.name, 'field1');
+      assert.equal(f.fieldName, 'f1');
+      assert.equal(f.notNull, true);
+      assert.equal(f.defaultValue.getTime(), d.getTime());
+      assert.equal(f.primaryKey, true);
+      f.defaultValue = d;
+      assert.equal(f.defaultValue.getTime(), d.getTime());
+    });
+  });
+
   describe('TIMESTAMP', function() {
 
     it('should be registered', function() {
