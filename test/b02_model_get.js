@@ -4,6 +4,8 @@ const assert = require('assert');
 const sqb = require('sqb');
 const Uniqorm = require('../lib/index');
 const loadModels = require('./support/loadModels');
+const {rejects} = require('rejected-or-not');
+assert.rejects = assert.rejects || rejects;
 
 describe('Model.prototype.get', function() {
 
@@ -42,30 +44,30 @@ describe('Model.prototype.get', function() {
 
   it('should retrieve single instance', function() {
     return Countries.get({id: 'DEU'}).then(rec => {
-      assert.equal(typeof rec, 'object');
+      assert.strictEqual(typeof rec, 'object');
       assert(!Array.isArray(rec), 'Record is array');
-      assert.equal(rec.id, 'DEU');
-      assert.equal(rec.phoneCode, 49);
+      assert.strictEqual(rec.id, 'DEU');
+      assert.strictEqual(rec.phoneCode, 49);
     });
   });
 
   it('should retrieve with key value', function() {
     return Countries.get('DEU').then(rec => {
-      assert.equal(typeof rec, 'object');
+      assert.strictEqual(typeof rec, 'object');
       assert(!Array.isArray(rec), 'Record is array');
-      assert.equal(rec.id, 'DEU');
-      assert.equal(rec.phoneCode, 49);
+      assert.strictEqual(rec.id, 'DEU');
+      assert.strictEqual(rec.phoneCode, 49);
     });
   });
 
-  it('should get() check key values on get()', function(done) {
-    Countries.get().then(() => done('Failed')).catch(() => done());
+  it('should get() check key values on get()', function() {
+    return assert.rejects(() => Countries.get());
   });
 
   describe('Finalize', function() {
 
     it('should have no active connection after all tests', function() {
-      assert.equal(pool.acquired, 0);
+      assert.strictEqual(pool.acquired, 0);
     });
 
     it('should shutdown pool', function() {

@@ -43,19 +43,19 @@ describe('Model.prototype.destroy', function() {
     return pool.select(sqb.raw('count(*)'))
         .from(table)
         .execute({objectRows: false})
-        .then(resp => resp.rows[0][0]);
+        .then(resp => Number(resp.rows[0][0]));
   }
 
   it('should destroy record with key value', function() {
     return getRecordCount('uniqorm_1.cities').then(count => {
       return Cities.destroy(1000)
           .then(result => {
-            assert.equal(result, true);
+            assert.strictEqual(result, true);
             return Cities.get(1000).then(rows => {
               if (rows)
                 assert(0, 'Failed');
               return getRecordCount('uniqorm_1.cities')
-                  .then(c => assert.equal(c, count - 1));
+                  .then(c => assert.strictEqual(c, count - 1));
             });
           });
     });
@@ -66,12 +66,12 @@ describe('Model.prototype.destroy', function() {
     return getRecordCount('uniqorm_2.notes').then(count => {
       return Notes.destroy({id: 1})
           .then(result => {
-            assert.equal(result, true);
+            assert.strictEqual(result, true);
             return Notes.get(1).then(rows => {
               if (rows)
                 assert(0, 'Failed');
               return getRecordCount('uniqorm_2.notes')
-                  .then(c => assert.equal(c, count - 1));
+                  .then(c => assert.strictEqual(c, count - 1));
             });
           });
     });

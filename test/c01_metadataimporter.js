@@ -4,6 +4,8 @@ const assert = require('assert');
 const sqb = require('sqb');
 const Uniqorm = require('../lib/index');
 const waterfall = require('putil-waterfall');
+const {rejects} = require('rejected-or-not');
+assert.rejects = assert.rejects || rejects;
 
 describe('MetadataImporter', function() {
 
@@ -31,8 +33,8 @@ describe('MetadataImporter', function() {
     const importer = new Uniqorm.MetadataImporter(pool);
     return importer.listSchemas().then(schemas => {
       assert(schemas);
-      assert.notEqual(schemas.length, 0);
-      assert.notEqual(schemas.indexOf('uniqorm_1'), 0);
+      assert.notStrictEqual(schemas.length, 0);
+      assert.notStrictEqual(schemas.indexOf('uniqorm_1'), 0);
     });
   });
 
@@ -41,7 +43,7 @@ describe('MetadataImporter', function() {
     return importer.importSchema('uniqorm_2', {
       modelNameFormat: Uniqorm.MetadataImporter.NameFormat.CAPITALIZE_FIRST_LETTER
     }).then(result => {
-      assert.equal(typeof result, 'object');
+      assert.strictEqual(typeof result, 'object');
       assert(result.CustomerTags);
     });
   });
@@ -51,7 +53,7 @@ describe('MetadataImporter', function() {
     return importer.importSchema('uniqorm_2', {
       modelNameFormat: Uniqorm.MetadataImporter.NameFormat.CAMEL_CASE
     }).then(result => {
-      assert.equal(typeof result, 'object');
+      assert.strictEqual(typeof result, 'object');
       assert(result.customerTags);
     });
   });
@@ -61,9 +63,9 @@ describe('MetadataImporter', function() {
     return importer.importSchema('uniqorm_2', {
       fieldNameFormat: Uniqorm.MetadataImporter.NameFormat.CAPITALIZE_FIRST_LETTER
     }).then(result => {
-      assert.equal(typeof result, 'object');
+      assert.strictEqual(typeof result, 'object');
       assert(result.notes.fields.SourceKey);
-      assert.equal(result.notes.fields.SourceKey.fieldName, 'source_key');
+      assert.strictEqual(result.notes.fields.SourceKey.fieldName, 'source_key');
     });
   });
 
@@ -72,34 +74,32 @@ describe('MetadataImporter', function() {
     return importer.importSchema('uniqorm_2', {
       fieldNameFormat: Uniqorm.MetadataImporter.NameFormat.CAMEL_CASE
     }).then(result => {
-      assert.equal(typeof result, 'object');
+      assert.strictEqual(typeof result, 'object');
       assert(result.notes.fields.sourceKey);
-      assert.equal(result.notes.fields.sourceKey.fieldName, 'source_key');
+      assert.strictEqual(result.notes.fields.sourceKey.fieldName, 'source_key');
     });
   });
 
   it('should import schema', function() {
     const importer = new Uniqorm.MetadataImporter(pool);
     return waterfall.every(['uniqorm_1', 'uniqorm_2'], (next, s) => {
-      return importer.importSchema(s, {modelNameFormat: 2, fieldNameFormat: 1}).then(result => {
-        assert.equal(typeof result, 'object');
-        for (const key of Object.keys(result)) {
-          const o = result[key];
-          const j = require('./support/models/' + o.name + '.json');
-          assert.deepEqual(o, j);
-        }
-      });
+      return importer.importSchema(s, {modelNameFormat: 2, fieldNameFormat: 1})
+          .then(result => {
+            assert.strictEqual(typeof result, 'object');
+            for (const key of Object.keys(result)) {
+              const o = result[key];
+              const j = require('./support/models/' + o.name + '.json');
+              assert.deepStrictEqual(o, j);
+            }
+          });
     });
   });
 
-  it('should provide schame name argument if dialect supports', function(done) {
+  it('should provide schame name argument if dialect supports', function() {
     const importer = new Uniqorm.MetadataImporter(pool);
-    importer.importSchema().then(() => assert(0, 'Failed'))
-        .catch(e => {
-          if (e.message.includes('You must provide schema name'))
-            return done();
-          done(e);
-        });
+    return assert.rejects(() =>
+            importer.importSchema(),
+        /You must provide schema name/);
   });
 
   it('should import manipulate model names with modelNameModifier()', function() {
@@ -109,10 +109,10 @@ describe('MetadataImporter', function() {
         return schemaName + '_' + tableName;
       }
     }).then(result => {
-      assert.equal(typeof result, 'object');
+      assert.strictEqual(typeof result, 'object');
       for (const key of Object.keys(result)) {
         const o = result[key];
-        assert.equal(o.name, o.schema + '_' + o.tableName);
+        assert.strictEqual(o.name, o.schema + '_' + o.tableName);
       }
     });
   });
@@ -124,9 +124,9 @@ describe('MetadataImporter', function() {
         return original + '_';
       }
     }).then(result => {
-      assert.equal(typeof result, 'object');
+      assert.strictEqual(typeof result, 'object');
       assert(result.countries.fields.id_);
-      assert.equal(result.countries.fields.id_.fieldName, 'id');
+      assert.strictEqual(result.countries.fields.id_.fieldName, 'id');
     });
   });
 

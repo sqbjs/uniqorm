@@ -20,19 +20,15 @@ describe('Uniqorm', function() {
     let orm = new Uniqorm();
     assert(orm.schemas);
     orm = new Uniqorm(null, {silent: true});
-    assert.equal(orm.options.silent, true);
+    assert.strictEqual(orm.options.silent, true);
     orm = new Uniqorm(pool);
     assert(orm);
   });
 
   it('should validate arguments on create', function() {
-    try {
+    assert.throws(() => {
       new Uniqorm(new Date());
-    } catch (e) {
-      if (e.message.includes('First argument can be'))
-        return;
-      throw e;
-    }
+    }, /First argument can be/);
   });
 
   it('should define model', function() {
@@ -52,19 +48,15 @@ describe('Uniqorm', function() {
   });
 
   it('should check modelDef argument exists in define() function', function() {
-    const orm = new Uniqorm();
-    try {
+    assert.throws(() => {
+      const orm = new Uniqorm();
       orm.define();
-    } catch (e) {
-      if (e.message.includes('(modelDef) is empty or is not valid'))
-        return;
-      throw e;
-    }
+    }, /is empty or is not valid/);
   });
 
   it('should check model not defined before', function() {
-    const orm = new Uniqorm();
-    try {
+    assert.throws(() => {
+      const orm = new Uniqorm();
       orm.define({
         name: 'model1',
         tableName: 'table1',
@@ -75,68 +67,41 @@ describe('Uniqorm', function() {
         }
       });
       orm.define({name: 'model1'});
-    } catch (e) {
-      if (e.message.includes('already exists'))
-        return;
-      throw e;
-    }
+    }, /already exists/);
   });
 
   it('should check name argument valid on define', function() {
     const orm = new Uniqorm();
-    try {
+    assert.throws(() => {
       orm.define({name: '124ABC'});
-    } catch (e) {
-      if (e.message.includes('Invalid model name')) {
-        try {
-          orm.define({});
-        } catch (e) {
-          if (e.message.includes('You must provide model name'))
-            return;
-          throw e;
-        }
-      }
-      throw e;
-    }
+    }, /Invalid model name/);
+    assert.throws(() => {
+      orm.define({});
+    }, /You must provide model name/);
   });
 
   it('should check options.fields property exists on define', function() {
     const orm = new Uniqorm();
-    try {
+    assert.throws(() => {
       orm.define({name: 'model1'});
-    } catch (e) {
-      if (e.message.includes('`fields` property is empty or is not valid')) {
-        try {
-          orm.define({name: 'model1', fields: 1234});
-        } catch (e) {
-          if (e.message.includes('`fields` property is empty or is not valid'))
-            return;
-        }
-      }
-      throw e;
-    }
+    }, /`fields` property is empty or is not valid/);
+    assert.throws(() => {
+      orm.define({name: 'model1', fields: 1234});
+    }, /`fields` property is empty or is not valid/);
   });
 
   it('should check options.tableName property valid on define', function() {
     const orm = new Uniqorm();
-    try {
+    assert.throws(() => {
       orm.define({name: 'model1', tableName: '123ABC'});
-    } catch (e) {
-      if (e.message.includes('Invalid tableName'))
-        return;
-      throw e;
-    }
+    }, /Invalid tableName/);
   });
 
   it('should not get unknown schema', function() {
     const orm = new Uniqorm();
-    try {
+    assert.throws(() => {
       orm.getModel('model1234');
-    } catch (e) {
-      if (e.message.includes('No such'))
-        return;
-      throw e;
-    }
+    }, /No such/);
   });
 
   it('should not get unknown model', function() {
@@ -153,13 +118,9 @@ describe('Uniqorm', function() {
         }
       }
     });
-    try {
+    assert.throws(() => {
       orm.getModel('model1234');
-    } catch (e) {
-      if (e.message.includes('Schema "schema1" has no model'))
-        return;
-      throw e;
-    }
+    }, /Schema "schema1" has no model/);
   });
 
 });

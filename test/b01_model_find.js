@@ -4,6 +4,8 @@ const assert = require('assert');
 const sqb = require('sqb');
 const Uniqorm = require('../lib/index');
 const loadModels = require('./support/loadModels');
+const {rejects} = require('rejected-or-not');
+assert.rejects = assert.rejects || rejects;
 
 describe('Model.prototype.find', function() {
 
@@ -50,59 +52,51 @@ describe('Model.prototype.find', function() {
 
   it('should limit results', function() {
     return Countries.find({limit: 2}).then(recs => {
-      assert.equal(recs.length, 2);
+      assert.strictEqual(recs.length, 2);
     });
   });
 
   it('should offset results', function() {
     return Countries.find().then(recs1 => {
       return Countries.find({offset: 1}).then(recs2 => {
-        assert.equal(recs2[0].id, recs1[1].id);
+        assert.strictEqual(recs2[0].id, recs1[1].id);
       });
     });
   });
 
   it('should sort results', function() {
     return Countries.find({sort: 'phoneCode'}).then(recs1 => {
-      assert.equal(recs1[0].id, 'RUS');
+      assert.strictEqual(recs1[0].id, 'RUS');
       return Countries.find({sort: '-phoneCode'}).then(recs2 => {
-        assert.equal(recs2[0].id, 'TUR');
+        assert.strictEqual(recs2[0].id, 'TUR');
       });
     });
   });
 
-  it('should sort items must be string type', function(done) {
-    Countries.find({sort: 1})
-        .then(() => done('Failed'))
-        .catch((e) => {
-          if (e.message.includes('Invalid element in "sort" property'))
-            return done();
-          done(e);
-        });
+  it('should sort items must be string type', function() {
+    return assert.rejects(() =>
+            Countries.find({sort: 1}),
+        /Invalid element in "sort" property/);
   });
 
-  it('should sort items must be a valid string', function(done) {
-    Countries.find({sort: '1asdfd'})
-        .then(() => done('Failed'))
-        .catch((e) => {
-          if (e.message.includes('is not a valid order expression'))
-            return done();
-          done(e);
-        });
+  it('should sort items must be a valid string', function() {
+    return assert.rejects(() =>
+            Countries.find({sort: '1asdfd'}),
+        /is not a valid order expression/);
   });
 
   it('should filter results', function() {
     return Countries.find({filter: {id: 'DEU'}}).then(recs => {
-      assert.equal(recs.length, 1);
-      assert.equal(recs[0].id, 'DEU');
-      assert.equal(recs[0].name, 'Germany');
+      assert.strictEqual(recs.length, 1);
+      assert.strictEqual(recs[0].id, 'DEU');
+      assert.strictEqual(recs[0].name, 'Germany');
     });
   });
 
   it('should return only requested attributes with requested alias', function() {
     return Countries.find({attributes: ['id country_id', 'name country_name']})
         .then(recs1 => {
-          assert.equal(Object.getOwnPropertyNames(recs1[0]).length, 2);
+          assert.strictEqual(Object.getOwnPropertyNames(recs1[0]).length, 2);
           assert(recs1[0].country_id);
           assert(recs1[0].country_name);
           return Countries.find({
@@ -118,14 +112,10 @@ describe('Model.prototype.find', function() {
         });
   });
 
-  it('should validate attribute names', function(done) {
-    Countries.find({attributes: '1id'})
-        .then(() => done('Failed'))
-        .catch((e) => {
-          if (e.message.includes('is not a valid column name'))
-            return done();
-          done(e);
-        });
+  it('should validate attribute names', function() {
+    return assert.rejects(() =>
+            Countries.find({attributes: '1id'}),
+        /is not a valid column name/);
   });
 
   it('should ignore invalid attribute names in silent mode', function() {
@@ -147,12 +137,12 @@ describe('Model.prototype.find', function() {
         attributes: ['id', 'name', 'country'],
         filter: {id: 1}
       }).then(recs => {
-        assert.equal(recs.length, 1);
-        assert.equal(recs[0].id, 1);
-        assert.equal(recs[0].name, 'Munich');
-        assert.equal(typeof recs[0].country, 'object');
-        assert.equal(recs[0].country.id, 'DEU');
-        assert.equal(recs[0].country.name, 'Germany');
+        assert.strictEqual(recs.length, 1);
+        assert.strictEqual(recs[0].id, 1);
+        assert.strictEqual(recs[0].name, 'Munich');
+        assert.strictEqual(typeof recs[0].country, 'object');
+        assert.strictEqual(recs[0].country.id, 'DEU');
+        assert.strictEqual(recs[0].country.name, 'Germany');
       });
     });
 
@@ -161,10 +151,10 @@ describe('Model.prototype.find', function() {
         attributes: ['id', 'name', 'countryName'],
         filter: {id: 1}
       }).then(recs => {
-        assert.equal(recs.length, 1);
-        assert.equal(recs[0].id, 1);
-        assert.equal(recs[0].name, 'Munich');
-        assert.equal(recs[0].countryName, 'Germany');
+        assert.strictEqual(recs.length, 1);
+        assert.strictEqual(recs[0].id, 1);
+        assert.strictEqual(recs[0].name, 'Munich');
+        assert.strictEqual(recs[0].countryName, 'Germany');
       });
     });
 
@@ -173,12 +163,12 @@ describe('Model.prototype.find', function() {
         attributes: ['id', 'name', 'country'],
         filter: {id: 1}
       }).then(recs => {
-        assert.equal(recs.length, 1);
-        assert.equal(recs[0].id, 1);
-        assert.equal(recs[0].name, 'Munich');
-        assert.equal(typeof recs[0].country, 'object');
-        assert.equal(recs[0].country.id, 'DEU');
-        assert.equal(recs[0].country.name, 'Germany');
+        assert.strictEqual(recs.length, 1);
+        assert.strictEqual(recs[0].id, 1);
+        assert.strictEqual(recs[0].name, 'Munich');
+        assert.strictEqual(typeof recs[0].country, 'object');
+        assert.strictEqual(recs[0].country.id, 'DEU');
+        assert.strictEqual(recs[0].country.name, 'Germany');
       });
     });
 
@@ -194,13 +184,13 @@ describe('Model.prototype.find', function() {
         },
         filter: {id: 1}
       }).then(recs => {
-        assert.equal(recs.length, 1);
-        assert.equal(recs[0].id, 1);
-        assert.equal(recs[0]._name, 'Munich');
-        assert.equal(typeof recs[0]._country, 'object');
-        assert.equal(Object.getOwnPropertyNames(recs[0]._country).length, 2);
-        assert.equal(recs[0]._country.name_alias, 'Germany');
-        assert.equal(recs[0]._country.phone_code_alias, 49);
+        assert.strictEqual(recs.length, 1);
+        assert.strictEqual(recs[0].id, 1);
+        assert.strictEqual(recs[0]._name, 'Munich');
+        assert.strictEqual(typeof recs[0]._country, 'object');
+        assert.strictEqual(Object.getOwnPropertyNames(recs[0]._country).length, 2);
+        assert.strictEqual(recs[0]._country.name_alias, 'Germany');
+        assert.strictEqual(recs[0]._country.phone_code_alias, 49);
       });
     });
 
@@ -213,13 +203,13 @@ describe('Model.prototype.find', function() {
         },
         filter: {id: 1}
       }).then(recs => {
-        assert.equal(recs.length, 1);
-        assert.equal(recs[0].id, 1);
-        assert.equal(recs[0]._name, 'Munich');
-        assert.equal(typeof recs[0].country, 'object');
-        assert.equal(Object.getOwnPropertyNames(recs[0].country).length, 2);
-        assert.equal(recs[0].country.name, 'Germany');
-        assert.equal(recs[0].country.phoneCode, 49);
+        assert.strictEqual(recs.length, 1);
+        assert.strictEqual(recs[0].id, 1);
+        assert.strictEqual(recs[0]._name, 'Munich');
+        assert.strictEqual(typeof recs[0].country, 'object');
+        assert.strictEqual(Object.getOwnPropertyNames(recs[0].country).length, 2);
+        assert.strictEqual(recs[0].country.name, 'Germany');
+        assert.strictEqual(recs[0].country.phoneCode, 49);
       });
     });
 
@@ -228,10 +218,10 @@ describe('Model.prototype.find', function() {
         attributes: ['id', 'name', 'country.name country_name'],
         filter: {id: 1}
       }).then(recs => {
-        assert.equal(recs.length, 1);
-        assert.equal(recs[0].id, 1);
-        assert.equal(recs[0].name, 'Munich');
-        assert.equal(recs[0].country_name, 'Germany');
+        assert.strictEqual(recs.length, 1);
+        assert.strictEqual(recs[0].id, 1);
+        assert.strictEqual(recs[0].name, 'Munich');
+        assert.strictEqual(recs[0].country_name, 'Germany');
       });
     });
 
@@ -244,13 +234,13 @@ describe('Model.prototype.find', function() {
         },
         filter: {id: 1}
       }).then(recs => {
-        assert.equal(recs.length, 1);
-        assert.equal(recs[0].id, 1);
-        assert.equal(recs[0]._name, 'Munich');
-        assert.equal(typeof recs[0]._country, 'object');
-        assert.equal(Object.getOwnPropertyNames(recs[0]._country).length, 3);
-        assert.equal(recs[0]._country.name, 'Germany');
-        assert.equal(recs[0]._country.phoneCode, 49);
+        assert.strictEqual(recs.length, 1);
+        assert.strictEqual(recs[0].id, 1);
+        assert.strictEqual(recs[0]._name, 'Munich');
+        assert.strictEqual(typeof recs[0]._country, 'object');
+        assert.strictEqual(Object.getOwnPropertyNames(recs[0]._country).length, 3);
+        assert.strictEqual(recs[0]._country.name, 'Germany');
+        assert.strictEqual(recs[0]._country.phoneCode, 49);
       });
     });
 
@@ -263,14 +253,14 @@ describe('Model.prototype.find', function() {
         },
         filter: {id: 1}
       }).then(recs => {
-        assert.equal(recs.length, 1);
-        assert.equal(recs[0].id, 1);
-        assert.equal(recs[0]._name, 'Munich');
-        assert.equal(typeof recs[0].country, 'object');
+        assert.strictEqual(recs.length, 1);
+        assert.strictEqual(recs[0].id, 1);
+        assert.strictEqual(recs[0]._name, 'Munich');
+        assert.strictEqual(typeof recs[0].country, 'object');
         assert(!Array.isArray(recs[0].country));
-        assert.equal(Object.getOwnPropertyNames(recs[0].country).length, 3);
-        assert.equal(recs[0].country.name, 'Germany');
-        assert.equal(recs[0].country.phoneCode, 49);
+        assert.strictEqual(Object.getOwnPropertyNames(recs[0].country).length, 3);
+        assert.strictEqual(recs[0].country.name, 'Germany');
+        assert.strictEqual(recs[0].country.phoneCode, 49);
       });
     });
 
@@ -279,25 +269,21 @@ describe('Model.prototype.find', function() {
         attributes: ['id', 'name', 'city', 'country'],
         filter: {id: 19}
       }).then(recs => {
-        assert.equal(recs.length, 1);
-        assert.equal(recs[0].id, 19);
-        assert.equal(recs[0].name, 'Meric, Jale');
-        assert.equal(typeof recs[0].city, 'object');
-        assert.equal(recs[0].city.id, 10);
-        assert.equal(recs[0].city.name, 'Izmir');
-        assert.equal(recs[0].country.id, 'TUR');
-        assert.equal(recs[0].country.name, 'Turkey');
+        assert.strictEqual(recs.length, 1);
+        assert.strictEqual(recs[0].id, 19);
+        assert.strictEqual(recs[0].name, 'Meric, Jale');
+        assert.strictEqual(typeof recs[0].city, 'object');
+        assert.strictEqual(recs[0].city.id, 10);
+        assert.strictEqual(recs[0].city.name, 'Izmir');
+        assert.strictEqual(recs[0].country.id, 'TUR');
+        assert.strictEqual(recs[0].country.name, 'Turkey');
       });
     });
 
-    it('should not request O2O associated flat fields sub attribute', function(done) {
-      Cities.find({attributes: ['countryName.name name']})
-          .then(() => done('Failed'))
-          .catch((e) => {
-            if (e.message.includes('has no sub value'))
-              return done();
-            done(e);
-          });
+    it('should not request O2O associated flat fields sub attribute', function() {
+      return assert.rejects(() =>
+              Cities.find({attributes: ['countryName.name name']}),
+          /has no sub value/);
     });
 
   });
@@ -309,51 +295,40 @@ describe('Model.prototype.find', function() {
         attributes: ['id', 'name', 'notes'],
         filter: {id: 19}
       }).then(recs => {
-        assert.equal(recs.length, 1);
-        assert.equal(recs[0].id, 19);
+        assert.strictEqual(recs.length, 1);
+        assert.strictEqual(recs[0].id, 19);
         assert(Array.isArray(recs[0].notes));
-        assert.equal(recs[0].notes.length, 2);
-        assert.equal(recs[0].notes[0].contents, 'note 1');
-        assert.equal(recs[0].notes[1].contents, 'note 2');
+        assert.strictEqual(recs[0].notes.length, 2);
+        assert.strictEqual(recs[0].notes[0].contents, 'note 1');
+        assert.strictEqual(recs[0].notes[1].contents, 'note 2');
       });
     });
 
-    it('should not request M2M associated sub attribute as flat', function(done) {
-      Customers.find({attributes: ['notes.contents contents']})
-          .then(() => done('Failed'))
-          .catch((e) => {
-            if (e.message.includes('sub values can not be used'))
-              return done();
-            done(e);
-          });
+    it('should not request M2M associated sub attribute as flat', function() {
+      return assert.rejects(() =>
+              Customers.find({attributes: ['notes.contents contents']}),
+          /sub values can not be used/);
     });
 
-    it('should check sub attribute exists', function(done) {
-      Cities.find({attributes: ['country.unknown aaa']})
-          .then(() => done('Failed'))
-          .catch((e) => {
-            if (e.message.includes('has no attribute'))
-              return done();
-            done(e);
-          });
+    it('should check sub attribute exists', function() {
+      return assert.rejects(() =>
+              Cities.find({attributes: ['country.nofield aaa']}),
+          /has no field/);
     });
 
-    it('should check sub attribute exists in child context', function(done) {
-      Cities.find({
-        attributes: {
-          id: '',
-          name: '',
-          country: {
-            attributes: [{unknown: null}]
-          }
-        },
-        filter: {id: 1}
-      }).then(() => done('Failed'))
-          .catch((e) => {
-            if (e.message.includes('has no attribute'))
-              return done();
-            done(e);
-          });
+    it('should check sub attribute exists in child context', function() {
+      return assert.rejects(() =>
+              Cities.find({
+                attributes: {
+                  id: '',
+                  name: '',
+                  country: {
+                    attributes: [{unknown: null}]
+                  }
+                },
+                filter: {id: 1}
+              }),
+          /has no field/);
     });
 
     it('should filter by O2O associated attribute', function() {
@@ -364,9 +339,9 @@ describe('Model.prototype.find', function() {
         scope
       }).then(recs => {
         assert(scope);
-        assert.equal(recs.length, 2);
-        assert.equal(recs[0].name, 'Paris');
-        assert.equal(recs[1].name, 'Lyon');
+        assert.strictEqual(recs.length, 2);
+        assert.strictEqual(recs[0].name, 'Paris');
+        assert.strictEqual(recs[1].name, 'Lyon');
       });
     });
 
@@ -375,9 +350,9 @@ describe('Model.prototype.find', function() {
         attributes: ['id', 'name'],
         filter: {countryName: 'France'}
       }).then(recs => {
-        assert.equal(recs.length, 4);
-        assert.equal(recs[0].name, 'Rue Cler');
-        assert.equal(recs[1].name, 'Rue des Rosiers');
+        assert.strictEqual(recs.length, 4);
+        assert.strictEqual(recs[0].name, 'Rue Cler');
+        assert.strictEqual(recs[1].name, 'Rue des Rosiers');
       });
     });
 
@@ -386,8 +361,48 @@ describe('Model.prototype.find', function() {
         attributes: ['id', 'name', 'countryName'],
         sort: ['-countryName']
       }).then(recs => {
-        assert.equal(recs[0].name, 'Manchester');
-        assert.equal(recs[1].name, 'Izmir');
+        assert.strictEqual(recs[0].name, 'Manchester');
+        assert.strictEqual(recs[1].name, 'Izmir');
+      });
+    });
+
+    it('should find deep', function() {
+      return Streets.find({
+        attributes: {
+          city: {
+            attributes: {
+              country: {
+                attributes: {
+                  id: null,
+                  name: null
+                }
+              }
+            }
+          }
+        }
+      }).then(recs => {
+        assert.strictEqual(typeof recs[0].city, 'object');
+        assert.strictEqual(typeof recs[0].city.country, 'object');
+        assert(recs[0].city.country.id);
+        assert(recs[0].city.country.name);
+      });
+    });
+
+    it('should find deep (default attributes)', function() {
+      return Streets.find({
+        attributes: {
+          city: {
+            attributes: {
+              country: null
+            }
+          }
+        }
+      }).then(recs => {
+        assert.strictEqual(typeof recs[0].city, 'object');
+        assert.strictEqual(typeof recs[0].city.country, 'object');
+        assert(recs[0].city.country.id);
+        assert(recs[0].city.country.name);
+        assert(recs[0].city.country.phoneCode);
       });
     });
 
@@ -400,12 +415,12 @@ describe('Model.prototype.find', function() {
         attributes: ['id', 'name', 'tags'],
         filter: {id: 19}
       }).then(recs => {
-        assert.equal(recs.length, 1);
-        assert.equal(recs[0].id, 19);
+        assert.strictEqual(recs.length, 1);
+        assert.strictEqual(recs[0].id, 19);
         assert(Array.isArray(recs[0].tags));
-        assert.equal(recs[0].tags.length, 2);
-        assert.equal(recs[0].tags[0].name, 'Red');
-        assert.equal(recs[0].tags[1].name, 'Green');
+        assert.strictEqual(recs[0].tags.length, 2);
+        assert.strictEqual(recs[0].tags[0].name, 'Red');
+        assert.strictEqual(recs[0].tags[1].name, 'Green');
       });
     });
   });
@@ -425,7 +440,7 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should show sql on error', function(done) {
+    it('should show sql on error', function() {
       orm.define({
         name: 'Notexists',
         schema: 'uniqorm_1',
@@ -434,22 +449,16 @@ describe('Model.prototype.find', function() {
           id: 'INTEGER'
         }
       });
-      orm.getModel('uniqorm_1.Notexists').find({
-        showSql: true
-      }).then(() => {
-        done('Failed');
-      }).catch(e => {
-        if (e.message.includes('select t.id'))
-          return done();
-        done(e);
-      });
+      return assert.rejects(() =>
+              orm.getModel('uniqorm_1.Notexists').find({showSql: true}),
+          /select t.id/);
     });
   });
 
   describe('Finalize', function() {
 
     it('should have no active connection after all tests', function() {
-      assert.equal(pool.acquired, 0);
+      assert.strictEqual(pool.acquired, 0);
     });
 
     it('should shutdown pool', function() {

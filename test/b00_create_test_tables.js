@@ -35,7 +35,7 @@ describe('Create test tables', function() {
     describe('Finalize', function() {
 
       it('should have no active connection after all tests', function() {
-        assert.equal(pool.acquired, 0);
+        assert.strictEqual(pool.acquired, 0);
       });
 
       it('should shutdown pool', function() {

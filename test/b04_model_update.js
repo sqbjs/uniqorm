@@ -4,6 +4,8 @@ const assert = require('assert');
 const sqb = require('sqb');
 const Uniqorm = require('../lib/index');
 const loadModels = require('./support/loadModels');
+const {rejects} = require('rejected-or-not');
+assert.rejects = assert.rejects || rejects;
 
 describe('Model.prototype.update', function() {
 
@@ -42,7 +44,7 @@ describe('Model.prototype.update', function() {
   it('should update record', function() {
     return Notes.update({id: 1, contents: 'changed 1'})
         .then(result => {
-          assert.equal(result, true);
+          assert.strictEqual(result, true);
         });
   });
 
@@ -50,8 +52,8 @@ describe('Model.prototype.update', function() {
     return Notes.update({id: 1, contents: 'changed 2'},
         {returning: ['id', 'contents'], silent: false})
         .then(result => {
-          assert.equal(result.id, 1);
-          assert.equal(result.contents, 'changed 2');
+          assert.strictEqual(result.id, 1);
+          assert.strictEqual(result.contents, 'changed 2');
         });
   });
 
@@ -59,7 +61,7 @@ describe('Model.prototype.update', function() {
     return Notes.update({id: 1, contents: 'changed 2'},
         {returning: '*', silent: false})
         .then(result => {
-          assert.equal(Object.getOwnPropertyNames(result).length, 4);
+          assert.strictEqual(Object.getOwnPropertyNames(result).length, 4);
         });
   });
 
@@ -67,8 +69,8 @@ describe('Model.prototype.update', function() {
     return Notes.update({id: 1, contents: 'changed 2'},
         {returning: 'id', silent: false})
         .then(result => {
-          assert.equal(Object.getOwnPropertyNames(result).length, 1);
-          assert.notEqual(result.id, undefined);
+          assert.strictEqual(Object.getOwnPropertyNames(result).length, 1);
+          assert.notStrictEqual(result.id, undefined);
         });
   });
 
@@ -76,34 +78,29 @@ describe('Model.prototype.update', function() {
     return Cities.update({id: 1000, name: 'Test City2', countryId: 'ITA'},
         {returning: ['countryName', 'country']})
         .then(result => {
-          assert.equal(result.countryName, 'Italy');
-          assert.equal(typeof result.country, 'object');
-          assert.equal(result.country.name, 'Italy');
+          assert.strictEqual(result.countryName, 'Italy');
+          assert.strictEqual(typeof result.country, 'object');
+          assert.strictEqual(result.country.name, 'Italy');
         });
   });
 
   it('should update using custom conditions', function() {
     return Notes.update({contents: 'changed 5'},
-        {returning: '*', where: {'id': 1}, })
+        {returning: '*', where: {'id': 1}})
         .then(() => {
           return Notes.find({sort: 'id'}).then(resp => {
-            assert.equal(resp.length, 6);
-            assert.equal(resp[0].id, 1);
-            assert.equal(resp[0].contents, 'changed 5');
-            assert.equal(resp[1].id, 2);
-            assert.equal(resp[1].contents, 'note 2');
+            assert.strictEqual(resp.length, 6);
+            assert.strictEqual(resp[0].id, 1);
+            assert.strictEqual(resp[0].contents, 'changed 5');
+            assert.strictEqual(resp[1].id, 2);
+            assert.strictEqual(resp[1].contents, 'note 2');
           });
         });
   });
 
-  it('should validate values argument is object', function(done) {
-    Cities.update([1, 2, 3])
-        .then(() => done('Failed'))
-        .catch(e => {
-          if (e.message.includes('You must provide'))
-            return done();
-          done(e);
-        });
+  it('should validate values argument is object', function() {
+    return assert.rejects(() => Cities.update([1, 2, 3]),
+        /You must provide/);
   });
 
 });

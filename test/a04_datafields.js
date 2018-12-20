@@ -14,14 +14,14 @@ describe('Data Fields', function() {
     it('should create', function() {
       const BOOLEAN = Uniqorm.DataField.get('BOOLEAN');
       const f = new BOOLEAN('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
 
-      assert.equal(f.jsType, 'Boolean');
-      assert.equal(f.sqlType, 'BOOLEAN');
+      assert.strictEqual(f.jsType, 'Boolean');
+      assert.strictEqual(f.sqlType, 'BOOLEAN');
     });
 
     it('should create with properties', function() {
@@ -32,16 +32,16 @@ describe('Data Fields', function() {
         primaryKey: 8,
         fieldName: 'f1'
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, true);
-      assert.equal(f.primaryKey, true);
-      assert.equal(f.parseValue(0), false);
-      assert.equal(f.parseValue(1), true);
-      assert.equal(f.parseValue({}), true);
-      assert.equal(f.parseValue(NaN), false);
-      assert.equal(f.parseValue(undefined), null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, true);
+      assert.strictEqual(f.primaryKey, true);
+      assert.strictEqual(f.parseValue(0), false);
+      assert.strictEqual(f.parseValue(1), true);
+      assert.strictEqual(f.parseValue({}), true);
+      assert.strictEqual(f.parseValue(NaN), false);
+      assert.strictEqual(f.parseValue(undefined), null);
     });
   });
 
@@ -54,20 +54,20 @@ describe('Data Fields', function() {
     it('should create', function() {
       const INTEGER = Uniqorm.DataField.get('INTEGER');
       const f = new INTEGER('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
-      assert.equal(f.parseValue(0), 0);
-      assert.equal(f.parseValue(1), 1);
-      assert.equal(f.parseValue('123'), 123);
-      assert.equal(f.parseValue('123.5'), 123);
-      assert.equal(f.parseValue(NaN), null);
-      assert.equal(f.parseValue(undefined), null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
+      assert.strictEqual(f.parseValue(0), 0);
+      assert.strictEqual(f.parseValue(1), 1);
+      assert.strictEqual(f.parseValue('123'), 123);
+      assert.strictEqual(f.parseValue('123.5'), 123);
+      assert.strictEqual(f.parseValue(NaN), null);
+      assert.strictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'Number');
-      assert.equal(f.sqlType, 'INTEGER');
+      assert.strictEqual(f.jsType, 'Number');
+      assert.strictEqual(f.sqlType, 'INTEGER');
     });
 
     it('should create with properties', function() {
@@ -78,11 +78,11 @@ describe('Data Fields', function() {
         primaryKey: 8,
         fieldName: 'f1'
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, 5);
-      assert.equal(f.primaryKey, true);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, 5);
+      assert.strictEqual(f.primaryKey, true);
     });
   });
 
@@ -95,20 +95,20 @@ describe('Data Fields', function() {
     it('should create', function() {
       const BIGINT = Uniqorm.DataField.get('BIGINT');
       const f = new BIGINT('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
-      assert.equal(f.parseValue(0), 0);
-      assert.equal(f.parseValue(1), 1);
-      assert.equal(f.parseValue('123'), 123);
-      assert.equal(f.parseValue('123.5'), 123);
-      assert.equal(f.parseValue(NaN), null);
-      assert.equal(f.parseValue(undefined), null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
+      assert.strictEqual(f.parseValue(0), 0);
+      assert.strictEqual(f.parseValue(1), 1);
+      assert.strictEqual(f.parseValue('123'), 123);
+      assert.strictEqual(f.parseValue('123.5'), 123);
+      assert.strictEqual(f.parseValue(NaN), null);
+      assert.strictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'Number');
-      assert.equal(f.sqlType, 'BIGINT');
+      assert.strictEqual(f.jsType, 'Number');
+      assert.strictEqual(f.sqlType, 'BIGINT');
     });
 
     it('should create with properties', function() {
@@ -119,11 +119,11 @@ describe('Data Fields', function() {
         primaryKey: 8,
         fieldName: 'f1'
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, 5);
-      assert.equal(f.primaryKey, true);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, 5);
+      assert.strictEqual(f.primaryKey, true);
     });
   });
 
@@ -136,20 +136,20 @@ describe('Data Fields', function() {
     it('should create', function() {
       const SMALLINT = Uniqorm.DataField.get('SMALLINT');
       const f = new SMALLINT('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
-      assert.equal(f.parseValue(0), 0);
-      assert.equal(f.parseValue(1), 1);
-      assert.equal(f.parseValue('123'), 123);
-      assert.equal(f.parseValue('123.5'), 123);
-      assert.equal(f.parseValue(NaN), null);
-      assert.equal(f.parseValue(undefined), null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
+      assert.strictEqual(f.parseValue(0), 0);
+      assert.strictEqual(f.parseValue(1), 1);
+      assert.strictEqual(f.parseValue('123'), 123);
+      assert.strictEqual(f.parseValue('123.5'), 123);
+      assert.strictEqual(f.parseValue(NaN), null);
+      assert.strictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'Number');
-      assert.equal(f.sqlType, 'SMALLINT');
+      assert.strictEqual(f.jsType, 'Number');
+      assert.strictEqual(f.sqlType, 'SMALLINT');
     });
 
     it('should create with properties', function() {
@@ -160,11 +160,11 @@ describe('Data Fields', function() {
         primaryKey: 8,
         fieldName: 'f1'
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, 5);
-      assert.equal(f.primaryKey, true);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, 5);
+      assert.strictEqual(f.primaryKey, true);
     });
   });
 
@@ -177,20 +177,20 @@ describe('Data Fields', function() {
     it('should create', function() {
       const DOUBLE = Uniqorm.DataField.get('DOUBLE');
       const f = new DOUBLE('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
-      assert.equal(f.parseValue(0), 0);
-      assert.equal(f.parseValue(1), 1);
-      assert.equal(f.parseValue('123'), 123);
-      assert.equal(f.parseValue('123.5'), 123.5);
-      assert.equal(f.parseValue(NaN), null);
-      assert.equal(f.parseValue(undefined), null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
+      assert.strictEqual(f.parseValue(0), 0);
+      assert.strictEqual(f.parseValue(1), 1);
+      assert.strictEqual(f.parseValue('123'), 123);
+      assert.strictEqual(f.parseValue('123.5'), 123.5);
+      assert.strictEqual(f.parseValue(NaN), null);
+      assert.strictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'Number');
-      assert.equal(f.sqlType, 'DOUBLE');
+      assert.strictEqual(f.jsType, 'Number');
+      assert.strictEqual(f.sqlType, 'DOUBLE');
     });
 
     it('should create with properties', function() {
@@ -201,11 +201,11 @@ describe('Data Fields', function() {
         primaryKey: 8,
         fieldName: 'f1'
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, 5.6);
-      assert.equal(f.primaryKey, true);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, 5.6);
+      assert.strictEqual(f.primaryKey, true);
     });
   });
 
@@ -218,20 +218,20 @@ describe('Data Fields', function() {
     it('should create', function() {
       const FLOAT = Uniqorm.DataField.get('FLOAT');
       const f = new FLOAT('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
-      assert.equal(f.parseValue(0), 0);
-      assert.equal(f.parseValue(1), 1);
-      assert.equal(f.parseValue('123'), 123);
-      assert.equal(f.parseValue('123.5'), 123.5);
-      assert.equal(f.parseValue(NaN), null);
-      assert.equal(f.parseValue(undefined), null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
+      assert.strictEqual(f.parseValue(0), 0);
+      assert.strictEqual(f.parseValue(1), 1);
+      assert.strictEqual(f.parseValue('123'), 123);
+      assert.strictEqual(f.parseValue('123.5'), 123.5);
+      assert.strictEqual(f.parseValue(NaN), null);
+      assert.strictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'Number');
-      assert.equal(f.sqlType, 'FLOAT');
+      assert.strictEqual(f.jsType, 'Number');
+      assert.strictEqual(f.sqlType, 'FLOAT');
     });
 
     it('should create with properties', function() {
@@ -242,11 +242,11 @@ describe('Data Fields', function() {
         primaryKey: 8,
         fieldName: 'f1'
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, 5.6);
-      assert.equal(f.primaryKey, true);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, 5.6);
+      assert.strictEqual(f.primaryKey, true);
     });
   });
 
@@ -259,20 +259,20 @@ describe('Data Fields', function() {
     it('should create', function() {
       const NUMBER = Uniqorm.DataField.get('NUMBER');
       let f = new NUMBER('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
 
-      assert.equal(f.jsType, 'Number');
-      assert.equal(f.sqlType, 'NUMBER(18,2)');
+      assert.strictEqual(f.jsType, 'Number');
+      assert.strictEqual(f.sqlType, 'NUMBER(18,2)');
 
-      assert.equal(f.precision, 18);
-      assert.equal(f.scale, 2);
+      assert.strictEqual(f.precision, 18);
+      assert.strictEqual(f.scale, 2);
       f = new NUMBER('field1', null, {});
-      assert.equal(f.precision, 18);
-      assert.equal(f.scale, 2);
+      assert.strictEqual(f.precision, 18);
+      assert.strictEqual(f.scale, 2);
     });
 
     it('should create with properties', function() {
@@ -285,18 +285,18 @@ describe('Data Fields', function() {
         precision: 12,
         scale: 4
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, 5.6);
-      assert.equal(f.primaryKey, true);
-      assert.equal(f.precision, 12);
-      assert.equal(f.sqlType, 'NUMBER(12,4)');
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, 5.6);
+      assert.strictEqual(f.primaryKey, true);
+      assert.strictEqual(f.precision, 12);
+      assert.strictEqual(f.sqlType, 'NUMBER(12,4)');
       f.scale = null;
-      assert.equal(f.sqlType, 'NUMBER(12,2)');
+      assert.strictEqual(f.sqlType, 'NUMBER(12,2)');
       f.scale = 3;
       f.precision = null;
-      assert.equal(f.sqlType, 'NUMBER(18,3)');
+      assert.strictEqual(f.sqlType, 'NUMBER(18,3)');
     });
 
     it('should set scale to 0 if value is invalid', function() {
@@ -304,7 +304,7 @@ describe('Data Fields', function() {
       const f = new NUMBER('field1', null, {
         scale: 'abc'
       });
-      assert.equal(f.scale, 0);
+      assert.strictEqual(f.scale, 0);
     });
 
   });
@@ -318,20 +318,20 @@ describe('Data Fields', function() {
     it('should create', function() {
       const TEXT = Uniqorm.DataField.get('TEXT');
       const f = new TEXT('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
-      assert.equal(f.parseValue(0), '0');
-      assert.equal(f.parseValue(1), '1');
-      assert.equal(f.parseValue('123'), '123');
-      assert.equal(f.parseValue('123.5'), '123.5');
-      assert.equal(f.parseValue(NaN), 'NaN');
-      assert.equal(f.parseValue(undefined), null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
+      assert.strictEqual(f.parseValue(0), '0');
+      assert.strictEqual(f.parseValue(1), '1');
+      assert.strictEqual(f.parseValue('123'), '123');
+      assert.strictEqual(f.parseValue('123.5'), '123.5');
+      assert.strictEqual(f.parseValue(NaN), 'NaN');
+      assert.strictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'String');
-      assert.equal(f.sqlType, 'TEXT');
+      assert.strictEqual(f.jsType, 'String');
+      assert.strictEqual(f.sqlType, 'TEXT');
     });
 
     it('should create with properties', function() {
@@ -342,12 +342,12 @@ describe('Data Fields', function() {
         primaryKey: 8,
         fieldName: 'f1'
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, '12345');
-      assert.equal(f.primaryKey, true);
-      assert.equal(f.sqlType, 'TEXT');
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, '12345');
+      assert.strictEqual(f.primaryKey, true);
+      assert.strictEqual(f.sqlType, 'TEXT');
     });
   });
 
@@ -360,20 +360,20 @@ describe('Data Fields', function() {
     it('should create', function() {
       const CHAR = Uniqorm.DataField.get('CHAR');
       const f = new CHAR('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
-      assert.equal(f.parseValue(0), '0');
-      assert.equal(f.parseValue(1), '1');
-      assert.equal(f.parseValue('123'), '123');
-      assert.equal(f.parseValue('123.5'), '123.5');
-      assert.equal(f.parseValue(NaN), 'NaN');
-      assert.equal(f.parseValue(undefined), null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
+      assert.strictEqual(f.parseValue(0), '0');
+      assert.strictEqual(f.parseValue(1), '1');
+      assert.strictEqual(f.parseValue('123'), '123');
+      assert.strictEqual(f.parseValue('123.5'), '123.5');
+      assert.strictEqual(f.parseValue(NaN), 'NaN');
+      assert.strictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'String');
-      assert.equal(f.sqlType, 'CHAR');
+      assert.strictEqual(f.jsType, 'String');
+      assert.strictEqual(f.sqlType, 'CHAR');
     });
 
     it('should create with properties', function() {
@@ -385,13 +385,13 @@ describe('Data Fields', function() {
         fieldName: 'f1',
         charLength: 10
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, '12345');
-      assert.equal(f.primaryKey, true);
-      assert.equal(f.charLength, 10);
-      assert.equal(f.sqlType, 'CHAR(10)');
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, '12345');
+      assert.strictEqual(f.primaryKey, true);
+      assert.strictEqual(f.charLength, 10);
+      assert.strictEqual(f.sqlType, 'CHAR(10)');
     });
   });
 
@@ -404,21 +404,21 @@ describe('Data Fields', function() {
     it('should create', function() {
       const VARCHAR = Uniqorm.DataField.get('VARCHAR');
       const f = new VARCHAR('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
-      assert.equal(f.parseValue(0), '0');
-      assert.equal(f.parseValue(1), '1');
-      assert.equal(f.parseValue('123'), '123');
-      assert.equal(f.parseValue('123.5'), '123.5');
-      assert.equal(f.parseValue(NaN), 'NaN');
-      assert.equal(f.parseValue(undefined), null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
+      assert.strictEqual(f.parseValue(0), '0');
+      assert.strictEqual(f.parseValue(1), '1');
+      assert.strictEqual(f.parseValue('123'), '123');
+      assert.strictEqual(f.parseValue('123.5'), '123.5');
+      assert.strictEqual(f.parseValue(NaN), 'NaN');
+      assert.strictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'String');
-      assert.equal(f.sqlType, 'VARCHAR');
-      assert.equal(f.charLength, null);
+      assert.strictEqual(f.jsType, 'String');
+      assert.strictEqual(f.sqlType, 'VARCHAR');
+      assert.strictEqual(f.charLength, null);
     });
 
     it('should create with properties', function() {
@@ -430,15 +430,15 @@ describe('Data Fields', function() {
         fieldName: 'f1',
         charLength: 10
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, '12345');
-      assert.equal(f.primaryKey, true);
-      assert.equal(f.charLength, 10);
-      assert.equal(f.sqlType, 'VARCHAR(10)');
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, '12345');
+      assert.strictEqual(f.primaryKey, true);
+      assert.strictEqual(f.charLength, 10);
+      assert.strictEqual(f.sqlType, 'VARCHAR(10)');
       f.charLength = undefined;
-      assert.equal(f.charLength, null);
+      assert.strictEqual(f.charLength, null);
     });
 
     it('should set charLength to null if value is invalid', function() {
@@ -446,7 +446,7 @@ describe('Data Fields', function() {
       const f = new VARCHAR('field1', null, {
         charLength: 'abc'
       });
-      assert.equal(f.charLength, null);
+      assert.strictEqual(f.charLength, null);
     });
 
   });
@@ -460,20 +460,20 @@ describe('Data Fields', function() {
     it('should create', function() {
       const CLOB = Uniqorm.DataField.get('CLOB');
       const f = new CLOB('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
-      assert.equal(f.parseValue(0), '0');
-      assert.equal(f.parseValue(1), '1');
-      assert.equal(f.parseValue('123'), '123');
-      assert.equal(f.parseValue('123.5'), '123.5');
-      assert.equal(f.parseValue(NaN), 'NaN');
-      assert.equal(f.parseValue(undefined), null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
+      assert.strictEqual(f.parseValue(0), '0');
+      assert.strictEqual(f.parseValue(1), '1');
+      assert.strictEqual(f.parseValue('123'), '123');
+      assert.strictEqual(f.parseValue('123.5'), '123.5');
+      assert.strictEqual(f.parseValue(NaN), 'NaN');
+      assert.strictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'String');
-      assert.equal(f.sqlType, 'CLOB');
+      assert.strictEqual(f.jsType, 'String');
+      assert.strictEqual(f.sqlType, 'CLOB');
     });
 
     it('should create with properties', function() {
@@ -484,11 +484,11 @@ describe('Data Fields', function() {
         primaryKey: 8,
         fieldName: 'f1'
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, '12345');
-      assert.equal(f.primaryKey, true);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, '12345');
+      assert.strictEqual(f.primaryKey, true);
     });
   });
 
@@ -499,44 +499,53 @@ describe('Data Fields', function() {
     });
 
     it('should create', function() {
-      const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMPTZ');
-      const f = new TIMESTAMP('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
-      assert.deepEqual(f.parseValue(0), new Date(0));
-      assert.deepEqual(f.parseValue(new Date(1)), new Date(1));
-      assert.deepEqual(f.parseValue('2018-11-05'), new Date(2018, 10, 5));
-      assert.deepEqual(f.parseValue('20181105'), new Date(2018, 10, 5));
-      assert.deepEqual(f.parseValue('2018-11-05 10:15:30.654+03'), new Date('2018-11-05T10:15:30.654+03:00'));
-      assert.deepEqual(f.parseValue('20181105 101530.654+03'), new Date('2018-11-05T10:15:30.654+03:00'));
-      assert.deepEqual(f.parseValue('2018-11-05T10:15:30.654+03'), new Date('2018-11-05T10:15:30.654+03:00'));
-      assert.deepEqual(f.parseValue(undefined), null);
+      const TIMESTAMPTZ = Uniqorm.DataField.get('TIMESTAMPTZ');
+      const f = new TIMESTAMPTZ('field1');
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
+      assert.deepStrictEqual(f.parseValue(0), new Date(0));
+      assert.deepStrictEqual(f.parseValue(new Date(1)), new Date(1));
+      assert.deepStrictEqual(f.parseValue('2018-11-05'), new Date(2018, 10, 5));
+      assert.deepStrictEqual(f.parseValue('20181105'), new Date(2018, 10, 5));
+      assert.deepStrictEqual(f.parseValue('2018-11-05 10:15:30.654+03'), new Date('2018-11-05T10:15:30.654+03:00'));
+      assert.deepStrictEqual(f.parseValue('20181105 101530.654+03'), new Date('2018-11-05T10:15:30.654+03:00'));
+      assert.deepStrictEqual(f.parseValue('2018-11-05T10:15:30.654+03'), new Date('2018-11-05T10:15:30.654+03:00'));
+      assert.deepStrictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'Date');
-      assert.equal(f.sqlType, 'TIMESTAMPTZ');
+      assert.strictEqual(f.jsType, 'Date');
+      assert.strictEqual(f.sqlType, 'TIMESTAMPTZ');
     });
 
     it('should create with properties', function() {
       const d = new Date();
-      const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMPTZ');
-      const f = new TIMESTAMP('field1', null, {
+      const TIMESTAMPTZ = Uniqorm.DataField.get('TIMESTAMPTZ');
+      const f = new TIMESTAMPTZ('field1', null, {
         notNull: 1,
         defaultValue: d.getTime(),
         primaryKey: 8,
         fieldName: 'f1',
         charLength: 10
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue.getTime(), d.getTime());
-      assert.equal(f.primaryKey, true);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue.getTime(), d.getTime());
+      assert.strictEqual(f.primaryKey, true);
       f.defaultValue = d;
-      assert.equal(f.defaultValue.getTime(), d.getTime());
+      assert.strictEqual(f.defaultValue.getTime(), d.getTime());
     });
+
+    it('should parseValue() validate value', function() {
+      assert.throws(()=>{
+        const TIMESTAMPTZ = Uniqorm.DataField.get('TIMESTAMPTZ');
+        const f = new TIMESTAMPTZ('field1', null, {});
+        f.parseValue('abcd');
+      });
+    });
+
   });
 
   describe('TIMESTAMP', function() {
@@ -548,20 +557,20 @@ describe('Data Fields', function() {
     it('should create', function() {
       const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
       const f = new TIMESTAMP('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
-      assert.deepEqual(f.parseValue(0), new Date(0));
-      assert.deepEqual(f.parseValue(new Date(1)), new Date(1));
-      assert.deepEqual(f.parseValue('2018-11-05'), new Date(2018, 10, 5));
-      assert.deepEqual(f.parseValue('2018-11-05 10:15:30.654'), new Date(2018, 10, 5, 10, 15, 30, 654));
-      assert.deepEqual(f.parseValue('2018-11-05T10:15:30.654'), new Date(2018, 10, 5, 10, 15, 30, 654));
-      assert.deepEqual(f.parseValue(undefined), null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
+      assert.deepStrictEqual(f.parseValue(0), new Date(0));
+      assert.deepStrictEqual(f.parseValue(new Date(1)), new Date(1));
+      assert.deepStrictEqual(f.parseValue('2018-11-05'), new Date(2018, 10, 5));
+      assert.deepStrictEqual(f.parseValue('2018-11-05 10:15:30.654'), new Date(2018, 10, 5, 10, 15, 30, 654));
+      assert.deepStrictEqual(f.parseValue('2018-11-05T10:15:30.654'), new Date(2018, 10, 5, 10, 15, 30, 654));
+      assert.deepStrictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'Date');
-      assert.equal(f.sqlType, 'TIMESTAMP');
+      assert.strictEqual(f.jsType, 'Date');
+      assert.strictEqual(f.sqlType, 'TIMESTAMP');
     });
 
     it('should create with properties', function() {
@@ -574,14 +583,23 @@ describe('Data Fields', function() {
         fieldName: 'f1',
         charLength: 10
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue.getTime(), d.getTime());
-      assert.equal(f.primaryKey, true);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue.getTime(), d.getTime());
+      assert.strictEqual(f.primaryKey, true);
       f.defaultValue = d;
-      assert.equal(f.defaultValue.getTime(), d.getTime());
+      assert.strictEqual(f.defaultValue.getTime(), d.getTime());
     });
+
+    it('should parseValue() validate value', function() {
+      assert.throws(()=>{
+        const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
+        const f = new TIMESTAMP('field1', null, {});
+        f.parseValue('abcd');
+      });
+    });
+
   });
 
   describe('DATE', function() {
@@ -593,24 +611,24 @@ describe('Data Fields', function() {
     it('should create', function() {
       const DATE = Uniqorm.DataField.get('DATE');
       const f = new DATE('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
       const d1 = new Date(0);
       const d2 = new Date(2018, 10, 5, 10, 15, 30, 654);
       d1.setHours(0, 0, 0, 0);
       d2.setHours(0, 0, 0, 0);
-      assert.deepEqual(f.parseValue(0), d1);
-      assert.deepEqual(f.parseValue(new Date(0)), d1);
-      assert.deepEqual(f.parseValue('2018-11-05'), new Date(2018, 10, 5));
-      assert.deepEqual(f.parseValue('2018-11-05 10:15:30.654'), d2);
-      assert.deepEqual(f.parseValue('2018-11-05T10:15:30.654'), d2);
-      assert.deepEqual(f.parseValue(undefined), null);
+      assert.deepStrictEqual(f.parseValue(0), d1);
+      assert.deepStrictEqual(f.parseValue(new Date(0)), d1);
+      assert.deepStrictEqual(f.parseValue('2018-11-05'), new Date(2018, 10, 5));
+      assert.deepStrictEqual(f.parseValue('2018-11-05 10:15:30.654'), d2);
+      assert.deepStrictEqual(f.parseValue('2018-11-05T10:15:30.654'), d2);
+      assert.deepStrictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'Date');
-      assert.equal(f.sqlType, 'DATE');
+      assert.strictEqual(f.jsType, 'Date');
+      assert.strictEqual(f.sqlType, 'DATE');
     });
 
     it('should create with properties', function() {
@@ -625,13 +643,13 @@ describe('Data Fields', function() {
         fieldName: 'f1',
         charLength: 10
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue.getTime(), d2.getTime());
-      assert.equal(f.primaryKey, true);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue.getTime(), d2.getTime());
+      assert.strictEqual(f.primaryKey, true);
       f.defaultValue = d1;
-      assert.equal(f.defaultValue.getTime(), d2.getTime());
+      assert.strictEqual(f.defaultValue.getTime(), d2.getTime());
     });
   });
 
@@ -644,23 +662,23 @@ describe('Data Fields', function() {
     it('should create', function() {
       const TIME = Uniqorm.DataField.get('TIME');
       const f = new TIME('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
       const d1 = new Date(0);
       const d2 = new Date(2018, 10, 5, 10, 15, 30, 654);
       d1.setFullYear(0, 0, 0);
       d2.setFullYear(0, 0, 0);
-      assert.deepEqual(f.parseValue(0), d1);
-      assert.deepEqual(f.parseValue(new Date(0)), d1);
-      assert.deepEqual(f.parseValue('2018-11-05 10:15:30.654'), d2);
-      assert.deepEqual(f.parseValue('2018-11-05T10:15:30.654'), d2);
-      assert.deepEqual(f.parseValue(undefined), null);
+      assert.deepStrictEqual(f.parseValue(0), d1);
+      assert.deepStrictEqual(f.parseValue(new Date(0)), d1);
+      assert.deepStrictEqual(f.parseValue('2018-11-05 10:15:30.654'), d2);
+      assert.deepStrictEqual(f.parseValue('2018-11-05T10:15:30.654'), d2);
+      assert.deepStrictEqual(f.parseValue(undefined), null);
 
-      assert.equal(f.jsType, 'Date');
-      assert.equal(f.sqlType, 'TIME');
+      assert.strictEqual(f.jsType, 'Date');
+      assert.strictEqual(f.sqlType, 'TIME');
     });
 
     it('should create with properties', function() {
@@ -675,13 +693,13 @@ describe('Data Fields', function() {
         fieldName: 'f1',
         charLength: 10
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue.getTime(), d2.getTime());
-      assert.equal(f.primaryKey, true);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue.getTime(), d2.getTime());
+      assert.strictEqual(f.primaryKey, true);
       f.defaultValue = d1;
-      assert.equal(f.defaultValue.getTime(), d2.getTime());
+      assert.strictEqual(f.defaultValue.getTime(), d2.getTime());
     });
   });
 
@@ -694,14 +712,14 @@ describe('Data Fields', function() {
     it('should create', function() {
       const BUFFER = Uniqorm.DataField.get('BUFFER');
       const f = new BUFFER('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
 
-      assert.equal(f.jsType, 'Buffer');
-      assert.equal(f.sqlType, 'BUFFER');
+      assert.strictEqual(f.jsType, 'Buffer');
+      assert.strictEqual(f.sqlType, 'BUFFER');
     });
 
     it('should create with properties', function() {
@@ -712,11 +730,11 @@ describe('Data Fields', function() {
         primaryKey: 8,
         fieldName: 'f1'
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, true);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, true);
     });
   });
 
@@ -729,14 +747,14 @@ describe('Data Fields', function() {
     it('should create', function() {
       const BLOB = Uniqorm.DataField.get('BLOB');
       const f = new BLOB('field1');
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'field1');
-      assert.equal(f.notNull, null);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, null);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'field1');
+      assert.strictEqual(f.notNull, null);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, null);
 
-      assert.equal(f.jsType, 'Buffer');
-      assert.equal(f.sqlType, 'BLOB');
+      assert.strictEqual(f.jsType, 'Buffer');
+      assert.strictEqual(f.sqlType, 'BLOB');
     });
 
     it('should create with properties', function() {
@@ -747,11 +765,11 @@ describe('Data Fields', function() {
         primaryKey: 8,
         fieldName: 'f1'
       });
-      assert.equal(f.name, 'field1');
-      assert.equal(f.fieldName, 'f1');
-      assert.equal(f.notNull, true);
-      assert.equal(f.defaultValue, null);
-      assert.equal(f.primaryKey, true);
+      assert.strictEqual(f.name, 'field1');
+      assert.strictEqual(f.fieldName, 'f1');
+      assert.strictEqual(f.notNull, true);
+      assert.strictEqual(f.defaultValue, null);
+      assert.strictEqual(f.primaryKey, true);
     });
   });
 

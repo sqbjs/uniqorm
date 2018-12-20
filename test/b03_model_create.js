@@ -4,6 +4,8 @@ const assert = require('assert');
 const sqb = require('sqb');
 const Uniqorm = require('../lib/index');
 const loadModels = require('./support/loadModels');
+const {rejects} = require('rejected-or-not');
+assert.rejects = assert.rejects || rejects;
 
 describe('Model.prototype.create', function() {
 
@@ -42,7 +44,7 @@ describe('Model.prototype.create', function() {
   it('should create record', function() {
     return Countries.create({id: 'ITA', name: 'Italy', phoneCode: 39})
         .then(result => {
-          assert.equal(result, true);
+          assert.strictEqual(result, true);
         });
   });
 
@@ -54,8 +56,8 @@ describe('Model.prototype.create', function() {
         },
         {returning: ['id', 'sourceKey'], silent: false})
         .then(result => {
-          assert.notEqual(result.id, undefined);
-          assert.equal(result.sourceKey, 2);
+          assert.notStrictEqual(result.id, undefined);
+          assert.strictEqual(result.sourceKey, 2);
         });
   });
 
@@ -67,7 +69,7 @@ describe('Model.prototype.create', function() {
         },
         {returning: '*', silent: false})
         .then(result => {
-          assert.equal(Object.getOwnPropertyNames(result).length, 4);
+          assert.strictEqual(Object.getOwnPropertyNames(result).length, 4);
         });
   });
 
@@ -79,8 +81,8 @@ describe('Model.prototype.create', function() {
         },
         {returning: 'id', silent: false})
         .then(result => {
-          assert.equal(Object.getOwnPropertyNames(result).length, 1);
-          assert.notEqual(result.id, undefined);
+          assert.strictEqual(Object.getOwnPropertyNames(result).length, 1);
+          assert.notStrictEqual(result.id, undefined);
         });
   });
 
@@ -88,20 +90,15 @@ describe('Model.prototype.create', function() {
     return Cities.create({id: 1000, name: 'Test City', countryId: 'TUR'},
         {returning: ['countryName', 'country']})
         .then(result => {
-          assert.equal(result.countryName, 'Turkey');
-          assert.equal(typeof result.country, 'object');
-          assert.equal(result.country.name, 'Turkey');
+          assert.strictEqual(result.countryName, 'Turkey');
+          assert.strictEqual(typeof result.country, 'object');
+          assert.strictEqual(result.country.name, 'Turkey');
         });
   });
 
-  it('should validate values argument is object', function(done) {
-    Cities.create([1, 2, 3])
-        .then(() => done('Failed'))
-        .catch(e => {
-          if (e.message.includes('You must provide'))
-            return done();
-          done(e);
-        });
+  it('should validate values argument is object', function() {
+    return assert.rejects(() => Cities.create([1, 2, 3]),
+        /You must provide/);
   });
 
 });

@@ -7,7 +7,7 @@ describe('Associations', function() {
 
   it('should check "key" property is provided', function() {
     const orm = new Uniqorm();
-    try {
+    assert.throws(() => {
       orm.define({
         name: 'details2',
         fields: {
@@ -22,16 +22,12 @@ describe('Associations', function() {
           }
         ]
       });
-    } catch (err) {
-      if (err.message.includes('You must provide "key" property'))
-        return;
-      throw err;
-    }
+    }, /You must provide "key" property/);
   });
 
   it('should check "foreignKey" property is provided', function() {
     const orm = new Uniqorm();
-    try {
+    assert.throws(() => {
       orm.define({
         name: 'details2',
         fields: {
@@ -46,16 +42,12 @@ describe('Associations', function() {
           }
         ]
       });
-    } catch (err) {
-      if (err.message.includes('You must provide "foreignKey" property'))
-        return;
-      throw err;
-    }
+    }, /You must provide "foreignKey" property/);
   });
 
   it('should check "foreignModel" property is provided', function() {
     const orm = new Uniqorm();
-    try {
+    assert.throws(() => {
       orm.define({
         name: 'details2',
         fields: {
@@ -70,11 +62,7 @@ describe('Associations', function() {
           }
         ]
       });
-    } catch (err) {
-      if (err.message.includes('You must provide "foreignModel" property'))
-        return;
-      throw err;
-    }
+    }, /You must provide "foreignModel" property/);
   });
 
   it('should define associations', function() {
@@ -101,15 +89,15 @@ describe('Associations', function() {
       ]
     });
     const details = orm.getModel('details');
-    assert.equal(details.associations.length, 1);
-    assert.equal(details.associations[0].orm, orm);
-    assert.equal(details.associations[0].name, 'fk_details_master');
-    assert.equal(details.associations[0].key, 'master_id');
-    assert.equal(details.associations[0].foreignKey, 'id');
-    assert.equal(details.associations[0].model.name, 'details');
-    assert.equal(String(details.associations[0]), '[object Association(details.master_id>masters.id)]');
-    assert.equal(details.associations[0].inspect(), '[object Association(details.master_id>masters.id)]');
-    assert.equal(details.associations[0].foreignModel.name, 'masters');
+    assert.strictEqual(details.associations.length, 1);
+    assert.strictEqual(details.associations[0].orm, orm);
+    assert.strictEqual(details.associations[0].name, 'fk_details_master');
+    assert.strictEqual(details.associations[0].key, 'master_id');
+    assert.strictEqual(details.associations[0].foreignKey, 'id');
+    assert.strictEqual(details.associations[0].model.name, 'details');
+    assert.strictEqual(String(details.associations[0]), '[object Association(details.master_id>masters.id)]');
+    assert.strictEqual(details.associations[0].inspect(), '[object Association(details.master_id>masters.id)]');
+    assert.strictEqual(details.associations[0].foreignModel.name, 'masters');
   });
 
 });
