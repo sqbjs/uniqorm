@@ -23,7 +23,7 @@ module.exports = merge.deep({}, require('./Customers.json'), {
       key: 'id',
       hasMany: true,
       foreignKey: 'sourceKey',
-      filter: {source: 'customers'}
+      filter: () => ({source: 'customers'})
     },
     tags: {
       hasMany: true,

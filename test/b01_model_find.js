@@ -316,7 +316,7 @@ describe('Model.prototype.find', function() {
           /has no field/);
     });
 
-    it('should check sub attribute exists in child context', function() {
+    it('should check sub attribute exists in child finder', function() {
       return assert.rejects(() =>
               Cities.find({
                 attributes: {
