@@ -23,7 +23,7 @@
   "dependencies": {
     "errorex": "^2.0.3",
     "putil-isplainobject": "^1.0.1",
-    "putil-merge": "^2.1.0",
+    "putil-merge": "^2.2.0",
     "putil-waterfall": "^2.1.1"
   },
   "devDependencies": {
