@@ -40,7 +40,7 @@
     "sqb": ">=3.4.3"
   },
   "engines": {
-    "node": ">= 8.0"
+    "node": ">= 6.0"
   },
   "files": [
     "LICENSE",
