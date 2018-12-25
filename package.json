@@ -32,15 +32,15 @@
     "eslint-config-google": "^0.11.0",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
-    "sqb": "^3.5.7",
-    "sqb-connect-pg": "^3.0.16",
+    "sqb": "^3.6.0",
+    "sqb-connect-pg": "^3.0.18",
     "rejected-or-not": "^1.0.1"
   },
   "peerDependencies": {
     "sqb": ">=3.4.3"
   },
   "engines": {
-    "node": ">= 6.0"
+    "node": ">= 8.0"
   },
   "files": [
     "LICENSE",

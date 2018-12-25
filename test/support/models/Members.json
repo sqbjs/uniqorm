@@ -1,0 +1,16 @@
+{
+  "name": "Members",
+  "schema": "uniqorm_1",
+  "tableName": "members",
+  "fields": {
+    "id": {
+      "dataType": "INTEGER",
+      "primaryKey": true
+    },
+    "name": {
+      "dataType": "VARCHAR",
+      "notNull": true,
+      "charLength": 20
+    }
+  }
+}

@@ -7,6 +7,11 @@
       "dataType": "INTEGER",
       "primaryKey": true
     },
+    "memberId": {
+      "dataType": "INTEGER",
+      "fieldName": "member_id",
+      "notNull": true
+    },
     "name": {
       "dataType": "VARCHAR",
       "charLength": 64,
@@ -29,6 +34,12 @@
       "foreignModel": "uniqorm_1.Streets",
       "key": "streetId",
       "foreignKey": "id"
+    },
+    {
+      "foreignKey": "id",
+      "foreignModel": "uniqorm_1.Members",
+      "key": "memberId",
+      "name": "fk_customers_member"
     }
   ]
 }

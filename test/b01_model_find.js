@@ -290,20 +290,6 @@ describe('Model.prototype.find', function() {
 
   describe('O2M associations', function() {
 
-    it('should return associated attributes', function() {
-      return Customers.find({
-        attributes: ['id', 'name', 'notes'],
-        filter: {id: 19}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 1);
-        assert.strictEqual(recs[0].id, 19);
-        assert(Array.isArray(recs[0].notes));
-        assert.strictEqual(recs[0].notes.length, 2);
-        assert.strictEqual(recs[0].notes[0].contents, 'note 1');
-        assert.strictEqual(recs[0].notes[1].contents, 'note 2');
-      });
-    });
-
     it('should not request M2M associated sub attribute as flat', function() {
       return assert.rejects(() =>
               Customers.find({attributes: ['notes.contents contents']}),
@@ -329,6 +315,20 @@ describe('Model.prototype.find', function() {
                 filter: {id: 1}
               }),
           /has no field/);
+    });
+
+    it('should return associated attributes', function() {
+      return Customers.find({
+        attributes: ['id', 'name', 'notes'],
+        filter: {id: 19}
+      }).then(recs => {
+        assert.strictEqual(recs.length, 1);
+        assert.strictEqual(recs[0].id, 19);
+        assert(Array.isArray(recs[0].notes));
+        assert.strictEqual(recs[0].notes.length, 2);
+        assert.strictEqual(recs[0].notes[0].contents, 'note 1');
+        assert.strictEqual(recs[0].notes[1].contents, 'note 2');
+      });
     });
 
     it('should filter by O2O associated attribute', function() {
