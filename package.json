@@ -7,7 +7,10 @@
     "Eray Hanoglu <e.hanoglu@panates.com>"
   ],
   "license": "MIT",
-  "repository": "panates/uniqorm",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sqbjs/uniqorm.git"
+  },
   "main": "lib/index.js",
   "keywords": [
     "javascript",
@@ -32,12 +35,12 @@
     "eslint-config-google": "^0.11.0",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
-    "sqb": "^3.6.0",
+    "sqb": "^3.6.1",
     "sqb-connect-pg": "^3.0.18",
     "rejected-or-not": "^1.0.1"
   },
   "peerDependencies": {
-    "sqb": ">=3.4.3"
+    "sqb": ">=3.6.1"
   },
   "engines": {
     "node": ">= 6.0"
