@@ -69,7 +69,7 @@ describe('Model', function() {
     const orm = new Uniqorm();
     let model1 = orm.define(model1Def);
     assert.deepStrictEqual(model1.tableNameFull, 'schema1.table1');
-    const model2Def = merge.clone(model1Def);
+    const model2Def = merge({}, model1Def);
     model2Def.name = 'model2';
     delete model2Def.schema;
     const model2 = orm.define(model2Def);

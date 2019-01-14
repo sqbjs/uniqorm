@@ -1,6 +1,6 @@
 const merge = require('putil-merge');
 
-module.exports = merge.deep({}, require('./Cities.json'), {
+module.exports = merge.all([{}, require('./Cities.json'), {
   fields: {
     country: {
       joinType: 'inner',
@@ -11,4 +11,4 @@ module.exports = merge.deep({}, require('./Cities.json'), {
       fieldName: 'name'
     }
   }
-});
+}], {deep: true});

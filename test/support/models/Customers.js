@@ -1,6 +1,6 @@
 const merge = require('putil-merge');
 
-module.exports = merge.deep({}, require('./Customers.json'), {
+module.exports = merge.all([{}, require('./Customers.json'), {
   fields: {
     street: {
       foreignModel: 'uniqorm_1.Streets',
@@ -38,4 +38,4 @@ module.exports = merge.deep({}, require('./Customers.json'), {
       }
     }
   }
-});
+}], {deep: true});
