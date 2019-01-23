@@ -73,7 +73,7 @@ describe('Model.prototype.create', function() {
         });
   });
 
-  it('should return single fields if requested as string attribute', function() {
+  it('should return single fields if requested as string property', function() {
     return Notes.create({
           source: 'customers',
           sourceKey: 2,

@@ -4,7 +4,7 @@ module.exports = merge.all([{}, require('./Customers.json'), {
   fields: {
     street: {
       foreignModel: 'uniqorm_1.Streets',
-      attributes: ['id', 'name']
+      properties: ['id', 'name']
     },
     city: {
       foreignModel: 'uniqorm_1.Streets',
@@ -31,7 +31,7 @@ module.exports = merge.all([{}, require('./Customers.json'), {
       filter: {active: 1},
       towards: {
         foreignModel: 'uniqorm_1.Tags',
-        attributes: {
+        properties: {
           id: null,
           name: null
         }

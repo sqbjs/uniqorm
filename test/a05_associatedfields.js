@@ -80,7 +80,7 @@ describe('Associated Fields', function() {
       foreignModel: 'countries',
       foreignKey: 'id',
       key: 'country_id',
-      attributes: ['id', 'name'],
+      properties: ['id', 'name'],
       filter: [{id: 1}]
     });
     States.hasMany('country2', 'countries');
@@ -93,7 +93,7 @@ describe('Associated Fields', function() {
     assert.strictEqual(f.key, 'country_id');
     assert.strictEqual(f.hasMany, true);
     assert.deepStrictEqual(f.filter, [{id: 1}]);
-    assert.deepStrictEqual(f.attributes, {
+    assert.deepStrictEqual(f.properties, {
       id: null,
       name: null
     });
@@ -123,7 +123,7 @@ describe('Associated Fields', function() {
     assert.deepStrictEqual(f.filter, [{id: 1}]);
   });
 
-  it('should set "field" if attributes is not provided', function() {
+  it('should set "field" if properties is not provided', function() {
     let orm = new Uniqorm();
     orm.define(defs.countries);
     const States = orm.define(defs.states);
@@ -139,7 +139,7 @@ describe('Associated Fields', function() {
       foreignKey: 'id',
       key: 'country_id',
       filter: {id: 1},
-      attributes: {id: null, name: null},
+      properties: {id: null, name: null},
       fieldName: 'name'
     });
     orm.prepare();
@@ -150,7 +150,7 @@ describe('Associated Fields', function() {
     f = States.fields.country2;
     assert(f);
     assert.strictEqual(f.fieldName, null);
-    assert.deepStrictEqual(f.attributes, {
+    assert.deepStrictEqual(f.properties, {
       id: null,
       name: null
     });
@@ -163,7 +163,7 @@ describe('Associated Fields', function() {
       foreignModel: 'states',
       foreignKey: 'country_id',
       key: 'id',
-      attributes: {
+      properties: {
         state_name: 'name'
       },
       filter: {'id>=': 1},
@@ -172,7 +172,7 @@ describe('Associated Fields', function() {
         foreignKey: 'state_id',
         key: 'id',
         filter: {'id>': 0},
-        attributes: ['id', 'name']
+        properties: ['id', 'name']
       }
     });
     Countries.hasOne('cities2', {
@@ -198,19 +198,19 @@ describe('Associated Fields', function() {
     assert.strictEqual(f.towards.foreignKey, 'state_id');
     assert.strictEqual(f.towards.key, 'id');
     assert.deepStrictEqual(f.towards.filter, [{'id>': 0}]);
-    assert.deepStrictEqual(f.towards.attributes, {id: null, name: null});
+    assert.deepStrictEqual(f.towards.properties, {id: null, name: null});
 
     f = model.fields.cities2;
     assert(f);
     assert.strictEqual(f.foreignModel.name, 'states');
     assert.strictEqual(f.foreignKey, 'country_id');
     assert.strictEqual(f.key, 'id');
-    assert.strictEqual(f.attributes, null);
+    assert.strictEqual(f.properties, null);
     assert(f.towards);
     assert.strictEqual(f.towards.foreignModel.name, 'cities');
     assert.strictEqual(f.towards.foreignKey, 'state_id');
     assert.strictEqual(f.towards.key, 'id');
-    assert.deepStrictEqual(f.towards.attributes, {
+    assert.deepStrictEqual(f.towards.properties, {
       id: null,
       state: null,
       state_id: null,

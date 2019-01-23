@@ -93,14 +93,14 @@ describe('Model.prototype.find', function() {
     });
   });
 
-  it('should return only requested attributes with requested alias', function() {
-    return Countries.find({attributes: ['id country_id', 'name country_name']})
+  it('should return only requested properties with requested alias', function() {
+    return Countries.find({properties: ['id country_id', 'name country_name']})
         .then(recs1 => {
           assert.strictEqual(Object.getOwnPropertyNames(recs1[0]).length, 2);
           assert(recs1[0].country_id);
           assert(recs1[0].country_name);
           return Countries.find({
-            attributes: {
+            properties: {
               country_id: 'id',
               country_name: 'name'
             }
@@ -112,15 +112,15 @@ describe('Model.prototype.find', function() {
         });
   });
 
-  it('should validate attribute names', function() {
+  it('should validate property names', function() {
     return assert.rejects(() =>
-            Countries.find({attributes: '1id'}),
+            Countries.find({properties: '1id'}),
         /is not a valid column name/);
   });
 
-  it('should ignore invalid attribute names in silent mode', function() {
+  it('should ignore invalid property names in silent mode', function() {
     return Countries.find({
-      attributes: ['1id', 'name', 'nofield', 123],
+      properties: ['1id', 'name', 'nofield', 123],
       silent: true
     })
         .then(recs => {
@@ -132,9 +132,9 @@ describe('Model.prototype.find', function() {
 
   describe('O2O associations', function() {
 
-    it('should return associated attributes', function() {
+    it('should return associated properties', function() {
       return Cities.find({
-        attributes: ['id', 'name', 'country'],
+        properties: ['id', 'name', 'country'],
         filter: {id: 1}
       }).then(recs => {
         assert.strictEqual(recs.length, 1);
@@ -148,7 +148,7 @@ describe('Model.prototype.find', function() {
 
     it('should return associated single value', function() {
       return Cities.find({
-        attributes: ['id', 'name', 'countryName'],
+        properties: ['id', 'name', 'countryName'],
         filter: {id: 1}
       }).then(recs => {
         assert.strictEqual(recs.length, 1);
@@ -158,9 +158,9 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should request attributes with array of attribute names', function() {
+    it('should request properties with array of property names', function() {
       return Cities.find({
-        attributes: ['id', 'name', 'country'],
+        properties: ['id', 'name', 'country'],
         filter: {id: 1}
       }).then(recs => {
         assert.strictEqual(recs.length, 1);
@@ -172,14 +172,14 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should request attributes with object that includes attribute names', function() {
+    it('should request properties with object that includes property names', function() {
       return Cities.find({
-        attributes: {
+        properties: {
           id: '',
           _name: 'name',
           _country: {
             fieldName: 'country',
-            attributes: {name_alias: 'name', 'phone_code_alias': 'phoneCode'}
+            properties: {name_alias: 'name', 'phone_code_alias': 'phoneCode'}
           }
         },
         filter: {id: 1}
@@ -194,9 +194,9 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should request attributes with object that includes attribute names - 2', function() {
+    it('should request properties with object that includes property names - 2', function() {
       return Cities.find({
-        attributes: {
+        properties: {
           id: '',
           _name: 'name',
           country: ['name', 'phoneCode']
@@ -213,9 +213,9 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should request sub attribute flat', function() {
+    it('should request sub property flat', function() {
       return Cities.find({
-        attributes: ['id', 'name', 'country.name country_name'],
+        properties: ['id', 'name', 'country.name country_name'],
         filter: {id: 1}
       }).then(recs => {
         assert.strictEqual(recs.length, 1);
@@ -225,9 +225,9 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should request attributes with different name than designed', function() {
+    it('should request properties with different name than designed', function() {
       return Cities.find({
-        attributes: {
+        properties: {
           id: '',
           _name: 'name',
           _country: 'country'
@@ -244,9 +244,9 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should request attributes with different name than designed', function() {
+    it('should request properties with different name than designed', function() {
       return Cities.find({
-        attributes: {
+        properties: {
           id: '',
           _name: 'name',
           country: null
@@ -264,9 +264,9 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should return associated attributes through other model', function() {
+    it('should return associated properties through other model', function() {
       return Customers.find({
-        attributes: ['id', 'name', 'city', 'country'],
+        properties: ['id', 'name', 'city', 'country'],
         filter: {id: 19}
       }).then(recs => {
         assert.strictEqual(recs.length, 1);
@@ -280,9 +280,9 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should not request O2O associated flat fields sub attribute', function() {
+    it('should not request O2O associated flat fields sub property', function() {
       return assert.rejects(() =>
-              Cities.find({attributes: ['countryName.name name']}),
+              Cities.find({properties: ['countryName.name name']}),
           /has no sub value/);
     });
 
@@ -290,26 +290,26 @@ describe('Model.prototype.find', function() {
 
   describe('O2M associations', function() {
 
-    it('should not request M2M associated sub attribute as flat', function() {
+    it('should not request M2M associated sub property as flat', function() {
       return assert.rejects(() =>
-              Customers.find({attributes: ['notes.contents contents']}),
+              Customers.find({properties: ['notes.contents contents']}),
           /sub values can not be used/);
     });
 
-    it('should check sub attribute exists', function() {
+    it('should check sub property exists', function() {
       return assert.rejects(() =>
-              Cities.find({attributes: ['country.nofield aaa']}),
+              Cities.find({properties: ['country.nofield aaa']}),
           /has no field/);
     });
 
-    it('should check sub attribute exists in child finder', function() {
+    it('should check sub property exists in child finder', function() {
       return assert.rejects(() =>
               Cities.find({
-                attributes: {
+                properties: {
                   id: '',
                   name: '',
                   country: {
-                    attributes: [{unknown: null}]
+                    properties: [{unknown: null}]
                   }
                 },
                 filter: {id: 1}
@@ -317,9 +317,9 @@ describe('Model.prototype.find', function() {
           /has no field/);
     });
 
-    it('should return associated attributes', function() {
+    it('should return associated properties', function() {
       return Customers.find({
-        attributes: ['id', 'name', 'notes'],
+        properties: ['id', 'name', 'notes'],
         filter: {id: 19}
       }).then(recs => {
         assert.strictEqual(recs.length, 1);
@@ -331,10 +331,10 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should filter by O2O associated attribute', function() {
+    it('should filter by O2O associated property', function() {
       const scope = {};
       return Cities.find({
-        attributes: ['id', 'name'],
+        properties: ['id', 'name'],
         filter: {countryName: 'France'},
         scope
       }).then(recs => {
@@ -345,9 +345,9 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should filter by O2O associated attribute (towards)', function() {
+    it('should filter by O2O associated property (towards)', function() {
       return Streets.find({
-        attributes: ['id', 'name'],
+        properties: ['id', 'name'],
         filter: {countryName: 'France'}
       }).then(recs => {
         assert.strictEqual(recs.length, 4);
@@ -356,9 +356,9 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should sort by O2O associated attribute', function() {
+    it('should sort by O2O associated property', function() {
       return Cities.find({
-        attributes: ['id', 'name', 'countryName'],
+        properties: ['id', 'name', 'countryName'],
         sort: ['-countryName']
       }).then(recs => {
         assert.strictEqual(recs[0].name, 'Manchester');
@@ -368,11 +368,11 @@ describe('Model.prototype.find', function() {
 
     it('should find deep', function() {
       return Streets.find({
-        attributes: {
+        properties: {
           city: {
-            attributes: {
+            properties: {
               country: {
-                attributes: {
+                properties: {
                   id: null,
                   name: null
                 }
@@ -388,11 +388,11 @@ describe('Model.prototype.find', function() {
       });
     });
 
-    it('should find deep (default attributes)', function() {
+    it('should find deep (default properties)', function() {
       return Streets.find({
-        attributes: {
+        properties: {
           city: {
-            attributes: {
+            properties: {
               country: null
             }
           }
@@ -410,9 +410,9 @@ describe('Model.prototype.find', function() {
 
   describe('M2M associations', function() {
 
-    it('should return M2M associated attributes (array)', function() {
+    it('should return M2M associated properties (array)', function() {
       return Customers.find({
-        attributes: ['id', 'name', 'tags'],
+        properties: ['id', 'name', 'tags'],
         filter: {id: 19}
       }).then(recs => {
         assert.strictEqual(recs.length, 1);
@@ -430,11 +430,11 @@ describe('Model.prototype.find', function() {
     it('should fill scope object', function() {
       const scope = {};
       return Customers.find({
-        attributes: ['id', 'name', 'notes'],
+        properties: ['id', 'name', 'notes'],
         filter: {id: 19},
         scope
       }).then(() => {
-        assert(scope.attributes);
+        assert(scope.properties);
         assert(scope.query);
         assert(scope.query.sql);
       });

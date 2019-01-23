@@ -65,7 +65,7 @@ describe('Model.prototype.update', function() {
         });
   });
 
-  it('should return single fields if requested as string attribute', function() {
+  it('should return single fields if requested as string property', function() {
     return Notes.update({id: 1, contents: 'changed 2'},
         {returning: 'id', silent: false})
         .then(result => {
