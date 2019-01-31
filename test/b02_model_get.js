@@ -1,9 +1,7 @@
 /* eslint-disable */
 require('./support/env');
 const assert = require('assert');
-const sqb = require('sqb');
-const Uniqorm = require('../lib/index');
-const loadModels = require('./support/loadModels');
+const {createPool, createOrm} = require('./support/helpers');
 const {rejects} = require('rejected-or-not');
 assert.rejects = assert.rejects || rejects;
 
@@ -17,51 +15,49 @@ describe('Model.prototype.get', function() {
   let Customers;
 
   before(function() {
-    pool = sqb.pool({
-      dialect: 'pg',
-      user: (process.env.DB_USER || 'postgres'),
-      password: (process.env.DB_PASS || ''),
-      host: (process.env.DB_HOST || 'localhost'),
-      database: (process.env.DB || 'test'),
-      schema: 'sqb_test',
-      defaults: {
-        naming: 'lowercase'
-      }
-    });
-    orm = new Uniqorm(pool);
-  });
-
-  after(() => pool.close(true));
-
-  it('load models', function() {
-    loadModels(orm);
-    orm.prepare();
+    pool = createPool();
+    orm = createOrm(pool);
     Countries = orm.getModel('uniqorm_1.Countries');
     Cities = orm.getModel('uniqorm_1.Cities');
     Streets = orm.getModel('uniqorm_1.Streets');
     Customers = orm.getModel('uniqorm_2.Customers');
   });
 
+  after(() => pool.close(true));
+
   it('should retrieve single instance', function() {
-    return Countries.get({id: 'DEU'}).then(rec => {
-      assert.strictEqual(typeof rec, 'object');
-      assert(!Array.isArray(rec), 'Record is array');
-      assert.strictEqual(rec.id, 'DEU');
-      assert.strictEqual(rec.phoneCode, 49);
+    return Countries.get({id: 'DEU'}).then(resp => {
+      assert(resp);
+      assert(resp.executeTime);
+      assert.strictEqual(typeof resp.instance, 'object');
+      assert(!Array.isArray(resp.instance), 'Record is array');
+      assert.strictEqual(resp.instance.id, 'DEU');
+      assert.strictEqual(resp.instance.phoneCode, 49);
     });
   });
 
   it('should retrieve with key value', function() {
-    return Countries.get('DEU').then(rec => {
-      assert.strictEqual(typeof rec, 'object');
-      assert(!Array.isArray(rec), 'Record is array');
-      assert.strictEqual(rec.id, 'DEU');
-      assert.strictEqual(rec.phoneCode, 49);
+    return Countries.get('DEU').then(resp => {
+      assert.strictEqual(typeof resp, 'object');
+      assert(!Array.isArray(resp), 'Record is array');
+      assert.strictEqual(resp.instance.id, 'DEU');
+      assert.strictEqual(resp.instance.phoneCode, 49);
     });
   });
 
-  it('should get() check key values on get()', function() {
-    return assert.rejects(() => Countries.get());
+  it('should throw if no argument given', function() {
+    return assert.rejects(() => Countries.get(),
+        /You must all provide all key values/);
+  });
+
+  it('should throw if not all key values given', function() {
+    return Promise.all([
+      assert.rejects(() => Countries.get({}),
+          /You must all provide all key values/),
+      assert.rejects(() => Countries.get({id: undefined}),
+          /You must all provide all key values/)
+    ]);
+
   });
 
   describe('Finalize', function() {

@@ -81,7 +81,8 @@ describe('Associated Fields', function() {
       foreignKey: 'id',
       key: 'country_id',
       properties: ['id', 'name'],
-      filter: [{id: 1}]
+      filter: [{id: 1}],
+      joinType: 'leftOuter'
     });
     States.hasMany('country2', 'countries');
     orm.prepare();
@@ -123,7 +124,7 @@ describe('Associated Fields', function() {
     assert.deepStrictEqual(f.filter, [{id: 1}]);
   });
 
-  it('should set "field" if properties is not provided', function() {
+  it('should set "fieldName" if properties is not provided', function() {
     let orm = new Uniqorm();
     orm.define(defs.countries);
     const States = orm.define(defs.states);
@@ -237,6 +238,19 @@ describe('Associated Fields', function() {
     assert.strictEqual(f.foreignModel.name, 'states');
     assert.strictEqual(f.foreignKey, 'id');
     assert.strictEqual(f.key, 'states_id');
+  });
+
+  it('should validate joinType', function() {
+    assert.throws(() => {
+      const orm = new Uniqorm();
+      const Countries = orm.define(defs.countries);
+      Countries.hasMany('cities', {
+        foreignModel: 'states',
+        foreignKey: 'country_id',
+        key: 'id',
+        joinType: 'invalid'
+      });
+    });
   });
 
 });

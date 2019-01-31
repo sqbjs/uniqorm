@@ -1,8 +1,7 @@
 /* eslint-disable */
 require('./support/env');
 const assert = require('assert');
-const sqb = require('sqb');
-const createDatabase = require('./support/createDatabase');
+const {createPool, createDatabase} = require('./support/helpers');
 
 describe('Create test tables', function() {
 
@@ -13,17 +12,7 @@ describe('Create test tables', function() {
 
     it('create test tables', function() {
       this.slow(4000);
-      pool = sqb.pool({
-        dialect: 'pg',
-        user: (process.env.DB_USER || 'postgres'),
-        password: (process.env.DB_PASS || ''),
-        host: (process.env.DB_HOST || 'localhost'),
-        database: (process.env.DB || 'test'),
-        schema: 'sqb_test',
-        defaults: {
-          naming: 'lowercase'
-        }
-      });
+      pool = createPool();
       return pool.acquire(connection => {
         return createDatabase(connection._client.intlcon, {
           structureScript: 'db_structure.sql',

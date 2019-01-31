@@ -1,9 +1,7 @@
 /* eslint-disable */
 require('./support/env');
 const assert = require('assert');
-const sqb = require('sqb');
-const Uniqorm = require('../lib/index');
-const loadModels = require('./support/loadModels');
+const {createPool, createOrm} = require('./support/helpers');
 const {rejects} = require('rejected-or-not');
 assert.rejects = assert.rejects || rejects;
 
@@ -18,20 +16,8 @@ describe('Model.prototype.create', function() {
   let Notes;
 
   before(function() {
-    pool = sqb.pool({
-      dialect: 'pg',
-      user: (process.env.DB_USER || 'postgres'),
-      password: (process.env.DB_PASS || ''),
-      host: (process.env.DB_HOST || 'localhost'),
-      database: (process.env.DB || 'test'),
-      schema: 'sqb_test',
-      defaults: {
-        naming: 'lowercase'
-      }
-    });
-    orm = new Uniqorm(pool);
-    loadModels(orm);
-    orm.prepare();
+    pool = createPool();
+    orm = createOrm(pool);
     Countries = orm.getModel('uniqorm_1.Countries');
     Cities = orm.getModel('uniqorm_1.Cities');
     Streets = orm.getModel('uniqorm_1.Streets');
@@ -44,7 +30,9 @@ describe('Model.prototype.create', function() {
   it('should create record', function() {
     return Countries.create({id: 'ITA', name: 'Italy', phoneCode: 39})
         .then(result => {
-          assert.strictEqual(result, true);
+          assert(result);
+          assert(result.executeTime);
+          assert.strictEqual(result.rowsAffected, 1);
         });
   });
 
@@ -56,8 +44,11 @@ describe('Model.prototype.create', function() {
         },
         {returning: ['id', 'sourceKey'], silent: false})
         .then(result => {
-          assert.notStrictEqual(result.id, undefined);
-          assert.strictEqual(result.sourceKey, 2);
+          assert(result);
+          assert.strictEqual(result.rowsAffected, 1);
+          assert(result.instance);
+          assert.notStrictEqual(result.instance.id, undefined);
+          assert.strictEqual(result.instance.sourceKey, 2);
         });
   });
 
@@ -69,7 +60,8 @@ describe('Model.prototype.create', function() {
         },
         {returning: '*', silent: false})
         .then(result => {
-          assert.strictEqual(Object.getOwnPropertyNames(result).length, 4);
+          assert.strictEqual(result.rowsAffected, 1);
+          assert.strictEqual(Object.getOwnPropertyNames(result.instance).length, 4);
         });
   });
 
@@ -81,8 +73,9 @@ describe('Model.prototype.create', function() {
         },
         {returning: 'id', silent: false})
         .then(result => {
-          assert.strictEqual(Object.getOwnPropertyNames(result).length, 1);
-          assert.notStrictEqual(result.id, undefined);
+          assert.strictEqual(result.rowsAffected, 1);
+          assert.strictEqual(Object.getOwnPropertyNames(result.instance).length, 1);
+          assert.notStrictEqual(result.instance.id, undefined);
         });
   });
 
@@ -90,9 +83,10 @@ describe('Model.prototype.create', function() {
     return Cities.create({id: 1000, name: 'Test City', countryId: 'TUR'},
         {returning: ['countryName', 'country']})
         .then(result => {
-          assert.strictEqual(result.countryName, 'Turkey');
-          assert.strictEqual(typeof result.country, 'object');
-          assert.strictEqual(result.country.name, 'Turkey');
+          assert.strictEqual(result.rowsAffected, 1);
+          assert.strictEqual(result.instance.countryName, 'Turkey');
+          assert.strictEqual(typeof result.instance.country, 'object');
+          assert.strictEqual(result.instance.country.name, 'Turkey');
         });
   });
 
@@ -101,4 +95,15 @@ describe('Model.prototype.create', function() {
         /You must provide/);
   });
 
+  it('should validate required fields', function() {
+    return assert.rejects(() => Notes.create({}),
+        /Value required for column "source"/);
+  });
+
+  it('should validate max chars', function() {
+    return assert.rejects(() => Notes.create({
+          source: '123456789012345678901'
+        }),
+        /Value too large for column/);
+  });
 });

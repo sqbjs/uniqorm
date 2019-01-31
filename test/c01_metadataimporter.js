@@ -1,7 +1,7 @@
 /* eslint-disable */
 require('./support/env');
 const assert = require('assert');
-const sqb = require('sqb');
+const {createPool, createOrm} = require('./support/helpers');
 const Uniqorm = require('../lib/index');
 const waterfall = require('putil-waterfall');
 const {rejects} = require('rejected-or-not');
@@ -13,18 +13,8 @@ describe('MetadataImporter', function() {
   let orm;
 
   before(function() {
-    pool = sqb.pool({
-      dialect: 'pg',
-      user: (process.env.DB_USER || 'postgres'),
-      password: (process.env.DB_PASS || ''),
-      host: (process.env.DB_HOST || 'localhost'),
-      database: (process.env.DB || 'test'),
-      schema: 'sqb_test',
-      defaults: {
-        naming: 'lowercase'
-      }
-    });
-    orm = new Uniqorm(pool);
+    pool = createPool();
+    orm = createOrm(pool);
   });
 
   after(() => pool.close(true));

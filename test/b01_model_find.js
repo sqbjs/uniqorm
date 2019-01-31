@@ -1,9 +1,7 @@
 /* eslint-disable */
 require('./support/env');
 const assert = require('assert');
-const sqb = require('sqb');
-const Uniqorm = require('../lib/index');
-const loadModels = require('./support/loadModels');
+const {createPool, createOrm} = require('./support/helpers');
 const {rejects} = require('rejected-or-not');
 assert.rejects = assert.rejects || rejects;
 
@@ -17,58 +15,50 @@ describe('Model.prototype.find', function() {
   let Customers;
 
   before(function() {
-    pool = sqb.pool({
-      dialect: 'pg',
-      user: (process.env.DB_USER || 'postgres'),
-      password: (process.env.DB_PASS || ''),
-      host: (process.env.DB_HOST || 'localhost'),
-      database: (process.env.DB || 'test'),
-      schema: 'sqb_test',
-      defaults: {
-        naming: 'lowercase'
-      }
-    });
-    orm = new Uniqorm(pool, {showSql: true});
-  });
-
-  after(() => pool.close(true));
-
-  it('load models', function() {
-    loadModels(orm);
-    orm.prepare();
+    pool = createPool();
+    orm = createOrm(pool);
     Countries = orm.getModel('uniqorm_1', 'Countries');
     Cities = orm.getModel('uniqorm_1', 'Cities');
     Streets = orm.getModel('uniqorm_1', 'Streets');
     Customers = orm.getModel('uniqorm_2', 'Customers');
   });
 
+  after(() => pool.close(true));
+
   it('should retrieve array of instances', function() {
-    return Countries.find().then(recs => {
-      assert(Array.isArray(recs), 'Result is not array');
-      assert(recs.length);
-      assert(recs[0].id);
+    return Countries.find().then(resp => {
+      assert(resp);
+      assert(resp.executeTime);
+      assert.strictEqual(resp.queriesExecuted, 1);
+      assert(Array.isArray(resp.instances), 'Result is not array');
+      assert(resp.instances.length);
+      assert(resp.instances[0].id);
     });
   });
 
   it('should limit results', function() {
-    return Countries.find({limit: 2}).then(recs => {
-      assert.strictEqual(recs.length, 2);
+    return Countries.find({limit: 2}).then(resp => {
+      assert.strictEqual(resp.queriesExecuted, 1);
+      assert.strictEqual(resp.instances.length, 2);
     });
   });
 
   it('should offset results', function() {
-    return Countries.find().then(recs1 => {
-      return Countries.find({offset: 1}).then(recs2 => {
-        assert.strictEqual(recs2[0].id, recs1[1].id);
+    return Countries.find().then(resp1 => {
+      return Countries.find({offset: 1}).then(resp2 => {
+        assert.strictEqual(resp2.queriesExecuted, 1);
+        assert.strictEqual(resp2.instances[0].id, resp1.instances[1].id);
       });
     });
   });
 
   it('should sort results', function() {
-    return Countries.find({sort: 'phoneCode'}).then(recs1 => {
-      assert.strictEqual(recs1[0].id, 'RUS');
-      return Countries.find({sort: '-phoneCode'}).then(recs2 => {
-        assert.strictEqual(recs2[0].id, 'TUR');
+    return Countries.find({sort: 'phoneCode'}).then(resp1 => {
+      assert.strictEqual(resp1.queriesExecuted, 1);
+      assert.strictEqual(resp1.instances[0].id, 'RUS');
+      return Countries.find({sort: '-phoneCode'}).then(resp2 => {
+        assert.strictEqual(resp2.queriesExecuted, 1);
+        assert.strictEqual(resp2.instances[0].id, 'TUR');
       });
     });
   });
@@ -86,28 +76,30 @@ describe('Model.prototype.find', function() {
   });
 
   it('should filter results', function() {
-    return Countries.find({filter: {id: 'DEU'}}).then(recs => {
-      assert.strictEqual(recs.length, 1);
-      assert.strictEqual(recs[0].id, 'DEU');
-      assert.strictEqual(recs[0].name, 'Germany');
-    });
+    return Countries.find({filter: {or: [{phoneCode: 49}, {phoneCode: 90}]}})
+        .then(resp => {
+          assert.strictEqual(resp.queriesExecuted, 1);
+          assert.strictEqual(resp.instances.length, 2);
+        });
   });
 
   it('should return only requested properties with requested alias', function() {
     return Countries.find({properties: ['id country_id', 'name country_name']})
-        .then(recs1 => {
-          assert.strictEqual(Object.getOwnPropertyNames(recs1[0]).length, 2);
-          assert(recs1[0].country_id);
-          assert(recs1[0].country_name);
+        .then(resp1 => {
+          assert.strictEqual(resp1.queriesExecuted, 1);
+          assert.strictEqual(Object.getOwnPropertyNames(resp1.instances[0]).length, 2);
+          assert(resp1.instances[0].country_id);
+          assert(resp1.instances[0].country_name);
           return Countries.find({
             properties: {
               country_id: 'id',
               country_name: 'name'
             }
-          }).then(recs2 => {
-            assert(Object.getOwnPropertyNames(recs2[0]), 2);
-            assert(recs2[0].country_id);
-            assert(recs2[0].country_name);
+          }).then(resp2 => {
+            assert.strictEqual(resp2.queriesExecuted, 1);
+            assert(Object.getOwnPropertyNames(resp2.instances[0]), 2);
+            assert(resp2.instances[0].country_id);
+            assert(resp2.instances[0].country_name);
           });
         });
   });
@@ -122,12 +114,11 @@ describe('Model.prototype.find', function() {
     return Countries.find({
       properties: ['1id', 'name', 'nofield', 123],
       silent: true
-    })
-        .then(recs => {
-          assert(!recs[0].id);
-          assert(!recs[0].nofield);
-          assert(recs[0].name);
-        });
+    }).then(resp => {
+      assert(!resp.instances[0].id);
+      assert(!resp.instances[0].nofield);
+      assert(resp.instances[0].name);
+    });
   });
 
   describe('O2O associations', function() {
@@ -136,13 +127,14 @@ describe('Model.prototype.find', function() {
       return Cities.find({
         properties: ['id', 'name', 'country'],
         filter: {id: 1}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 1);
-        assert.strictEqual(recs[0].id, 1);
-        assert.strictEqual(recs[0].name, 'Munich');
-        assert.strictEqual(typeof recs[0].country, 'object');
-        assert.strictEqual(recs[0].country.id, 'DEU');
-        assert.strictEqual(recs[0].country.name, 'Germany');
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 1);
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 1);
+        assert.strictEqual(resp.instances[0].name, 'Munich');
+        assert.strictEqual(typeof resp.instances[0].country, 'object');
+        assert.strictEqual(resp.instances[0].country.id, 'DEU');
+        assert.strictEqual(resp.instances[0].country.name, 'Germany');
       });
     });
 
@@ -150,11 +142,12 @@ describe('Model.prototype.find', function() {
       return Cities.find({
         properties: ['id', 'name', 'countryName'],
         filter: {id: 1}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 1);
-        assert.strictEqual(recs[0].id, 1);
-        assert.strictEqual(recs[0].name, 'Munich');
-        assert.strictEqual(recs[0].countryName, 'Germany');
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 1);
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 1);
+        assert.strictEqual(resp.instances[0].name, 'Munich');
+        assert.strictEqual(resp.instances[0].countryName, 'Germany');
       });
     });
 
@@ -162,13 +155,14 @@ describe('Model.prototype.find', function() {
       return Cities.find({
         properties: ['id', 'name', 'country'],
         filter: {id: 1}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 1);
-        assert.strictEqual(recs[0].id, 1);
-        assert.strictEqual(recs[0].name, 'Munich');
-        assert.strictEqual(typeof recs[0].country, 'object');
-        assert.strictEqual(recs[0].country.id, 'DEU');
-        assert.strictEqual(recs[0].country.name, 'Germany');
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 1);
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 1);
+        assert.strictEqual(resp.instances[0].name, 'Munich');
+        assert.strictEqual(typeof resp.instances[0].country, 'object');
+        assert.strictEqual(resp.instances[0].country.id, 'DEU');
+        assert.strictEqual(resp.instances[0].country.name, 'Germany');
       });
     });
 
@@ -183,14 +177,15 @@ describe('Model.prototype.find', function() {
           }
         },
         filter: {id: 1}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 1);
-        assert.strictEqual(recs[0].id, 1);
-        assert.strictEqual(recs[0]._name, 'Munich');
-        assert.strictEqual(typeof recs[0]._country, 'object');
-        assert.strictEqual(Object.getOwnPropertyNames(recs[0]._country).length, 2);
-        assert.strictEqual(recs[0]._country.name_alias, 'Germany');
-        assert.strictEqual(recs[0]._country.phone_code_alias, 49);
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 1);
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 1);
+        assert.strictEqual(resp.instances[0]._name, 'Munich');
+        assert.strictEqual(typeof resp.instances[0]._country, 'object');
+        assert.strictEqual(Object.getOwnPropertyNames(resp.instances[0]._country).length, 2);
+        assert.strictEqual(resp.instances[0]._country.name_alias, 'Germany');
+        assert.strictEqual(resp.instances[0]._country.phone_code_alias, 49);
       });
     });
 
@@ -202,14 +197,14 @@ describe('Model.prototype.find', function() {
           country: ['name', 'phoneCode']
         },
         filter: {id: 1}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 1);
-        assert.strictEqual(recs[0].id, 1);
-        assert.strictEqual(recs[0]._name, 'Munich');
-        assert.strictEqual(typeof recs[0].country, 'object');
-        assert.strictEqual(Object.getOwnPropertyNames(recs[0].country).length, 2);
-        assert.strictEqual(recs[0].country.name, 'Germany');
-        assert.strictEqual(recs[0].country.phoneCode, 49);
+      }).then(resp => {
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 1);
+        assert.strictEqual(resp.instances[0]._name, 'Munich');
+        assert.strictEqual(typeof resp.instances[0].country, 'object');
+        assert.strictEqual(Object.getOwnPropertyNames(resp.instances[0].country).length, 2);
+        assert.strictEqual(resp.instances[0].country.name, 'Germany');
+        assert.strictEqual(resp.instances[0].country.phoneCode, 49);
       });
     });
 
@@ -217,11 +212,11 @@ describe('Model.prototype.find', function() {
       return Cities.find({
         properties: ['id', 'name', 'country.name country_name'],
         filter: {id: 1}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 1);
-        assert.strictEqual(recs[0].id, 1);
-        assert.strictEqual(recs[0].name, 'Munich');
-        assert.strictEqual(recs[0].country_name, 'Germany');
+      }).then(resp => {
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 1);
+        assert.strictEqual(resp.instances[0].name, 'Munich');
+        assert.strictEqual(resp.instances[0].country_name, 'Germany');
       });
     });
 
@@ -233,14 +228,14 @@ describe('Model.prototype.find', function() {
           _country: 'country'
         },
         filter: {id: 1}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 1);
-        assert.strictEqual(recs[0].id, 1);
-        assert.strictEqual(recs[0]._name, 'Munich');
-        assert.strictEqual(typeof recs[0]._country, 'object');
-        assert.strictEqual(Object.getOwnPropertyNames(recs[0]._country).length, 3);
-        assert.strictEqual(recs[0]._country.name, 'Germany');
-        assert.strictEqual(recs[0]._country.phoneCode, 49);
+      }).then(resp => {
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 1);
+        assert.strictEqual(resp.instances[0]._name, 'Munich');
+        assert.strictEqual(typeof resp.instances[0]._country, 'object');
+        assert.strictEqual(Object.getOwnPropertyNames(resp.instances[0]._country).length, 3);
+        assert.strictEqual(resp.instances[0]._country.name, 'Germany');
+        assert.strictEqual(resp.instances[0]._country.phoneCode, 49);
       });
     });
 
@@ -252,15 +247,16 @@ describe('Model.prototype.find', function() {
           country: null
         },
         filter: {id: 1}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 1);
-        assert.strictEqual(recs[0].id, 1);
-        assert.strictEqual(recs[0]._name, 'Munich');
-        assert.strictEqual(typeof recs[0].country, 'object');
-        assert(!Array.isArray(recs[0].country));
-        assert.strictEqual(Object.getOwnPropertyNames(recs[0].country).length, 3);
-        assert.strictEqual(recs[0].country.name, 'Germany');
-        assert.strictEqual(recs[0].country.phoneCode, 49);
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 1);
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 1);
+        assert.strictEqual(resp.instances[0]._name, 'Munich');
+        assert.strictEqual(typeof resp.instances[0].country, 'object');
+        assert(!Array.isArray(resp.instances[0].country));
+        assert.strictEqual(Object.getOwnPropertyNames(resp.instances[0].country).length, 3);
+        assert.strictEqual(resp.instances[0].country.name, 'Germany');
+        assert.strictEqual(resp.instances[0].country.phoneCode, 49);
       });
     });
 
@@ -268,15 +264,16 @@ describe('Model.prototype.find', function() {
       return Customers.find({
         properties: ['id', 'name', 'city', 'country'],
         filter: {id: 19}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 1);
-        assert.strictEqual(recs[0].id, 19);
-        assert.strictEqual(recs[0].name, 'Meric, Jale');
-        assert.strictEqual(typeof recs[0].city, 'object');
-        assert.strictEqual(recs[0].city.id, 10);
-        assert.strictEqual(recs[0].city.name, 'Izmir');
-        assert.strictEqual(recs[0].country.id, 'TUR');
-        assert.strictEqual(recs[0].country.name, 'Turkey');
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 1);
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 19);
+        assert.strictEqual(resp.instances[0].name, 'Meric, Jale');
+        assert.strictEqual(typeof resp.instances[0].city, 'object');
+        assert.strictEqual(resp.instances[0].city.id, 10);
+        assert.strictEqual(resp.instances[0].city.name, 'Izmir');
+        assert.strictEqual(resp.instances[0].country.id, 'TUR');
+        assert.strictEqual(resp.instances[0].country.name, 'Turkey');
       });
     });
 
@@ -296,10 +293,10 @@ describe('Model.prototype.find', function() {
           /sub values can not be used/);
     });
 
-    it('should check sub property exists', function() {
+    it('should not request sub field of single value associated field', function() {
       return assert.rejects(() =>
-              Cities.find({properties: ['country.nofield aaa']}),
-          /has no field/);
+              Streets.find({properties: ['countryName.nofield']}),
+          /is a single value associated field/);
     });
 
     it('should check sub property exists in child finder', function() {
@@ -321,27 +318,25 @@ describe('Model.prototype.find', function() {
       return Customers.find({
         properties: ['id', 'name', 'notes'],
         filter: {id: 19}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 1);
-        assert.strictEqual(recs[0].id, 19);
-        assert(Array.isArray(recs[0].notes));
-        assert.strictEqual(recs[0].notes.length, 2);
-        assert.strictEqual(recs[0].notes[0].contents, 'note 1');
-        assert.strictEqual(recs[0].notes[1].contents, 'note 2');
+      }).then(resp => {
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 19);
+        assert(Array.isArray(resp.instances[0].notes));
+        assert.strictEqual(resp.instances[0].notes.length, 2);
+        assert.strictEqual(resp.instances[0].notes[0].contents, 'note 1');
+        assert.strictEqual(resp.instances[0].notes[1].contents, 'note 2');
       });
     });
 
     it('should filter by O2O associated property', function() {
-      const scope = {};
       return Cities.find({
         properties: ['id', 'name'],
-        filter: {countryName: 'France'},
-        scope
-      }).then(recs => {
-        assert(scope);
-        assert.strictEqual(recs.length, 2);
-        assert.strictEqual(recs[0].name, 'Paris');
-        assert.strictEqual(recs[1].name, 'Lyon');
+        filter: {countryName: 'France'}
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 1);
+        assert.strictEqual(resp.instances.length, 2);
+        assert.strictEqual(resp.instances[0].name, 'Paris');
+        assert.strictEqual(resp.instances[1].name, 'Lyon');
       });
     });
 
@@ -349,10 +344,11 @@ describe('Model.prototype.find', function() {
       return Streets.find({
         properties: ['id', 'name'],
         filter: {countryName: 'France'}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 4);
-        assert.strictEqual(recs[0].name, 'Rue Cler');
-        assert.strictEqual(recs[1].name, 'Rue des Rosiers');
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 1);
+        assert.strictEqual(resp.instances.length, 4);
+        assert.strictEqual(resp.instances[0].name, 'Rue Cler');
+        assert.strictEqual(resp.instances[1].name, 'Rue des Rosiers');
       });
     });
 
@@ -360,9 +356,10 @@ describe('Model.prototype.find', function() {
       return Cities.find({
         properties: ['id', 'name', 'countryName'],
         sort: ['-countryName']
-      }).then(recs => {
-        assert.strictEqual(recs[0].name, 'Manchester');
-        assert.strictEqual(recs[1].name, 'Izmir');
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 1);
+        assert.strictEqual(resp.instances[0].name, 'Manchester');
+        assert.strictEqual(resp.instances[1].name, 'Izmir');
       });
     });
 
@@ -380,11 +377,12 @@ describe('Model.prototype.find', function() {
             }
           }
         }
-      }).then(recs => {
-        assert.strictEqual(typeof recs[0].city, 'object');
-        assert.strictEqual(typeof recs[0].city.country, 'object');
-        assert(recs[0].city.country.id);
-        assert(recs[0].city.country.name);
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 1);
+        assert.strictEqual(typeof resp.instances[0].city, 'object');
+        assert.strictEqual(typeof resp.instances[0].city.country, 'object');
+        assert(resp.instances[0].city.country.id);
+        assert(resp.instances[0].city.country.name);
       });
     });
 
@@ -397,12 +395,13 @@ describe('Model.prototype.find', function() {
             }
           }
         }
-      }).then(recs => {
-        assert.strictEqual(typeof recs[0].city, 'object');
-        assert.strictEqual(typeof recs[0].city.country, 'object');
-        assert(recs[0].city.country.id);
-        assert(recs[0].city.country.name);
-        assert(recs[0].city.country.phoneCode);
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 1);
+        assert.strictEqual(typeof resp.instances[0].city, 'object');
+        assert.strictEqual(typeof resp.instances[0].city.country, 'object');
+        assert(resp.instances[0].city.country.id);
+        assert(resp.instances[0].city.country.name);
+        assert(resp.instances[0].city.country.phoneCode);
       });
     });
 
@@ -414,29 +413,36 @@ describe('Model.prototype.find', function() {
       return Customers.find({
         properties: ['id', 'name', 'tags'],
         filter: {id: 19}
-      }).then(recs => {
-        assert.strictEqual(recs.length, 1);
-        assert.strictEqual(recs[0].id, 19);
-        assert(Array.isArray(recs[0].tags));
-        assert.strictEqual(recs[0].tags.length, 2);
-        assert.strictEqual(recs[0].tags[0].name, 'Red');
-        assert.strictEqual(recs[0].tags[1].name, 'Green');
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 2);
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 19);
+        assert(Array.isArray(resp.instances[0].tags));
+        assert.strictEqual(resp.instances[0].tags.length, 2);
+        assert.strictEqual(resp.instances[0].tags[0].name, 'Red');
+        assert.strictEqual(resp.instances[0].tags[1].name, 'Green');
       });
     });
   });
 
   describe('Common', function() {
 
-    it('should fill scope object', function() {
-      const scope = {};
+    it('should fill trace sqls', function() {
+      let trace;
       return Customers.find({
         properties: ['id', 'name', 'notes'],
         filter: {id: 19},
-        scope
+        trace: (x) => {
+          trace = x;
+        }
       }).then(() => {
-        assert(scope.properties);
-        assert(scope.query);
-        assert(scope.query.sql);
+        assert.deepStrictEqual(trace.properties, {
+          id: null,
+          name: null,
+          notes: null
+        });
+        assert(trace.query);
+        assert.strictEqual(typeof trace.query.sql, 'string');
       });
     });
 
@@ -450,8 +456,12 @@ describe('Model.prototype.find', function() {
         }
       });
       return assert.rejects(() =>
-              orm.getModel('uniqorm_1.Notexists').find({showSql: true}),
-          /select t.id/);
+              orm.getModel('uniqorm_1.Notexists').find(),
+          (e) => {
+            assert(e.query);
+            assert(e.query.sql);
+            return true;
+          });
     });
   });
 
