@@ -5,7 +5,8 @@
   "fields": {
     "id": {
       "dataType": "INTEGER",
-      "primaryKey": true
+      "primaryKey": true,
+      "required": false
     },
     "name": {
       "dataType": "VARCHAR",
