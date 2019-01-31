@@ -14,7 +14,7 @@ module.exports = merge.all([{}, require('./Customers.json'), {
       foreignModel: 'uniqorm_1.Streets',
       towards: {
         foreignModel: 'uniqorm_1.Cities',
-        filter: {'id>': 0},
+        where: {'id>': 0},
         towards: 'uniqorm_1.Countries'
       }
     },
@@ -23,12 +23,12 @@ module.exports = merge.all([{}, require('./Customers.json'), {
       key: 'id',
       hasMany: true,
       foreignKey: 'sourceKey',
-      filter: () => ({source: 'customers'})
+      where: () => ({source: 'customers'})
     },
     tags: {
       hasMany: true,
       foreignModel: 'uniqorm_2.CustomerTags',
-      filter: {active: 1},
+      where: {active: 1},
       towards: {
         foreignModel: 'uniqorm_1.Tags',
         properties: {

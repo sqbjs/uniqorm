@@ -76,7 +76,7 @@ describe('Model.prototype.find', function() {
   });
 
   it('should filter results', function() {
-    return Countries.find({filter: {or: [{phoneCode: 49}, {phoneCode: 90}]}})
+    return Countries.find({where: {or: [{phoneCode: 49}, {phoneCode: 90}]}})
         .then(resp => {
           assert.strictEqual(resp.queriesExecuted, 1);
           assert.strictEqual(resp.instances.length, 2);
@@ -126,7 +126,7 @@ describe('Model.prototype.find', function() {
     it('should return associated properties', function() {
       return Cities.find({
         properties: ['id', 'name', 'country'],
-        filter: {id: 1}
+        where: {id: 1}
       }).then(resp => {
         assert.strictEqual(resp.queriesExecuted, 1);
         assert.strictEqual(resp.instances.length, 1);
@@ -141,7 +141,7 @@ describe('Model.prototype.find', function() {
     it('should return associated single value', function() {
       return Cities.find({
         properties: ['id', 'name', 'countryName'],
-        filter: {id: 1}
+        where: {id: 1}
       }).then(resp => {
         assert.strictEqual(resp.queriesExecuted, 1);
         assert.strictEqual(resp.instances.length, 1);
@@ -154,7 +154,7 @@ describe('Model.prototype.find', function() {
     it('should request properties with array of property names', function() {
       return Cities.find({
         properties: ['id', 'name', 'country'],
-        filter: {id: 1}
+        where: {id: 1}
       }).then(resp => {
         assert.strictEqual(resp.queriesExecuted, 1);
         assert.strictEqual(resp.instances.length, 1);
@@ -176,7 +176,7 @@ describe('Model.prototype.find', function() {
             properties: {name_alias: 'name', 'phone_code_alias': 'phoneCode'}
           }
         },
-        filter: {id: 1}
+        where: {id: 1}
       }).then(resp => {
         assert.strictEqual(resp.queriesExecuted, 1);
         assert.strictEqual(resp.instances.length, 1);
@@ -196,7 +196,7 @@ describe('Model.prototype.find', function() {
           _name: 'name',
           country: ['name', 'phoneCode']
         },
-        filter: {id: 1}
+        where: {id: 1}
       }).then(resp => {
         assert.strictEqual(resp.instances.length, 1);
         assert.strictEqual(resp.instances[0].id, 1);
@@ -211,7 +211,7 @@ describe('Model.prototype.find', function() {
     it('should request sub property flat', function() {
       return Cities.find({
         properties: ['id', 'name', 'country.name country_name'],
-        filter: {id: 1}
+        where: {id: 1}
       }).then(resp => {
         assert.strictEqual(resp.instances.length, 1);
         assert.strictEqual(resp.instances[0].id, 1);
@@ -227,7 +227,7 @@ describe('Model.prototype.find', function() {
           _name: 'name',
           _country: 'country'
         },
-        filter: {id: 1}
+        where: {id: 1}
       }).then(resp => {
         assert.strictEqual(resp.instances.length, 1);
         assert.strictEqual(resp.instances[0].id, 1);
@@ -246,7 +246,7 @@ describe('Model.prototype.find', function() {
           _name: 'name',
           country: null
         },
-        filter: {id: 1}
+        where: {id: 1}
       }).then(resp => {
         assert.strictEqual(resp.queriesExecuted, 1);
         assert.strictEqual(resp.instances.length, 1);
@@ -263,7 +263,7 @@ describe('Model.prototype.find', function() {
     it('should return associated properties through other model', function() {
       return Customers.find({
         properties: ['id', 'name', 'city', 'country'],
-        filter: {id: 19}
+        where: {id: 19}
       }).then(resp => {
         assert.strictEqual(resp.queriesExecuted, 1);
         assert.strictEqual(resp.instances.length, 1);
@@ -309,7 +309,7 @@ describe('Model.prototype.find', function() {
                     properties: [{unknown: null}]
                   }
                 },
-                filter: {id: 1}
+                where: {id: 1}
               }),
           /has no field/);
     });
@@ -317,7 +317,7 @@ describe('Model.prototype.find', function() {
     it('should return associated properties', function() {
       return Customers.find({
         properties: ['id', 'name', 'notes'],
-        filter: {id: 19}
+        where: {id: 19}
       }).then(resp => {
         assert.strictEqual(resp.instances.length, 1);
         assert.strictEqual(resp.instances[0].id, 19);
@@ -331,7 +331,7 @@ describe('Model.prototype.find', function() {
     it('should filter by O2O associated property', function() {
       return Cities.find({
         properties: ['id', 'name'],
-        filter: {countryName: 'France'}
+        where: {countryName: 'France'}
       }).then(resp => {
         assert.strictEqual(resp.queriesExecuted, 1);
         assert.strictEqual(resp.instances.length, 2);
@@ -343,7 +343,7 @@ describe('Model.prototype.find', function() {
     it('should filter by O2O associated property (towards)', function() {
       return Streets.find({
         properties: ['id', 'name'],
-        filter: {countryName: 'France'}
+        where: {countryName: 'France'}
       }).then(resp => {
         assert.strictEqual(resp.queriesExecuted, 1);
         assert.strictEqual(resp.instances.length, 4);
@@ -412,7 +412,7 @@ describe('Model.prototype.find', function() {
     it('should return M2M associated properties (array)', function() {
       return Customers.find({
         properties: ['id', 'name', 'tags'],
-        filter: {id: 19}
+        where: {id: 19}
       }).then(resp => {
         assert.strictEqual(resp.queriesExecuted, 2);
         assert.strictEqual(resp.instances.length, 1);
@@ -431,7 +431,7 @@ describe('Model.prototype.find', function() {
       let trace;
       return Customers.find({
         properties: ['id', 'name', 'notes'],
-        filter: {id: 19},
+        where: {id: 19},
         trace: (x) => {
           trace = x;
         }
