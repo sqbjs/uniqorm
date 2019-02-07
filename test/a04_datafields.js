@@ -63,7 +63,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.parseValue(1), 1);
       assert.strictEqual(f.parseValue('123'), 123);
       assert.strictEqual(f.parseValue('123.5'), 123);
-      assert.strictEqual(f.parseValue(NaN), null);
       assert.strictEqual(f.parseValue(undefined), null);
 
       assert.strictEqual(f.jsType, 'Number');
@@ -104,7 +103,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.parseValue(1), 1);
       assert.strictEqual(f.parseValue('123'), 123);
       assert.strictEqual(f.parseValue('123.5'), 123);
-      assert.strictEqual(f.parseValue(NaN), null);
       assert.strictEqual(f.parseValue(undefined), null);
 
       assert.strictEqual(f.jsType, 'Number');
@@ -145,7 +143,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.parseValue(1), 1);
       assert.strictEqual(f.parseValue('123'), 123);
       assert.strictEqual(f.parseValue('123.5'), 123);
-      assert.strictEqual(f.parseValue(NaN), null);
       assert.strictEqual(f.parseValue(undefined), null);
 
       assert.strictEqual(f.jsType, 'Number');
@@ -186,7 +183,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.parseValue(1), 1);
       assert.strictEqual(f.parseValue('123'), 123);
       assert.strictEqual(f.parseValue('123.5'), 123.5);
-      assert.strictEqual(f.parseValue(NaN), null);
       assert.strictEqual(f.parseValue(undefined), null);
 
       assert.strictEqual(f.jsType, 'Number');
@@ -206,6 +202,14 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, true);
       assert.strictEqual(f.defaultValue, 5.6);
       assert.strictEqual(f.primaryKey, true);
+    });
+
+    it('should validate value is a valid number', function() {
+      const DOUBLE = Uniqorm.DataField.get('DOUBLE');
+      const f = new DOUBLE('field1', null, {});
+      assert.throws(() => {
+        f.parseValue('abc');
+      }, /is not a valid number value/);
     });
 
     it('should validate minValue', function() {
@@ -262,7 +266,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.parseValue(1), 1);
       assert.strictEqual(f.parseValue('123'), 123);
       assert.strictEqual(f.parseValue('123.5'), 123.5);
-      assert.strictEqual(f.parseValue(NaN), null);
       assert.strictEqual(f.parseValue(undefined), null);
 
       assert.strictEqual(f.jsType, 'Number');
