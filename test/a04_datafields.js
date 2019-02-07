@@ -227,6 +227,21 @@ describe('Data Fields', function() {
         f.parseValue('11');
       }, /Value is out of range/);
     });
+
+    it('should validate using custom validator', function() {
+      const DOUBLE = Uniqorm.DataField.get('DOUBLE');
+      const f = new DOUBLE('field1', null, {
+        maxValue: 10,
+        validate: (v) => {
+          if (v < 0)
+            throw new Error('Invalid value');
+        }
+      });
+      assert.throws(() => {
+        f.parseValue(-1);
+      }, /Invalid value/);
+    });
+
   });
 
   describe('FLOAT', function() {
