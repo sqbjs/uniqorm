@@ -97,13 +97,13 @@ describe('Model.prototype.create', function() {
 
   it('should validate required fields', function() {
     return assert.rejects(() => Notes.create({}),
-        /Value required for column "source"/);
+        /Value required for field "source"/);
   });
 
   it('should validate max chars', function() {
     return assert.rejects(() => Notes.create({
           source: '123456789012345678901'
         }),
-        /Value too large for column/);
+        /Value too large for field/);
   });
 });

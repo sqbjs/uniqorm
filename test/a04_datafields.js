@@ -207,6 +207,26 @@ describe('Data Fields', function() {
       assert.strictEqual(f.defaultValue, 5.6);
       assert.strictEqual(f.primaryKey, true);
     });
+
+    it('should validate minValue', function() {
+      const DOUBLE = Uniqorm.DataField.get('DOUBLE');
+      const f = new DOUBLE('field1', null, {
+        minValue: 10
+      });
+      assert.throws(() => {
+        f.parseValue('2');
+      }, /Value is out of range/);
+    });
+
+    it('should validate maxValue', function() {
+      const DOUBLE = Uniqorm.DataField.get('DOUBLE');
+      const f = new DOUBLE('field1', null, {
+        maxValue: 10
+      });
+      assert.throws(() => {
+        f.parseValue('11');
+      }, /Value is out of range/);
+    });
   });
 
   describe('FLOAT', function() {
@@ -539,7 +559,7 @@ describe('Data Fields', function() {
     });
 
     it('should parseValue() validate value', function() {
-      assert.throws(()=>{
+      assert.throws(() => {
         const TIMESTAMPTZ = Uniqorm.DataField.get('TIMESTAMPTZ');
         const f = new TIMESTAMPTZ('field1', null, {});
         f.parseValue('abcd');
@@ -593,11 +613,31 @@ describe('Data Fields', function() {
     });
 
     it('should parseValue() validate value', function() {
-      assert.throws(()=>{
+      assert.throws(() => {
         const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
         const f = new TIMESTAMP('field1', null, {});
         f.parseValue('abcd');
       });
+    });
+
+    it('should validate minValue', function() {
+      assert.throws(() => {
+        const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
+        const f = new TIMESTAMP('field1', null, {
+          minValue: '1990-01-02'
+        });
+        f.parseValue('1990-01-01');
+      }, /Value is out of range/);
+    });
+
+    it('should validate maxValue', function() {
+      assert.throws(() => {
+        const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
+        const f = new TIMESTAMP('field1', null, {
+          maxValue: '1990-01-01'
+        });
+        f.parseValue('1990-01-02');
+      }, /Value is out of range/);
     });
 
   });
