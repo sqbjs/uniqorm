@@ -15,7 +15,7 @@ Uniqorm is an multi dialect and multi schema ORM framework for enterprise level 
 
 ## Main features
 
-- Can work with any dialect that [SQB](https://github.com/panates/sqb) supports
+- Can work with any dialect that [SQB](https://github.com/sqbjs/sqb) supports
 - Supports multi schemas
 - Supports One2One, One2Many, Many2Many associations
 - Supports reading DBms metadata and importing model schemas
@@ -33,17 +33,17 @@ Uniqorm is an multi dialect and multi schema ORM framework for enterprise level 
 
 [npm-image]: https://img.shields.io/npm/v/uniqorm.svg
 [npm-url]: https://npmjs.org/package/uniqorm
-[travis-image]: https://travis-ci.org/panates/uniqorm.svg?branch=master
-[travis-url]: https://travis-ci.org/panates/uniqorm#
-[coveralls-image]: https://img.shields.io/coveralls/panates/uniqorm/master.svg
-[coveralls-url]: https://coveralls.io/r/panates/uniqorm
+[travis-image]: https://travis-ci.org/sqbjs/uniqorm.svg?branch=master
+[travis-url]: https://travis-ci.org/sqbjs/uniqorm#
+[coveralls-image]: https://img.shields.io/coveralls/sqbjs/uniqorm/master.svg
+[coveralls-url]: https://coveralls.io/r/sqbjs/uniqorm
 [downloads-image]: https://img.shields.io/npm/dm/uniqorm.svg
 [downloads-url]: https://npmjs.org/package/uniqorm
-[gitter-image]: https://badges.gitter.im/panates/uniqorm.svg
-[gitter-url]: https://gitter.im/panates/uniqorm?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-[dependencies-image]: https://david-dm.org/panates/uniqorm/status.svg
-[dependencies-url]:https://david-dm.org/panates/uniqorm
-[devdependencies-image]: https://david-dm.org/panates/uniqorm/dev-status.svg
-[devdependencies-url]:https://david-dm.org/panates/uniqorm?type=dev
+[gitter-image]: https://badges.gitter.im/sqbjs/uniqorm.svg
+[gitter-url]: https://gitter.im/sqbjs/uniqorm?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+[dependencies-image]: https://david-dm.org/sqbjs/uniqorm/status.svg
+[dependencies-url]:https://david-dm.org/sqbjs/uniqorm
+[devdependencies-image]: https://david-dm.org/sqbjs/uniqorm/dev-status.svg
+[devdependencies-url]:https://david-dm.org/sqbjs/uniqorm?type=dev
 [quality-image]: http://npm.packagequality.com/shield/uniqorm.png
 [quality-url]: http://packagequality.com/#?package=uniqorm
