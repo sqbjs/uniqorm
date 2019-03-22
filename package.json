@@ -1,7 +1,7 @@
 {
   "name": "uniqorm",
   "description": "Multi dialect and multi schema ORM framework for enterprise level NodeJS applications",
-  "version": "2.14.6",
+  "version": "2.15.0",
   "author": "Panates Ltd.",
   "contributors": [
     "Eray Hanoglu <e.hanoglu@panates.com>"
