@@ -36,6 +36,12 @@ module.exports = merge.all([{}, require('./Customers.json'), {
           name: null
         }
       }
+    },
+    tax: {
+      calculate: (values) => {
+        return values.balance ? values.balance * 0.2 : 0;
+      },
+      requires: ['balance']
     }
   }
 }], {deep: true});

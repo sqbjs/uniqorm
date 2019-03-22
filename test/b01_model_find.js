@@ -121,6 +121,20 @@ describe('Model.prototype.find', function() {
     });
   });
 
+  describe('calculated fields', function() {
+    it('should return calculated field values', function() {
+      return Customers.find({
+        properties: ['id', 'name', 'tax'],
+        where: {id: 1}
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 1);
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 1);
+        assert.strictEqual(resp.instances[0].tax, 20);
+      });
+    });
+  });
+
   describe('O2O associations', function() {
 
     it('should return associated properties', function() {

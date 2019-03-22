@@ -5,19 +5,22 @@
       "id": 1,
       "member_id": 1,
       "name": "Neuer, Friedrich",
-      "street_id": 1
+      "street_id": 1,
+      "balance": 100
     },
     {
       "id": 2,
       "member_id": 1,
       "name": "Muller, Jürgen",
-      "street_id": 2
+      "street_id": 2,
+      "balance": 200
     },
     {
       "id": 3,
       "member_id": 2,
       "name": "Werner, Peter",
-      "street_id": 3
+      "street_id": 3,
+      "balance": 1000
     },
     {
       "id": 4,

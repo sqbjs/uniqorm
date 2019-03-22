@@ -92,7 +92,7 @@ describe('Model', function() {
     }, /has no field/);
   });
 
-  it('should addField() validate definition object', function() {
+  it('should addField() validate definition', function() {
     const orm = new Uniqorm();
     const model1 = orm.define(model1Def);
     assert.throws(() => {
@@ -104,6 +104,24 @@ describe('Model', function() {
     assert.throws(() => {
       model1.addField('field3', {});
     }, /You must provide "dataType" property/);
+    assert.throws(() => {
+      model1.addField('field3', {
+        foreignModel: 'm1',
+        dataType: 'VARCHAR'
+      });
+    }, /You can't define "dataType" for associated fields/);
+    assert.throws(() => {
+      model1.addField('field3', {
+        foreignModel: 'm1',
+        calculate: () => 1
+      });
+    }, / You can't define "calculate" method for associated fields/);
+    assert.throws(() => {
+      model1.addField('field3', {
+        calculate: () => 1,
+        dataType: 'STRING'
+      });
+    }, /You can't define "dataType" for calculated fields/);
   });
 
   it('should add data field to a model', function() {

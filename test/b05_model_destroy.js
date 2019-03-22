@@ -49,9 +49,9 @@ describe('Model.prototype.destroy', function() {
 
   });
 
-  it('should destroy record with custom conditions', function() {
+  it('should destroy records with custom conditions', function() {
     return getRecordCount('uniqorm_2.notes').then(count => {
-      return Notes.destroy({'id in': [1, 2]})
+      return Notes.destroyMany({where: {'id in': [1, 2]}})
           .then(result => {
             assert.strictEqual(result.queriesExecuted, 1);
             assert.strictEqual(result.rowsAffected, 2);

@@ -630,11 +630,28 @@ describe('Data Fields', function() {
       assert.strictEqual(f.defaultValue.getTime(), d.getTime());
     });
 
+    it('should parse NOW string as current time', function() {
+      const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
+      const f = new TIMESTAMP('field1', null, {});
+      assert(f.parseValue('NOW') instanceof Date);
+    });
+
+    it('should parse DATE string as current date', function() {
+      const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
+      const f = new TIMESTAMP('field1', null, {});
+      assert(f.parseValue('DATE') instanceof Date);
+    });
+
     it('should parseValue() validate value', function() {
       assert.throws(() => {
         const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
         const f = new TIMESTAMP('field1', null, {});
         f.parseValue('abcd');
+      });
+      assert.throws(() => {
+        const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
+        const f = new TIMESTAMP('field1', null, {});
+        f.parseValue({});
       });
     });
 
