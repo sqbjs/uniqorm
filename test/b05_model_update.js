@@ -56,8 +56,8 @@ describe('Model.prototype.update', function() {
       assert(result);
       assert.strictEqual(result.rowsAffected, 1);
       assert.strictEqual(result.queriesExecuted, 1);
-      assert.strictEqual(result.instances.length, 1);
-      assert.strictEqual(result.instances[0].contents, contents);
+      assert(result.instance);
+      assert.strictEqual(result.instance.contents, contents);
     });
   });
 
@@ -68,8 +68,8 @@ describe('Model.prototype.update', function() {
     }).then(result => {
       assert.strictEqual(result.rowsAffected, 1);
       assert.strictEqual(result.queriesExecuted, 1);
-      assert.strictEqual(result.instances.length, 1);
-      assert.strictEqual(Object.getOwnPropertyNames(result.instances[0]).length, 4);
+      assert(result.instance);
+      assert.strictEqual(Object.getOwnPropertyNames(result.instance).length, 4);
     });
   });
 
@@ -79,9 +79,9 @@ describe('Model.prototype.update', function() {
       returning: 'id', silent: false
     }).then(result => {
       assert.strictEqual(result.rowsAffected, 1);
-      assert.strictEqual(result.instances.length, 1);
-      assert.strictEqual(Object.getOwnPropertyNames(result.instances[0]).length, 1);
-      assert.notStrictEqual(result.instances[0].id, undefined);
+      assert(result.instance);
+      assert.strictEqual(Object.getOwnPropertyNames(result.instance).length, 1);
+      assert.notStrictEqual(result.instance.id, undefined);
     });
   });
 
@@ -90,10 +90,10 @@ describe('Model.prototype.update', function() {
         {returning: ['countryName', 'country']})
         .then(result => {
           assert.strictEqual(result.rowsAffected, 1);
-          assert.strictEqual(result.instances.length, 1);
-          assert.strictEqual(result.instances[0].countryName, 'Italy');
-          assert.strictEqual(typeof result.instances[0].country, 'object');
-          assert.strictEqual(result.instances[0].country.name, 'Italy');
+          assert(result.instance);
+          assert.strictEqual(result.instance.countryName, 'Italy');
+          assert.strictEqual(typeof result.instance.country, 'object');
+          assert.strictEqual(result.instance.country.name, 'Italy');
         });
   });
 
@@ -104,10 +104,10 @@ describe('Model.prototype.update', function() {
       returning: ['countryName', 'country']
     }).then(result => {
       assert.strictEqual(result.rowsAffected, 1);
-      assert.strictEqual(result.instances.length, 1);
-      assert.strictEqual(result.instances[0].countryName, 'Italy');
-      assert.strictEqual(typeof result.instances[0].country, 'object');
-      assert.strictEqual(result.instances[0].country.name, 'Italy');
+      assert(result.instance);
+      assert.strictEqual(result.instance.countryName, 'Italy');
+      assert.strictEqual(typeof result.instance.country, 'object');
+      assert.strictEqual(result.instance.country.name, 'Italy');
     });
   });
 
