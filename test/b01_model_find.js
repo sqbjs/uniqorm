@@ -425,6 +425,27 @@ describe('Model.prototype.find', function() {
 
     it('should return M2M associated properties (array)', function() {
       return Customers.find({
+        properties: {
+          id: null,
+          tags: {
+            where: {
+              name: 'Red'
+            }
+          }
+        },
+        where: {id: 19}
+      }).then(resp => {
+        assert.strictEqual(resp.queriesExecuted, 2);
+        assert.strictEqual(resp.instances.length, 1);
+        assert.strictEqual(resp.instances[0].id, 19);
+        assert(Array.isArray(resp.instances[0].tags));
+        assert.strictEqual(resp.instances[0].tags.length, 1);
+        assert.strictEqual(resp.instances[0].tags[0].name, 'Red');
+      });
+    });
+
+    it('should return M2M associated properties (array)', function() {
+      return Customers.find({
         properties: ['id', 'name', 'tags'],
         where: {id: 19}
       }).then(resp => {
