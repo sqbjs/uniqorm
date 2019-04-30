@@ -97,7 +97,7 @@ describe('Model.prototype.create', function() {
 
   it('should validate required fields', function() {
     return assert.rejects(() => Notes.create({}),
-        /Value required for field "source"/);
+        /Value required for "source"/);
   });
 
   it('should validate max chars', function() {
