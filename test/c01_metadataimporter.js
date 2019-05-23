@@ -5,6 +5,7 @@ const {createPool, createOrm} = require('./support/helpers');
 const Uniqorm = require('../lib/index');
 const waterfall = require('putil-waterfall');
 const {rejects} = require('rejected-or-not');
+const merge = require('putil-merge');
 assert.rejects = assert.rejects || rejects;
 
 describe('MetadataImporter', function() {
@@ -78,7 +79,15 @@ describe('MetadataImporter', function() {
             assert.strictEqual(typeof result, 'object');
             for (const key of Object.keys(result)) {
               const o = result[key];
-              const j = require('./support/models/' + o.name + '.json');
+              const j = merge({},
+                  require('./support/models/' + o.name + '.json'),
+                  {deep: true});
+              for (const k of Object.keys(j.fields)) {
+                delete j.fields[k].defaultValue;
+                if (!o.fields[k].hasOwnProperty('required'))
+                  delete j.fields[k].required;
+                else j.fields[k].required = o.fields[k].required;
+              }
               assert.deepStrictEqual(o, j);
             }
           });
