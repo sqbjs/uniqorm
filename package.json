@@ -33,14 +33,14 @@
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
-    "eslint-config-google": "^0.12.0",
+    "eslint-config-google": "^0.13.0",
     "fecha": "^3.0.3",
     "glob": "^7.1.4",
     "mocha": "^6.1.4",
-    "nyc": "^14.1.0",
+    "nyc": "^14.1.1",
     "rejected-or-not": "^1.0.1",
-    "sqb": "^3.8.2",
-    "sqb-connect-pg": "^3.1.7"
+    "sqb": "^3.8.6",
+    "sqb-connect-pg": "^3.1.8"
   },
   "peerDependencies": {
     "sqb": ">=3.7.7"
