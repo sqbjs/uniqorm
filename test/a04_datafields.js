@@ -222,10 +222,30 @@ describe('Data Fields', function() {
       }, /Value is out of range/);
     });
 
+    it('should validate minValue method', function() {
+      const DOUBLE = Uniqorm.DataField.get('DOUBLE');
+      const f = new DOUBLE('field1', null, {
+        minValue: () => 10
+      });
+      assert.throws(() => {
+        f.parseValue('2');
+      }, /Value is out of range/);
+    });
+
     it('should validate maxValue', function() {
       const DOUBLE = Uniqorm.DataField.get('DOUBLE');
       const f = new DOUBLE('field1', null, {
         maxValue: 10
+      });
+      assert.throws(() => {
+        f.parseValue('11');
+      }, /Value is out of range/);
+    });
+
+    it('should validate maxValue method', function() {
+      const DOUBLE = Uniqorm.DataField.get('DOUBLE');
+      const f = new DOUBLE('field1', null, {
+        maxValue: () => 10
       });
       assert.throws(() => {
         f.parseValue('11');
@@ -530,62 +550,6 @@ describe('Data Fields', function() {
     });
   });
 
-  describe('TIMESTAMPTZ', function() {
-
-    it('should be registered', function() {
-      assert(Uniqorm.DataField.get('TIMESTAMPTZ'));
-    });
-
-    it('should create', function() {
-      const TIMESTAMPTZ = Uniqorm.DataField.get('TIMESTAMPTZ');
-      const f = new TIMESTAMPTZ('field1');
-      assert.strictEqual(f.name, 'field1');
-      assert.strictEqual(f.fieldName, 'field1');
-      assert.strictEqual(f.notNull, null);
-      assert.strictEqual(f.defaultValue, null);
-      assert.strictEqual(f.primaryKey, null);
-      assert.deepStrictEqual(f.parseValue(0), new Date(0));
-      assert.deepStrictEqual(f.parseValue(new Date(1)), new Date(1));
-      assert.deepStrictEqual(f.parseValue('2018-11-05'), new Date(2018, 10, 5));
-      assert.deepStrictEqual(f.parseValue('20181105'), new Date(2018, 10, 5));
-      assert.deepStrictEqual(f.parseValue('2018-11-05 10:15:30.654+03'), new Date('2018-11-05T10:15:30.654+03:00'));
-      assert.deepStrictEqual(f.parseValue('20181105 101530.654+03'), new Date('2018-11-05T10:15:30.654+03:00'));
-      assert.deepStrictEqual(f.parseValue('2018-11-05T10:15:30.654+03'), new Date('2018-11-05T10:15:30.654+03:00'));
-      assert.deepStrictEqual(f.parseValue(undefined), null);
-
-      assert.strictEqual(f.jsType, 'Date');
-      assert.strictEqual(f.sqlType, 'TIMESTAMPTZ');
-    });
-
-    it('should create with properties', function() {
-      const d = new Date();
-      const TIMESTAMPTZ = Uniqorm.DataField.get('TIMESTAMPTZ');
-      const f = new TIMESTAMPTZ('field1', null, {
-        notNull: 1,
-        defaultValue: d.getTime(),
-        primaryKey: 8,
-        fieldName: 'f1',
-        charLength: 10
-      });
-      assert.strictEqual(f.name, 'field1');
-      assert.strictEqual(f.fieldName, 'f1');
-      assert.strictEqual(f.notNull, true);
-      assert.strictEqual(f.defaultValue.getTime(), d.getTime());
-      assert.strictEqual(f.primaryKey, true);
-      f.defaultValue = d;
-      assert.strictEqual(f.defaultValue.getTime(), d.getTime());
-    });
-
-    it('should parseValue() validate value', function() {
-      assert.throws(() => {
-        const TIMESTAMPTZ = Uniqorm.DataField.get('TIMESTAMPTZ');
-        const f = new TIMESTAMPTZ('field1', null, {});
-        f.parseValue('abcd');
-      });
-    });
-
-  });
-
   describe('TIMESTAMP', function() {
 
     it('should be registered', function() {
@@ -602,9 +566,9 @@ describe('Data Fields', function() {
       assert.strictEqual(f.primaryKey, null);
       assert.deepStrictEqual(f.parseValue(0), new Date(0));
       assert.deepStrictEqual(f.parseValue(new Date(1)), new Date(1));
-      assert.deepStrictEqual(f.parseValue('2018-11-05'), new Date(2018, 10, 5));
-      assert.deepStrictEqual(f.parseValue('2018-11-05 10:15:30.654'), new Date(2018, 10, 5, 10, 15, 30, 654));
-      assert.deepStrictEqual(f.parseValue('2018-11-05T10:15:30.654'), new Date(2018, 10, 5, 10, 15, 30, 654));
+      assert.deepStrictEqual(f.parseValue('2018-11-05'), new Date('2018-11-05T00:00:00Z'));
+      assert.deepStrictEqual(f.parseValue('2018-11-05 10:15:30.654'), new Date('2018-11-05T10:15:30.654Z'));
+      assert.deepStrictEqual(f.parseValue('2018-11-05T10:15:30.654'), new Date('2018-11-05T10:15:30.654Z'));
       assert.deepStrictEqual(f.parseValue(undefined), null);
 
       assert.strictEqual(f.jsType, 'Date');
@@ -665,6 +629,16 @@ describe('Data Fields', function() {
       }, /Value is out of range/);
     });
 
+    it('should validate minValue method', function() {
+      assert.throws(() => {
+        const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
+        const f = new TIMESTAMP('field1', null, {
+          minValue: () => '1990-01-02'
+        });
+        f.parseValue('1990-01-01');
+      }, /Value is out of range/);
+    });
+
     it('should validate maxValue', function() {
       assert.throws(() => {
         const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
@@ -673,6 +647,24 @@ describe('Data Fields', function() {
         });
         f.parseValue('1990-01-02');
       }, /Value is out of range/);
+    });
+
+    it('should validate maxValue method', function() {
+      assert.throws(() => {
+        const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
+        const f = new TIMESTAMP('field1', null, {
+          maxValue: () => '1990-01-01'
+        });
+        f.parseValue('1990-01-02');
+      }, /Value is out of range/);
+    });
+
+  });
+
+  describe('TIMESTAMPTZ', function() {
+
+    it('should be registered', function() {
+      assert(Uniqorm.DataField.get('TIMESTAMPTZ'));
     });
 
   });
@@ -692,12 +684,10 @@ describe('Data Fields', function() {
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
       const d1 = new Date(0);
-      const d2 = new Date(2018, 10, 5, 10, 15, 30, 654);
-      d1.setHours(0, 0, 0, 0);
-      d2.setHours(0, 0, 0, 0);
+      const d2 = new Date('2018-11-05T00:00:00Z');
       assert.deepStrictEqual(f.parseValue(0), d1);
       assert.deepStrictEqual(f.parseValue(new Date(0)), d1);
-      assert.deepStrictEqual(f.parseValue('2018-11-05'), new Date(2018, 10, 5));
+      assert.deepStrictEqual(f.parseValue('2018-11-05'), d2);
       assert.deepStrictEqual(f.parseValue('2018-11-05 10:15:30.654'), d2);
       assert.deepStrictEqual(f.parseValue('2018-11-05T10:15:30.654'), d2);
       assert.deepStrictEqual(f.parseValue(undefined), null);
@@ -709,7 +699,7 @@ describe('Data Fields', function() {
     it('should create with properties', function() {
       const d1 = new Date();
       const d2 = new Date(d1.getTime());
-      d2.setHours(0, 0, 0, 0);
+      d2.setUTCHours(0, 0, 0, 0);
       const DATE = Uniqorm.DataField.get('DATE');
       const f = new DATE('field1', null, {
         notNull: 1,
@@ -743,9 +733,9 @@ describe('Data Fields', function() {
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
       const d1 = new Date(0);
-      const d2 = new Date(2018, 10, 5, 10, 15, 30, 654);
-      d1.setFullYear(0, 0, 0);
-      d2.setFullYear(0, 0, 0);
+      const d2 = new Date('2018-10-05T10:15:30.654Z');
+      d1.setUTCFullYear(0, 0, 0);
+      d2.setUTCFullYear(0, 0, 0);
       assert.deepStrictEqual(f.parseValue(0), d1);
       assert.deepStrictEqual(f.parseValue(new Date(0)), d1);
       assert.deepStrictEqual(f.parseValue('2018-11-05 10:15:30.654'), d2);
@@ -759,7 +749,7 @@ describe('Data Fields', function() {
     it('should create with properties', function() {
       const d1 = new Date();
       const d2 = new Date(d1.getTime());
-      d2.setFullYear(0, 0, 0);
+      d2.setUTCFullYear(0, 0, 0);
       const TIME = Uniqorm.DataField.get('TIME');
       const f = new TIME('field1', null, {
         notNull: 1,
