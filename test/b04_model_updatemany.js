@@ -60,7 +60,7 @@ describe('Model.prototype.updateMany', function() {
     const contents = crypto.randomBytes(4).toString('hex');
     return Notes.updateMany({contents}, {
       where: {id: 1},
-      returning: '*', silent: false
+      returning: '*', ignoreUnknownFields: false
     }).then(result => {
       assert.strictEqual(result.rowsAffected, 1);
       assert.strictEqual(result.queriesExecuted, 1);
@@ -73,7 +73,7 @@ describe('Model.prototype.updateMany', function() {
     const contents = crypto.randomBytes(4).toString('hex');
     return Notes.updateMany({contents}, {
       where: {id: 1},
-      returning: 'id', silent: false
+      returning: 'id', ignoreUnknownFields: false
     }).then(result => {
       assert.strictEqual(result.rowsAffected, 1);
       assert.strictEqual(result.instances.length, 1);

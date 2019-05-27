@@ -64,7 +64,7 @@ describe('Model.prototype.update', function() {
   it('should return all data fields if requested "*"', function() {
     const contents = crypto.randomBytes(4).toString('hex');
     return Notes.update(1, {contents}, {
-      returning: '*', silent: false
+      returning: '*', ignoreUnknownFields: false
     }).then(result => {
       assert.strictEqual(result.rowsAffected, 1);
       assert.strictEqual(result.queriesExecuted, 1);
@@ -76,7 +76,7 @@ describe('Model.prototype.update', function() {
   it('should return field values if requested as string property', function() {
     const contents = crypto.randomBytes(4).toString('hex');
     return Notes.update(1, {contents}, {
-      returning: 'id', silent: false
+      returning: 'id', ignoreUnknownFields: false
     }).then(result => {
       assert.strictEqual(result.rowsAffected, 1);
       assert(result.instance);

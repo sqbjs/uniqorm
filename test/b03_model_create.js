@@ -42,7 +42,7 @@ describe('Model.prototype.create', function() {
           sourceKey: 2,
           contents: 'any content'
         },
-        {returning: ['id', 'sourceKey'], silent: false})
+        {returning: ['id', 'sourceKey'], ignoreUnknownFields: false})
         .then(result => {
           assert(result);
           assert.strictEqual(result.rowsAffected, 1);
@@ -58,7 +58,7 @@ describe('Model.prototype.create', function() {
           sourceKey: 2,
           contents: 'any content'
         },
-        {returning: '*', silent: false})
+        {returning: '*', ignoreUnknownFields: false})
         .then(result => {
           assert.strictEqual(result.rowsAffected, 1);
           assert.strictEqual(Object.getOwnPropertyNames(result.instance).length, 4);
@@ -71,7 +71,7 @@ describe('Model.prototype.create', function() {
           sourceKey: 2,
           contents: 'any content'
         },
-        {returning: 'id', silent: false})
+        {returning: 'id', ignoreUnknownFields: false})
         .then(result => {
           assert.strictEqual(result.rowsAffected, 1);
           assert.strictEqual(Object.getOwnPropertyNames(result.instance).length, 1);

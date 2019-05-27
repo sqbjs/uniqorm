@@ -19,8 +19,8 @@ describe('Uniqorm', function() {
   it('should initialize', function() {
     let orm = new Uniqorm();
     assert(orm.schemas);
-    orm = new Uniqorm(null, {silent: true});
-    assert.strictEqual(orm.options.silent, true);
+    orm = new Uniqorm(null, {ignoreUnknownFields: true});
+    assert.strictEqual(orm.options.ignoreUnknownFields, true);
     orm = new Uniqorm(pool);
     assert(orm);
   });

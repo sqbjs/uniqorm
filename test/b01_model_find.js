@@ -110,10 +110,10 @@ describe('Model.prototype.find', function() {
         /is not a valid column name/);
   });
 
-  it('should ignore invalid property names in silent mode', function() {
+  it('should ignore invalid property names if ignoreUnknownFields=true', function() {
     return Countries.find({
-      properties: ['1id', 'name', 'nofield', 123],
-      silent: true
+      properties: ['id1', 'name', 'nofield'],
+      ignoreUnknownFields: true
     }).then(resp => {
       assert(!resp.instances[0].id);
       assert(!resp.instances[0].nofield);
