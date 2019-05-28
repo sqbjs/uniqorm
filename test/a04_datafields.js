@@ -797,7 +797,8 @@ describe('Data Fields', function() {
       d2.setFullYear(1970, 0, 1);
       assert.deepStrictEqual(f.parse(0), d1);
       assert.deepStrictEqual(f.parse(new Date(0)), d1);
-      assert.deepStrictEqual(f.parse('2018-11-05 10:15:30.654'), d2);
+      assert.deepStrictEqual(f.parse('10:15:30.654'), d2);
+      assert.deepStrictEqual(f.parse('2018-11-05T10:15:30.654'), d2);
       assert.deepStrictEqual(f.parse('2018-11-05T10:15:30.654'), d2);
       assert.deepStrictEqual(f.parse(undefined), null);
     });
