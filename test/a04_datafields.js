@@ -2,6 +2,7 @@
 require('./support/env');
 const assert = require('assert');
 const Uniqorm = require('../');
+const fecha = require('fecha');
 
 describe('Data Fields', function() {
 
@@ -11,7 +12,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('BOOLEAN'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const BOOLEAN = Uniqorm.DataField.get('BOOLEAN');
       const f = new BOOLEAN('field1');
       assert.strictEqual(f.name, 'field1');
@@ -19,7 +20,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, null);
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
-
       assert.strictEqual(f.jsType, 'Boolean');
       assert.strictEqual(f.sqlType, 'BOOLEAN');
     });
@@ -37,12 +37,32 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, true);
       assert.strictEqual(f.defaultValue, true);
       assert.strictEqual(f.primaryKey, true);
-      assert.strictEqual(f.parseValue(0), false);
-      assert.strictEqual(f.parseValue(1), true);
-      assert.strictEqual(f.parseValue({}), true);
-      assert.strictEqual(f.parseValue(NaN), false);
-      assert.strictEqual(f.parseValue(undefined), null);
     });
+
+    it('should parse', function() {
+      const BOOLEAN = Uniqorm.DataField.get('BOOLEAN');
+      const f = new BOOLEAN('field1');
+      assert.strictEqual(f.parse(true), true);
+      assert.strictEqual(f.parse(false), false);
+      assert.strictEqual(f.parse(0), false);
+      assert.strictEqual(f.parse(1), true);
+      assert.strictEqual(f.parse({}), true);
+      assert.strictEqual(f.parse(NaN), false);
+      assert.strictEqual(f.parse(undefined), null);
+    });
+
+    it('should serialize', function() {
+      const BOOLEAN = Uniqorm.DataField.get('BOOLEAN');
+      const f = new BOOLEAN('field1');
+      assert.strictEqual(f.serialize(true), true);
+      assert.strictEqual(f.serialize(false), false);
+      assert.strictEqual(f.serialize(0), false);
+      assert.strictEqual(f.serialize(1), true);
+      assert.strictEqual(f.serialize({}), true);
+      assert.strictEqual(f.serialize(NaN), false);
+      assert.strictEqual(f.serialize(undefined), null);
+    });
+
   });
 
   describe('INTEGER', function() {
@@ -51,7 +71,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('INTEGER'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const INTEGER = Uniqorm.DataField.get('INTEGER');
       const f = new INTEGER('field1');
       assert.strictEqual(f.name, 'field1');
@@ -59,12 +79,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, null);
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
-      assert.strictEqual(f.parseValue(0), 0);
-      assert.strictEqual(f.parseValue(1), 1);
-      assert.strictEqual(f.parseValue('123'), 123);
-      assert.strictEqual(f.parseValue('123.5'), 123);
-      assert.strictEqual(f.parseValue(undefined), null);
-
       assert.strictEqual(f.jsType, 'Number');
       assert.strictEqual(f.sqlType, 'INTEGER');
     });
@@ -83,6 +97,27 @@ describe('Data Fields', function() {
       assert.strictEqual(f.defaultValue, 5);
       assert.strictEqual(f.primaryKey, true);
     });
+
+    it('should parse', function() {
+      const INTEGER = Uniqorm.DataField.get('INTEGER');
+      const f = new INTEGER('field1');
+      assert.strictEqual(f.parse(0), 0);
+      assert.strictEqual(f.parse(1), 1);
+      assert.strictEqual(f.parse('123'), 123);
+      assert.strictEqual(f.parse('123.5'), 123);
+      assert.strictEqual(f.parse(undefined), null);
+    });
+
+    it('should serialize', function() {
+      const INTEGER = Uniqorm.DataField.get('INTEGER');
+      const f = new INTEGER('field1');
+      assert.strictEqual(f.serialize(0), 0);
+      assert.strictEqual(f.serialize(1), 1);
+      assert.strictEqual(f.serialize('123'), 123);
+      assert.strictEqual(f.serialize('123.5'), 123);
+      assert.strictEqual(f.serialize(undefined), null);
+    });
+
   });
 
   describe('BIGINT', function() {
@@ -91,7 +126,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('BIGINT'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const BIGINT = Uniqorm.DataField.get('BIGINT');
       const f = new BIGINT('field1');
       assert.strictEqual(f.name, 'field1');
@@ -99,30 +134,10 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, null);
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
-      assert.strictEqual(f.parseValue(0), 0);
-      assert.strictEqual(f.parseValue(1), 1);
-      assert.strictEqual(f.parseValue('123'), 123);
-      assert.strictEqual(f.parseValue('123.5'), 123);
-      assert.strictEqual(f.parseValue(undefined), null);
-
       assert.strictEqual(f.jsType, 'Number');
       assert.strictEqual(f.sqlType, 'BIGINT');
     });
 
-    it('should create with properties', function() {
-      const BIGINT = Uniqorm.DataField.get('BIGINT');
-      const f = new BIGINT('field1', null, {
-        notNull: 1,
-        defaultValue: '5.6',
-        primaryKey: 8,
-        fieldName: 'f1'
-      });
-      assert.strictEqual(f.name, 'field1');
-      assert.strictEqual(f.fieldName, 'f1');
-      assert.strictEqual(f.notNull, true);
-      assert.strictEqual(f.defaultValue, 5);
-      assert.strictEqual(f.primaryKey, true);
-    });
   });
 
   describe('SMALLINT', function() {
@@ -131,7 +146,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('SMALLINT'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const SMALLINT = Uniqorm.DataField.get('SMALLINT');
       const f = new SMALLINT('field1');
       assert.strictEqual(f.name, 'field1');
@@ -139,30 +154,10 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, null);
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
-      assert.strictEqual(f.parseValue(0), 0);
-      assert.strictEqual(f.parseValue(1), 1);
-      assert.strictEqual(f.parseValue('123'), 123);
-      assert.strictEqual(f.parseValue('123.5'), 123);
-      assert.strictEqual(f.parseValue(undefined), null);
-
       assert.strictEqual(f.jsType, 'Number');
       assert.strictEqual(f.sqlType, 'SMALLINT');
     });
 
-    it('should create with properties', function() {
-      const SMALLINT = Uniqorm.DataField.get('SMALLINT');
-      const f = new SMALLINT('field1', null, {
-        notNull: 1,
-        defaultValue: '5.6',
-        primaryKey: 8,
-        fieldName: 'f1'
-      });
-      assert.strictEqual(f.name, 'field1');
-      assert.strictEqual(f.fieldName, 'f1');
-      assert.strictEqual(f.notNull, true);
-      assert.strictEqual(f.defaultValue, 5);
-      assert.strictEqual(f.primaryKey, true);
-    });
   });
 
   describe('DOUBLE', function() {
@@ -171,7 +166,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('DOUBLE'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const DOUBLE = Uniqorm.DataField.get('DOUBLE');
       const f = new DOUBLE('field1');
       assert.strictEqual(f.name, 'field1');
@@ -179,12 +174,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, null);
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
-      assert.strictEqual(f.parseValue(0), 0);
-      assert.strictEqual(f.parseValue(1), 1);
-      assert.strictEqual(f.parseValue('123'), 123);
-      assert.strictEqual(f.parseValue('123.5'), 123.5);
-      assert.strictEqual(f.parseValue(undefined), null);
-
       assert.strictEqual(f.jsType, 'Number');
       assert.strictEqual(f.sqlType, 'DOUBLE');
     });
@@ -204,11 +193,31 @@ describe('Data Fields', function() {
       assert.strictEqual(f.primaryKey, true);
     });
 
+    it('should parse', function() {
+      const DOUBLE = Uniqorm.DataField.get('DOUBLE');
+      const f = new DOUBLE('field1');
+      assert.strictEqual(f.parse(0), 0);
+      assert.strictEqual(f.parse(1), 1);
+      assert.strictEqual(f.parse('123'), 123);
+      assert.strictEqual(f.parse('123.5'), 123.5);
+      assert.strictEqual(f.parse(undefined), null);
+    });
+
+    it('should serialize', function() {
+      const DOUBLE = Uniqorm.DataField.get('DOUBLE');
+      const f = new DOUBLE('field1');
+      assert.strictEqual(f.parse(0), 0);
+      assert.strictEqual(f.parse(1), 1);
+      assert.strictEqual(f.parse('123'), 123);
+      assert.strictEqual(f.parse('123.5'), 123.5);
+      assert.strictEqual(f.parse(undefined), null);
+    });
+
     it('should validate value is a valid number', function() {
       const DOUBLE = Uniqorm.DataField.get('DOUBLE');
       const f = new DOUBLE('field1', null, {});
       assert.throws(() => {
-        f.parseValue('abc');
+        f.parse('abc');
       }, /is not a valid number value/);
     });
 
@@ -218,7 +227,7 @@ describe('Data Fields', function() {
         minValue: 10
       });
       assert.throws(() => {
-        f.parseValue('2');
+        f.parse('2');
       }, /Value is out of range/);
     });
 
@@ -228,7 +237,7 @@ describe('Data Fields', function() {
         minValue: () => 10
       });
       assert.throws(() => {
-        f.parseValue('2');
+        f.parse('2');
       }, /Value is out of range/);
     });
 
@@ -238,7 +247,7 @@ describe('Data Fields', function() {
         maxValue: 10
       });
       assert.throws(() => {
-        f.parseValue('11');
+        f.parse('11');
       }, /Value is out of range/);
     });
 
@@ -248,7 +257,7 @@ describe('Data Fields', function() {
         maxValue: () => 10
       });
       assert.throws(() => {
-        f.parseValue('11');
+        f.parse('11');
       }, /Value is out of range/);
     });
 
@@ -262,7 +271,7 @@ describe('Data Fields', function() {
         }
       });
       assert.throws(() => {
-        f.parseValue(-1);
+        f.parse(-1);
       }, /Invalid value/);
     });
 
@@ -274,7 +283,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('FLOAT'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const FLOAT = Uniqorm.DataField.get('FLOAT');
       const f = new FLOAT('field1');
       assert.strictEqual(f.name, 'field1');
@@ -282,30 +291,10 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, null);
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
-      assert.strictEqual(f.parseValue(0), 0);
-      assert.strictEqual(f.parseValue(1), 1);
-      assert.strictEqual(f.parseValue('123'), 123);
-      assert.strictEqual(f.parseValue('123.5'), 123.5);
-      assert.strictEqual(f.parseValue(undefined), null);
-
       assert.strictEqual(f.jsType, 'Number');
       assert.strictEqual(f.sqlType, 'FLOAT');
     });
 
-    it('should create with properties', function() {
-      const FLOAT = Uniqorm.DataField.get('FLOAT');
-      const f = new FLOAT('field1', null, {
-        notNull: 1,
-        defaultValue: '5.6',
-        primaryKey: 8,
-        fieldName: 'f1'
-      });
-      assert.strictEqual(f.name, 'field1');
-      assert.strictEqual(f.fieldName, 'f1');
-      assert.strictEqual(f.notNull, true);
-      assert.strictEqual(f.defaultValue, 5.6);
-      assert.strictEqual(f.primaryKey, true);
-    });
   });
 
   describe('NUMBER', function() {
@@ -314,7 +303,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('NUMBER'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const NUMBER = Uniqorm.DataField.get('NUMBER');
       let f = new NUMBER('field1');
       assert.strictEqual(f.name, 'field1');
@@ -373,7 +362,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('TEXT'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const TEXT = Uniqorm.DataField.get('TEXT');
       const f = new TEXT('field1');
       assert.strictEqual(f.name, 'field1');
@@ -381,13 +370,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, null);
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
-      assert.strictEqual(f.parseValue(0), '0');
-      assert.strictEqual(f.parseValue(1), '1');
-      assert.strictEqual(f.parseValue('123'), '123');
-      assert.strictEqual(f.parseValue('123.5'), '123.5');
-      assert.strictEqual(f.parseValue(NaN), 'NaN');
-      assert.strictEqual(f.parseValue(undefined), null);
-
       assert.strictEqual(f.jsType, 'String');
       assert.strictEqual(f.sqlType, 'TEXT');
     });
@@ -407,6 +389,29 @@ describe('Data Fields', function() {
       assert.strictEqual(f.primaryKey, true);
       assert.strictEqual(f.sqlType, 'TEXT');
     });
+
+    it('should parse', function() {
+      const TEXT = Uniqorm.DataField.get('TEXT');
+      const f = new TEXT('field1');
+      assert.strictEqual(f.parse(0), '0');
+      assert.strictEqual(f.parse(1), '1');
+      assert.strictEqual(f.parse('123'), '123');
+      assert.strictEqual(f.parse('123.5'), '123.5');
+      assert.strictEqual(f.parse(NaN), 'NaN');
+      assert.strictEqual(f.parse(undefined), null);
+    });
+
+    it('should serialize', function() {
+      const TEXT = Uniqorm.DataField.get('TEXT');
+      const f = new TEXT('field1');
+      assert.strictEqual(f.serialize(0), '0');
+      assert.strictEqual(f.serialize(1), '1');
+      assert.strictEqual(f.serialize('123'), '123');
+      assert.strictEqual(f.serialize('123.5'), '123.5');
+      assert.strictEqual(f.serialize(NaN), 'NaN');
+      assert.strictEqual(f.serialize(undefined), null);
+    });
+
   });
 
   describe('CHAR', function() {
@@ -415,7 +420,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('CHAR'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const CHAR = Uniqorm.DataField.get('CHAR');
       const f = new CHAR('field1');
       assert.strictEqual(f.name, 'field1');
@@ -423,13 +428,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, null);
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
-      assert.strictEqual(f.parseValue(0), '0');
-      assert.strictEqual(f.parseValue(1), '1');
-      assert.strictEqual(f.parseValue('123'), '123');
-      assert.strictEqual(f.parseValue('123.5'), '123.5');
-      assert.strictEqual(f.parseValue(NaN), 'NaN');
-      assert.strictEqual(f.parseValue(undefined), null);
-
       assert.strictEqual(f.jsType, 'String');
       assert.strictEqual(f.sqlType, 'CHAR');
     });
@@ -459,7 +457,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('VARCHAR'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const VARCHAR = Uniqorm.DataField.get('VARCHAR');
       const f = new VARCHAR('field1');
       assert.strictEqual(f.name, 'field1');
@@ -467,13 +465,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, null);
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
-      assert.strictEqual(f.parseValue(0), '0');
-      assert.strictEqual(f.parseValue(1), '1');
-      assert.strictEqual(f.parseValue('123'), '123');
-      assert.strictEqual(f.parseValue('123.5'), '123.5');
-      assert.strictEqual(f.parseValue(NaN), 'NaN');
-      assert.strictEqual(f.parseValue(undefined), null);
-
       assert.strictEqual(f.jsType, 'String');
       assert.strictEqual(f.sqlType, 'VARCHAR');
       assert.strictEqual(f.charLength, null);
@@ -515,7 +506,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('CLOB'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const CLOB = Uniqorm.DataField.get('CLOB');
       const f = new CLOB('field1');
       assert.strictEqual(f.name, 'field1');
@@ -523,13 +514,7 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, null);
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
-      assert.strictEqual(f.parseValue(0), '0');
-      assert.strictEqual(f.parseValue(1), '1');
-      assert.strictEqual(f.parseValue('123'), '123');
-      assert.strictEqual(f.parseValue('123.5'), '123.5');
-      assert.strictEqual(f.parseValue(NaN), 'NaN');
-      assert.strictEqual(f.parseValue(undefined), null);
-
+      assert.strictEqual(f.parse(0), '0');
       assert.strictEqual(f.jsType, 'String');
       assert.strictEqual(f.sqlType, 'CLOB');
     });
@@ -556,7 +541,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('TIMESTAMP'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
       const f = new TIMESTAMP('field1');
       assert.strictEqual(f.name, 'field1');
@@ -564,13 +549,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, null);
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
-      assert.deepStrictEqual(f.parseValue(0), new Date(0));
-      assert.deepStrictEqual(f.parseValue(new Date(1)), new Date(1));
-      assert.deepStrictEqual(f.parseValue('2018-11-05'), new Date('2018-11-05T00:00:00Z'));
-      assert.deepStrictEqual(f.parseValue('2018-11-05 10:15:30.654'), new Date('2018-11-05T10:15:30.654Z'));
-      assert.deepStrictEqual(f.parseValue('2018-11-05T10:15:30.654'), new Date('2018-11-05T10:15:30.654Z'));
-      assert.deepStrictEqual(f.parseValue(undefined), null);
-
       assert.strictEqual(f.jsType, 'Date');
       assert.strictEqual(f.sqlType, 'TIMESTAMP');
     });
@@ -594,28 +572,58 @@ describe('Data Fields', function() {
       assert.strictEqual(f.defaultValue.getTime(), d.getTime());
     });
 
+    it('should parse', function() {
+      const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
+      const f = new TIMESTAMP('field1');
+      assert.deepStrictEqual(f.parse(0), new Date(0));
+      assert.deepStrictEqual(f.parse(new Date(1)), new Date(1));
+      assert.deepStrictEqual(f.parse('2018-11-05'), new Date('2018-11-05T00:00:00'));
+      assert.deepStrictEqual(f.parse('2018-11-05 10:15:30.654'), new Date('2018-11-05T10:15:30.654'));
+      assert.deepStrictEqual(f.parse('2018-11-05T10:15:30.654'), new Date('2018-11-05T10:15:30.654'));
+      assert.deepStrictEqual(f.parse('2018-11-05T10:15:30.654Z'), new Date('2018-11-05T10:15:30.654Z'));
+      assert.deepStrictEqual(f.parse(undefined), null);
+
+    });
+
+    it('should serialize', function() {
+      const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
+      const f = new TIMESTAMP('field1');
+      assert.deepStrictEqual(f.serialize(0), fecha.format(new Date(0), 'YYYY-MM-DDTHH:mm:ss'));
+      assert.deepStrictEqual(f.serialize(new Date(1)),
+          fecha.format(new Date(1), 'YYYY-MM-DDTHH:mm:ss.SSS'));
+      assert.deepStrictEqual(f.serialize('2018-11-05'),
+          fecha.format(new Date('2018-11-05T00:00:00'), 'YYYY-MM-DDTHH:mm:ss'));
+      assert.deepStrictEqual(f.serialize('2018-11-05 10:15:30.654'),
+          fecha.format(new Date('2018-11-05T10:15:30.654'), 'YYYY-MM-DDTHH:mm:ss.SSS'));
+      assert.deepStrictEqual(f.serialize('2018-11-05T10:15:30.654'),
+          fecha.format(new Date('2018-11-05T10:15:30.654'), 'YYYY-MM-DDTHH:mm:ss.SSS'));
+      assert.deepStrictEqual(f.serialize('2018-11-05T10:15:30.654Z'),
+          fecha.format(new Date('2018-11-05T10:15:30.654Z'), 'YYYY-MM-DDTHH:mm:ss.SSS'));
+      assert.deepStrictEqual(f.serialize(undefined), null);
+    });
+
     it('should parse NOW string as current time', function() {
       const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
       const f = new TIMESTAMP('field1', null, {});
-      assert(f.parseValue('NOW') instanceof Date);
+      assert(f.parse('NOW') instanceof Date);
     });
 
     it('should parse DATE string as current date', function() {
       const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
       const f = new TIMESTAMP('field1', null, {});
-      assert(f.parseValue('DATE') instanceof Date);
+      assert(f.parse('DATE') instanceof Date);
     });
 
-    it('should parseValue() validate value', function() {
+    it('should parse() validate value', function() {
       assert.throws(() => {
         const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
         const f = new TIMESTAMP('field1', null, {});
-        f.parseValue('abcd');
+        f.parse('abcd');
       });
       assert.throws(() => {
         const TIMESTAMP = Uniqorm.DataField.get('TIMESTAMP');
         const f = new TIMESTAMP('field1', null, {});
-        f.parseValue({});
+        f.parse({});
       });
     });
 
@@ -625,7 +633,7 @@ describe('Data Fields', function() {
         const f = new TIMESTAMP('field1', null, {
           minValue: '1990-01-02'
         });
-        f.parseValue('1990-01-01');
+        f.parse('1990-01-01');
       }, /Value is out of range/);
     });
 
@@ -635,7 +643,7 @@ describe('Data Fields', function() {
         const f = new TIMESTAMP('field1', null, {
           minValue: () => '1990-01-02'
         });
-        f.parseValue('1990-01-01');
+        f.parse('1990-01-01');
       }, /Value is out of range/);
     });
 
@@ -645,7 +653,7 @@ describe('Data Fields', function() {
         const f = new TIMESTAMP('field1', null, {
           maxValue: '1990-01-01'
         });
-        f.parseValue('1990-01-02');
+        f.parse('1990-01-02');
       }, /Value is out of range/);
     });
 
@@ -655,7 +663,7 @@ describe('Data Fields', function() {
         const f = new TIMESTAMP('field1', null, {
           maxValue: () => '1990-01-01'
         });
-        f.parseValue('1990-01-02');
+        f.parse('1990-01-02');
       }, /Value is out of range/);
     });
 
@@ -675,7 +683,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('DATE'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const DATE = Uniqorm.DataField.get('DATE');
       const f = new DATE('field1');
       assert.strictEqual(f.name, 'field1');
@@ -684,14 +692,7 @@ describe('Data Fields', function() {
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
       const d1 = new Date(0);
-      const d2 = new Date('2018-11-05T00:00:00Z');
-      assert.deepStrictEqual(f.parseValue(0), d1);
-      assert.deepStrictEqual(f.parseValue(new Date(0)), d1);
-      assert.deepStrictEqual(f.parseValue('2018-11-05'), d2);
-      assert.deepStrictEqual(f.parseValue('2018-11-05 10:15:30.654'), d2);
-      assert.deepStrictEqual(f.parseValue('2018-11-05T10:15:30.654'), d2);
-      assert.deepStrictEqual(f.parseValue(undefined), null);
-
+      d1.setHours(0, 0, 0);
       assert.strictEqual(f.jsType, 'Date');
       assert.strictEqual(f.sqlType, 'DATE');
     });
@@ -699,7 +700,7 @@ describe('Data Fields', function() {
     it('should create with properties', function() {
       const d1 = new Date();
       const d2 = new Date(d1.getTime());
-      d2.setUTCHours(0, 0, 0, 0);
+      d2.setHours(0, 0, 0, 0);
       const DATE = Uniqorm.DataField.get('DATE');
       const f = new DATE('field1', null, {
         notNull: 1,
@@ -716,6 +717,36 @@ describe('Data Fields', function() {
       f.defaultValue = d1;
       assert.strictEqual(f.defaultValue.getTime(), d2.getTime());
     });
+
+    it('should parse', function() {
+      const DATE = Uniqorm.DataField.get('DATE');
+      const f = new DATE('field1');
+      assert.deepStrictEqual(f.parse(0), new Date('1970-01-01T00:00:00'));
+      assert.deepStrictEqual(f.parse(new Date('1970-01-01T00:00:00')), new Date('1970-01-01T00:00:00'));
+      assert.deepStrictEqual(f.parse('2018-11-05'), new Date('2018-11-05T00:00:00'));
+      assert.deepStrictEqual(f.parse('2018-11-05 10:15:30.654'), new Date('2018-11-05T00:00:00'));
+      assert.deepStrictEqual(f.parse('2018-11-05T10:15:30.654'), new Date('2018-11-05T00:00:00'));
+      assert.deepStrictEqual(f.parse(undefined), null);
+
+    });
+
+    it('should serialize', function() {
+      const DATE = Uniqorm.DataField.get('DATE');
+      const f = new DATE('field1');
+      assert.deepStrictEqual(f.serialize(0), fecha.format(new Date(0), 'YYYY-MM-DD'));
+      assert.deepStrictEqual(f.serialize(new Date(1)),
+          fecha.format(new Date(1), 'YYYY-MM-DD'));
+      assert.deepStrictEqual(f.serialize('2018-11-05'),
+          fecha.format(new Date('2018-11-05T00:00:00'), 'YYYY-MM-DD'));
+      assert.deepStrictEqual(f.serialize('2018-11-05 10:15:30.654'),
+          fecha.format(new Date('2018-11-05T10:15:30.654'), 'YYYY-MM-DD'));
+      assert.deepStrictEqual(f.serialize('2018-11-05T10:15:30.654'),
+          fecha.format(new Date('2018-11-05T10:15:30.654'), 'YYYY-MM-DD'));
+      assert.deepStrictEqual(f.serialize('2018-11-05T10:15:30.654Z'),
+          fecha.format(new Date('2018-11-05T10:15:30.654Z'), 'YYYY-MM-DD'));
+      assert.deepStrictEqual(f.serialize(undefined), null);
+    });
+
   });
 
   describe('TIME', function() {
@@ -724,7 +755,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('TIME'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const TIME = Uniqorm.DataField.get('TIME');
       const f = new TIME('field1');
       assert.strictEqual(f.name, 'field1');
@@ -732,16 +763,6 @@ describe('Data Fields', function() {
       assert.strictEqual(f.notNull, null);
       assert.strictEqual(f.defaultValue, null);
       assert.strictEqual(f.primaryKey, null);
-      const d1 = new Date(0);
-      const d2 = new Date('2018-10-05T10:15:30.654Z');
-      d1.setUTCFullYear(0, 0, 0);
-      d2.setUTCFullYear(0, 0, 0);
-      assert.deepStrictEqual(f.parseValue(0), d1);
-      assert.deepStrictEqual(f.parseValue(new Date(0)), d1);
-      assert.deepStrictEqual(f.parseValue('2018-11-05 10:15:30.654'), d2);
-      assert.deepStrictEqual(f.parseValue('2018-11-05T10:15:30.654'), d2);
-      assert.deepStrictEqual(f.parseValue(undefined), null);
-
       assert.strictEqual(f.jsType, 'Date');
       assert.strictEqual(f.sqlType, 'TIME');
     });
@@ -749,7 +770,7 @@ describe('Data Fields', function() {
     it('should create with properties', function() {
       const d1 = new Date();
       const d2 = new Date(d1.getTime());
-      d2.setUTCFullYear(0, 0, 0);
+      d2.setFullYear(1970, 0, 1);
       const TIME = Uniqorm.DataField.get('TIME');
       const f = new TIME('field1', null, {
         notNull: 1,
@@ -766,6 +787,38 @@ describe('Data Fields', function() {
       f.defaultValue = d1;
       assert.strictEqual(f.defaultValue.getTime(), d2.getTime());
     });
+
+    it('should parse', function() {
+      const TIME = Uniqorm.DataField.get('TIME');
+      const f = new TIME('field1');
+      const d1 = new Date(0);
+      const d2 = new Date('2018-10-05T10:15:30.654');
+      d1.setFullYear(1970, 0, 1);
+      d2.setFullYear(1970, 0, 1);
+      assert.deepStrictEqual(f.parse(0), d1);
+      assert.deepStrictEqual(f.parse(new Date(0)), d1);
+      assert.deepStrictEqual(f.parse('2018-11-05 10:15:30.654'), d2);
+      assert.deepStrictEqual(f.parse('2018-11-05T10:15:30.654'), d2);
+      assert.deepStrictEqual(f.parse(undefined), null);
+    });
+
+    it('should serialize', function() {
+      const TIME = Uniqorm.DataField.get('TIME');
+      const f = new TIME('field1');
+      assert.deepStrictEqual(f.serialize(0), fecha.format(new Date(0), 'HH:mm:ss'));
+      assert.deepStrictEqual(f.serialize(new Date('2018-11-05 10:15:30.654')),
+          fecha.format(new Date('2018-11-05 10:15:30.654'), 'HH:mm:ss.SSS'));
+      assert.deepStrictEqual(f.serialize('2018-11-05'),
+          fecha.format(new Date('2018-11-05T00:00:00'), 'HH:mm:ss'));
+      assert.deepStrictEqual(f.serialize('2018-11-05 10:15:30.654'),
+          fecha.format(new Date('2018-11-05T10:15:30.654'), 'HH:mm:ss.SSS'));
+      assert.deepStrictEqual(f.serialize('2018-11-05T10:15:30.654'),
+          fecha.format(new Date('2018-11-05T10:15:30.654'), 'HH:mm:ss.SSS'));
+      assert.deepStrictEqual(f.serialize('2018-11-05T10:15:30.654Z'),
+          fecha.format(new Date('2018-11-05T10:15:30.654Z'), 'HH:mm:ss.SSS'));
+      assert.deepStrictEqual(f.serialize(undefined), null);
+    });
+
   });
 
   describe('BUFFER', function() {
@@ -774,7 +827,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('BUFFER'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const BUFFER = Uniqorm.DataField.get('BUFFER');
       const f = new BUFFER('field1');
       assert.strictEqual(f.name, 'field1');
@@ -809,7 +862,7 @@ describe('Data Fields', function() {
       assert(Uniqorm.DataField.get('BLOB'));
     });
 
-    it('should create', function() {
+    it('should construct', function() {
       const BLOB = Uniqorm.DataField.get('BLOB');
       const f = new BLOB('field1');
       assert.strictEqual(f.name, 'field1');
