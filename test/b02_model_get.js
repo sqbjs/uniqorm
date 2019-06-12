@@ -47,7 +47,7 @@ describe('Model.prototype.get', function() {
 
   it('should throw if no argument given', function() {
     return assert.rejects(() => Countries.get(),
-        /You must all provide all key values/);
+        /You must provide key values/);
   });
 
   it('should throw if not all key values given', function() {
