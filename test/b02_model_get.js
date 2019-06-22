@@ -60,6 +60,15 @@ describe('Model.prototype.get', function() {
 
   });
 
+  it('should retrieve as strict json', function() {
+    return Customers.get(12, {
+      json: true
+    }).then(resp => {
+      assert(resp);
+      assert.strictEqual(typeof resp.instance.birthDate, 'string');
+    });
+  });
+
   describe('Finalize', function() {
 
     it('should have no active connection after all tests', function() {

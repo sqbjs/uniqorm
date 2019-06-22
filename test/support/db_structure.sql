@@ -52,6 +52,7 @@ CREATE TABLE uniqorm_2.customers
     name character varying(64) COLLATE pg_catalog."default" NOT NULL,
     street_id integer NOT NULL,
     balance numeric(12,4),
+    birth_date date,
     CONSTRAINT customers_pkey PRIMARY KEY (id),
     CONSTRAINT fk_customers_street FOREIGN KEY (street_id)
         REFERENCES uniqorm_1.streets (id) MATCH SIMPLE

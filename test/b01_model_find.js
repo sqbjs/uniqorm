@@ -83,6 +83,16 @@ describe('Model.prototype.find', function() {
         });
   });
 
+  it('should retrieve as strict json', function() {
+    return Customers.find({
+      where: {id: 12},
+      json: true
+    }).then(resp => {
+      assert(resp);
+      assert.strictEqual(typeof resp.instances[0].birthDate, 'string');
+    });
+  });
+
   it('should return only requested properties with requested alias', function() {
     return Countries.find({properties: ['id country_id', 'name country_name']})
         .then(resp1 => {

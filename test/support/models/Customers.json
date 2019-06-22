@@ -27,6 +27,10 @@
       "dataType": "NUMBER",
       "precision": 12,
       "scale": 4
+    },
+    "birthDate": {
+      "dataType": "DATE",
+      "fieldName": "birth_date"
     }
   },
   "associations": [

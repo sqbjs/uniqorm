@@ -6,117 +6,136 @@
       "member_id": 1,
       "name": "Neuer, Friedrich",
       "street_id": 1,
-      "balance": 100
+      "balance": 100,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 2,
       "member_id": 1,
       "name": "Muller, Jürgen",
       "street_id": 2,
-      "balance": 200
+      "balance": 200,
+      "birth_date": "1970-04-12"
     },
     {
       "id": 3,
       "member_id": 2,
       "name": "Werner, Peter",
       "street_id": 3,
-      "balance": 1000
+      "balance": 1000,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 4,
       "member_id": 3,
       "name": "Moreno, Santiago",
-      "street_id": 4
+      "street_id": 4,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 5,
       "member_id": 2,
       "name": "Abeledo, Sebastián",
-      "street_id": 5
+      "street_id": 5,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 6,
       "member_id": 3,
       "name": "Fernández, Samuel",
-      "street_id": 6
+      "street_id": 6,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 7,
       "member_id": 1,
       "name": "Abeledo, Alejandro",
-      "street_id": 7
+      "street_id": 7,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 8,
       "member_id": 1,
       "name": "Alfaro, Diego",
-      "street_id": 7
+      "street_id": 7,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 9,
       "member_id": 2,
       "name": "Jonquet, Patrick",
-      "street_id": 8
+      "street_id": 8,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 10,
       "member_id": 1,
       "name": "Giresse, Jean",
-      "street_id": 8
+      "street_id": 8,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 11,
       "member_id": 3,
       "name": "Cantona, Bernard",
-      "street_id": 9
+      "street_id": 9,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 12,
       "member_id": 3,
       "name": "Silvestre, Franck",
-      "street_id": 10
+      "street_id": 10,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 13,
       "member_id": 2,
       "name": "Mathieu, Antoine",
-      "street_id": 11
+      "street_id": 11,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 14,
       "member_id": 1,
       "name": "Wright, John",
-      "street_id": 12
+      "street_id": 12,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 15,
       "member_id": 1,
       "name": "Samedov, Yuri",
-      "street_id": 13
+      "street_id": 13,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 16,
       "member_id": 2,
       "name": "Samedov, Yuri",
-      "street_id": 13
+      "street_id": 13,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 17,
       "member_id": 2,
       "name": "Topcu, Ahmet",
-      "street_id": 14
+      "street_id": 14,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 18,
       "member_id": 2,
       "name": "Tuna, Canan",
-      "street_id": 14
+      "street_id": 14,
+      "birth_date": "1980-02-05"
     },
     {
       "id": 19,
       "member_id": 2,
       "name": "Meric, Jale",
-      "street_id": 15
+      "street_id": 15,
+      "birth_date": "1980-02-05"
     }
   ]
 }
